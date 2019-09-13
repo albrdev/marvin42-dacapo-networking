@@ -63,9 +63,13 @@ run: $(TRG_BIN)
 	./$< $(args)
 
 .PHONY: mkdirs
-mkdirs:
-	$(CMD_MKDIR) $(DIR_OBJ)
-	$(CMD_MKDIR) $(DIR_BIN)
+mkdirs: $(DIR_OBJ) $(DIR_BIN)
+
+$(DIR_OBJ):
+	$(CMD_MKDIR) $@
+
+$(DIR_BIN):
+	$(CMD_MKDIR) $@
 
 $(DIR_BIN)/$(BIN_SERVER): $(OBJS) $(DIR_OBJ)/server_main.o
 	$(CC_CPP) $(CC_LIBS) $^ -o $@
