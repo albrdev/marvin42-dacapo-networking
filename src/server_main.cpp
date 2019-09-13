@@ -104,7 +104,7 @@ int endian(const char *fmt, void *data)
         case 'd': case 'i': case 'f':
             size = sizeof(uint32_t);
             break;
-        case 'F': case 'l':
+        case 'l': case 'F':
             size = sizeof(uint64_t);
             break;
         default:
@@ -115,7 +115,6 @@ int endian(const char *fmt, void *data)
         size_t rvrindex = size - 1U;
         for(size_t i = 0U; i < count; i++)
         {
-            fprintf(stderr, "%d => %d\n", i, rvrindex - i);
             xorswap(&iter[i], &iter[rvrindex - i]);
         }
 
