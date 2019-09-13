@@ -77,18 +77,24 @@
   <ItemGroup>
     <ClCompile Include="src\Client.cpp" />
     <ClCompile Include="src\client_main.cpp" />
+    <ClCompile Include="src\crc.c" />
+    <ClCompile Include="src\custom_packets.c" />
     <ClCompile Include="src\ErrorInfo.cpp" />
     <ClCompile Include="src\Exception.cpp" />
     <ClCompile Include="src\IPAuthority.cpp" />
+    <ClCompile Include="src\packet.c" />
     <ClCompile Include="src\Server.cpp" />
     <ClCompile Include="src\server_main.cpp" />
     <ClCompile Include="src\Socket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Client.hpp" />
+    <ClInclude Include="inc\crc.h" />
+    <ClInclude Include="inc\custom_packets.h" />
     <ClInclude Include="inc\ErrorInfo.hpp" />
     <ClInclude Include="inc\Exception.hpp" />
     <ClInclude Include="inc\IPAuthority.hpp" />
+    <ClInclude Include="inc\packet.h" />
     <ClInclude Include="inc\Server.hpp" />
     <ClInclude Include="inc\Socket.hpp" />
   </ItemGroup>

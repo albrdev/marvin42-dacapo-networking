@@ -25,6 +25,15 @@
     <ClCompile Include="src\Socket.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\crc.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom_packets.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\packet.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="inc">
@@ -51,6 +60,15 @@
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\Socket.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\crc.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\custom_packets.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\packet.h">
       <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>
