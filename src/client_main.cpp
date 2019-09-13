@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,6 +13,19 @@
 #include <netinet/ip6.h>
 #include "Client.hpp"
 #include "Exception.hpp"
+#include "packet.h"
+#include "custom_packets.h"
+
+void printhex(const void *const data, const size_t size)
+{
+    const unsigned char *ptr = (const unsigned char *)data;
+    for(size_t i = 0U; i < size; i++)
+    {
+        printf("%02hhX", ptr[i]);
+    }
+
+    putchar('\n');
+}
 
 int main(int argc, char *argv[])
 {
@@ -25,18 +39,20 @@ int main(int argc, char *argv[])
 
     Client client(addrs[0].c_str(), (unsigned short)std::stoi(argv[2]));
 
-    char *msg = argv[3];
-    size_t size = strlen(msg);
-    if(!client.Send(msg, size))
+    packet_motorrun_t pkt;
+    packet_mkmotorrun(&pkt, 0.75f, 0.25f);
+
+    size_t size = sizeof(pkt);
+    if(!client.Send(&pkt, size))
     {
         fprintf(stderr, "*** Error: %s\n", client.GetError().c_str());
         return 1;
     }
 
-    printf("Sent (%zu): \'%s\'\n", size, msg);
+    printf("Sent: %zu\n", size);
 
-    char rsp[1024];
-    if(!client.Receive(rsp, sizeof(rsp), size))
+    char buf[1024];
+    if(!client.Receive(buf, sizeof(buf), size))
     {
         fprintf(stderr, "*** Error: %s\n", client.GetError().c_str());
         return 1;
@@ -44,7 +60,12 @@ int main(int argc, char *argv[])
 
     if(size > 0U)
     {
-        printf("Received (%zu): \'%s\'\n", size, rsp);
+        printf("Data (%zu): ", size);
+        printhex(buf, size);
+
+        const packet_header_t *rsp = (const packet_header_t *)buf;
+        printf("chksum1=%hX, chksum2=%hX, type=%hhu, size=%hu%s", rsp->chksum_header, rsp->chksum_data, rsp->type, rsp->size, rsp->size > 0U ? " | " : "");
+        putchar('\n');
     }
     else
     {
