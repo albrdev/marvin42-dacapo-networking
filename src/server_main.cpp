@@ -1,13 +1,7 @@
-#include <stdio.h>
-#include <string.h>
-#include <limits.h>
-#include <set>
-#include <sys/socket.h>  
-#include <stdlib.h>
-#include <errno.h>
-#include <netinet/tcp.h>
-#include <netinet/ip.h>
-#include <netinet/ip6.h>
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <string>
 #include "Server.hpp"
 #include "crc.h"
 #include "packet.h"
@@ -87,6 +81,17 @@ void xorswap(uint8_t *const a, uint8_t *const b)
     *a ^= *b;
 }
 
+void endian_swaplb(void* const data, const size_t size)
+{
+    uint8_t* bytedata = (uint8_t*)data;
+    size_t count = size / 2U;
+    size_t lastIndex = size - 1U;
+    for(size_t i = 0U; i < count; i++)
+    {
+        xorswap(&bytedata[i], &bytedata[lastIndex - i]);
+    }
+}
+
 int endian(const char *fmt, void *data)
 {
     size_t size;
@@ -125,8 +130,32 @@ int endian(const char *fmt, void *data)
     return 0;
 }
 
+void bswap(uint32_t *const data)
+{
+    *data = ((*data << 8) & 0xFF00FF00) | ((*data >> 8) & 0x00FF00FF);
+    *data = (*data << 16) | (*data >> 16);
+}
+
+void ltom(uint32_t* const data)
+{
+    *data = ((*data << 8) & 0xFF00FF00) | ((*data >> 8) & 0x00FF00FF);
+}
+
+void btom(uint32_t* const data)
+{
+    *data = ((*data << 16) & 0xFFFF0000) | ((*data >> 16) & 0x0000FFFF);
+}
+
 int main(int argc, char *argv[])
 {
+    /*unsigned int bla = 0x11223344;
+    printhex(&bla, sizeof(bla));
+    btom(&bla);
+    btom(&bla);
+    //endian("d", &bla);
+    printhex(&bla, sizeof(bla));
+    return 0;*/
+
     Server server("127.0.0.1", 12345);
     server.SetOnClientConnectedEvent(OnClientConnected);
     server.SetOnClientDisconnectedEvent(OnClientDisconnected);

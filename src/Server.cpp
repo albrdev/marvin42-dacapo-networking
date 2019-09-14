@@ -2,14 +2,6 @@
 #include "Exception.hpp"
 #include "ErrorInfo.hpp"
 
-//std::map<int, std::string> Server::s_ErrorMessages =
-//{
-//    { 2,    "Could not set reusable address mode" },
-//    { 3,    "Could not set socket blocking mode" },
-//    { 4,    "Could not bind to port" },
-//    { 5,    "Listen failed" }
-//};
-
 void Server::SetTimeout(const long value)
 {
     m_Timeout.tv_sec = value / 1000;
