@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     }
     std::cout << std::endl;
 
-    Client client(addrs[0].c_str(), (unsigned short)std::stoi(argv[2]));
+    Client client(addrs[0].c_str(), (unsigned short)std::stoi(argv[2]), 1000UL);
     if(!client.Start())
     {
         fprintf(stderr, "*** Error: %s\n", client.GetError().c_str());
@@ -63,8 +63,7 @@ int main(int argc, char *argv[])
         printhex(buf, size);
 
         const packet_header_t *rsp = (const packet_header_t *)buf;
-        printf("chksum1=%hX, chksum2=%hX, type=%hhu, size=%hu%s", rsp->chksum_header, rsp->chksum_data, rsp->type, rsp->size, rsp->size > 0U ? " | " : "");
-        putchar('\n');
+        printf("chksum1=%hX, chksum2=%hX, type=%hhu, size=%hu\n", rsp->chksum_header, rsp->chksum_data, rsp->type, rsp->size);
     }
     else
     {
