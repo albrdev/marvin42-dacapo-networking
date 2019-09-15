@@ -3,11 +3,9 @@
 #include <iostream>
 #include <string>
 #include "Server.hpp"
-#include "crc.h"
-#include "packet.h"
-#include "custom_packets.h"
+#include "CustomServer.hpp"
 
-void printhex(const void *const data, const size_t size)
+static void printhex(const void *const data, const size_t size)
 {
     const unsigned char *ptr = (const unsigned char *)data;
     for(size_t i = 0U; i < size; i++)
@@ -24,55 +22,6 @@ enum endian
     E_BIG = 2,
     E_NETWORK = E_BIG
 };
-
-void OnClientConnected(Server &self, const IPAuthority &address)
-{
-    std::cout << "OnClientConnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
-}
-
-void OnClientDisconnected(Server &self, const IPAuthority &address)
-{
-    std::cout << "OnClientDisconnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
-}
-
-void OnDataReceived(Server &self, const IPAuthority &address, const int fd, const void *const data, const size_t size)
-{
-    std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
-
-    packet_header_t rsp;
-
-    const packet_header_t *pkt = (const packet_header_t *)data;
-    uint16_t crc = mkcrc16((uint8_t *)pkt + sizeof(pkt->chksum_header), sizeof(*pkt) - sizeof(pkt->chksum_header));
-
-    printf("Data (%zu, %hX): ", size, crc);
-    printhex(data, size);
-
-    if(packet_verifyheader(pkt) != 0)
-    {
-        printf("chksum1=%hX, chksum2=%hX, type=%hhu, size=%hu%s", pkt->chksum_header, pkt->chksum_data, pkt->type, pkt->size, pkt->size > 0U ? " | " : "");
-
-        switch(pkt->type)
-        {
-        case CPT_MOTORRUN:
-            const packet_motorrun_t *pkt = (const packet_motorrun_t *)data;
-            float left, right;
-            memcpy(&left, &pkt->left, sizeof(pkt->left));
-            memcpy(&right, &pkt->right, sizeof(pkt->right));
-            printf("left=%.2f, right=%.2f", left, right);
-            break;
-        }
-        putchar('\n');
-
-        packet_mkbasic(&rsp, PT_TRUE);
-    }
-    else
-    {
-        packet_mkbasic(&rsp, PT_FALSE);
-    }
-
-    size_t s = sizeof(rsp);
-    self.Send(fd, &rsp, s);
-}
 
 void xorswap(uint8_t *const a, uint8_t *const b)
 {
@@ -156,10 +105,12 @@ int main(int argc, char *argv[])
     printhex(&bla, sizeof(bla));
     return 0;*/
 
-    Server server("127.0.0.1", 12345);
-    server.SetOnClientConnectedEvent(OnClientConnected);
-    server.SetOnClientDisconnectedEvent(OnClientDisconnected);
-    server.SetOnDataReceivedEvent(OnDataReceived);
+    CustomServer server("127.0.0.1", 12345);
+    if(!server.Start())
+    {
+        fprintf(stderr, "*** Error: %s\n", server.GetError().c_str());
+        return 1;
+    }
 
     while(true)
     {

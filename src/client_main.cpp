@@ -33,6 +33,9 @@ int main(int argc, char *argv[])
     packet_motorrun_t pkt;
     packet_mkmotorrun(&pkt, 0.75f, 0.25f);
 
+    //packet_header_t pkt;
+    //packet_mkbasic(&pkt, CPT_MOTORSTOP);
+
     size_t size = sizeof(pkt);
     if(!client.Send(&pkt, size))
     {

@@ -15,8 +15,8 @@
 #include "IPAuthority.hpp"
 
 class Server;
-typedef std::function<void(Server &, const IPAuthority &)> onclientconnectionevent_t;
-typedef std::function<void(Server &, const IPAuthority &, const int, const void *const, const size_t)> ondatarecvevent_t;
+typedef std::function<void(Server* const, const IPAuthority&)> onclientconnectionevent_t;
+typedef std::function<void(Server* const, const IPAuthority&, const int, const void* const, const size_t)> ondatarecvevent_t;
 
 class Server : public Socket
 {
@@ -55,7 +55,7 @@ public:
     bool Start();
     bool Bind(void);
     bool Listen(void);
-    bool Poll(void);
+    bool Poll(void* const buffer, const size_t size, const size_t offset = 0U);
     bool Send(const int fd, const char *const data);
     bool Send(const int fd, const void *const data, const size_t size);
 

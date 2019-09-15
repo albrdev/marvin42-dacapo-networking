@@ -9,7 +9,8 @@ typedef struct _packet_motorrun packet_motorrun_t;
 
 enum CustomPacketType
 {
-    CPT_MOTORRUN = PT_MAX,
+    CPT_STATUS = PT_MAX,
+    CPT_MOTORRUN,
     CPT_MOTORSTOP
 };
 

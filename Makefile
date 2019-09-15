@@ -83,6 +83,9 @@ $(DIR_OBJ)/client_main.o: $(DIR_SRC)/client_main.cpp
 $(DIR_OBJ)/server_main.o: $(DIR_SRC)/server_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -D__USE_MINGW_ANSI_STDIO=1 -c $< -o $@
 
+$(DIR_OBJ)/CustomServer.o: $(DIR_SRC)/CustomServer.cpp $(DIR_INC)/CustomServer.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+
 $(DIR_OBJ)/Client.o: $(DIR_SRC)/Client.cpp $(DIR_INC)/Client.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 

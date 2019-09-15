@@ -153,7 +153,7 @@ void Server::AddConnection(const struct pollfd &pfd, const struct sockaddr_stora
 
     if(m_OnClientConnectedEvent)
     {
-        m_OnClientConnectedEvent(*this, *tmp);
+        m_OnClientConnectedEvent(this, *tmp);
     }
 }
 
@@ -174,7 +174,7 @@ bool Server::CloseConnection(const size_t index)
 {
     if(m_OnClientDisconnectedEvent)
     {
-        m_OnClientDisconnectedEvent(*this, *m_ReadAddresses[m_ReadList[index].fd]);
+        m_OnClientDisconnectedEvent(this, *m_ReadAddresses[m_ReadList[index].fd]);
     }
 
     int ret = close(m_ReadList[index].fd);
@@ -185,7 +185,7 @@ bool Server::CloseConnection(const size_t index)
     return false;
 }
 
-bool Server::Poll(void)
+bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
 {
     int ret = ppoll(&m_ReadList[0], m_ReadList.size(), &m_Timeout, nullptr);
     if(ret < 0)
@@ -231,21 +231,20 @@ bool Server::Poll(void)
         }
         else
         {
-            int size;
-            if(!AvailableBytes(m_ReadList[i].fd, size))
+            int availSize;
+            if(!AvailableBytes(m_ReadList[i].fd, availSize))
             {
                 SetError(new EH_ERRNO());
                 return false;
             }
 
-            if(size == 0)
+            if(availSize == 0)
             {
                 RemoveConnection(i);
                 return true;
             }
 
-            char buffer[1024];
-            int ret = recv(m_ReadList[i].fd, buffer, sizeof(buffer), 0);
+            int ret = recv(m_ReadList[i].fd, (uint8_t* const)buffer + offset, size - offset, 0);
             if(ret < 0)
             {
                 if(errno != EWOULDBLOCK)
@@ -264,7 +263,7 @@ bool Server::Poll(void)
 
             if(m_OnDataReceived)
             {
-                m_OnDataReceived(*this, *m_ReadAddresses[m_ReadList[i].fd], m_ReadList[i].fd, buffer, (size_t)ret);
+                m_OnDataReceived(this, *m_ReadAddresses[m_ReadList[i].fd], m_ReadList[i].fd, buffer, offset + ret);
             }
         }
     }
@@ -317,9 +316,4 @@ bool Server::Close(void)
 Server::Server(const char *const address, const unsigned short port, const long timeout) : Socket(address, port)
 {
     SetTimeout(timeout);
-
-    if(!Start())
-    {
-        throw EXCEPT(GetError());
-    }
 }
