@@ -15,7 +15,7 @@ bool Client::Start()
 
 bool Client::Connect(void)
 {
-    int ret = connect(m_FileDescriptor, (struct sockaddr *)&m_Address, sizeof(m_Address));
+    int ret = connect(m_Socket, (struct sockaddr *)&m_Address, sizeof(m_Address));
     if(ret != -1)
         return true;
 
@@ -25,7 +25,7 @@ bool Client::Connect(void)
 
 bool Client::Send(const char *const data)
 {
-    int ret = send(m_FileDescriptor, data, strlen(data) + 1U, 0);
+    int ret = send(m_Socket, data, strlen(data) + 1U, 0);
     if(ret != -1)
         return true;
 
@@ -35,7 +35,7 @@ bool Client::Send(const char *const data)
 
 bool Client::Send(const void *const data, const size_t size)
 {
-    int ret = send(m_FileDescriptor, data, size, 0);
+    int ret = send(m_Socket, data, size, 0);
     if(ret != -1)
         return true;
 
@@ -45,7 +45,7 @@ bool Client::Send(const void *const data, const size_t size)
 
 bool Client::Receive(void *const data, const size_t size, size_t &result)
 {
-    int ret = recv(m_FileDescriptor, data, size, 0);
+    int ret = recv(m_Socket, data, size, 0);
     if(ret != -1)
     {
         result = ret;
@@ -63,7 +63,7 @@ bool Client::Create(void)
         return false;
     }
 
-    return setsockopt(m_FileDescriptor, SOL_SOCKET, SO_RCVTIMEO, &m_Timeout, sizeof(m_Timeout)) != -1;
+    return setsockopt(m_Socket, SOL_SOCKET, SO_RCVTIMEO, &m_Timeout, sizeof(m_Timeout)) != -1;
 }
 
 Client::Client(const char *const address, const unsigned short port, const unsigned long timeout) : Socket(address, port)

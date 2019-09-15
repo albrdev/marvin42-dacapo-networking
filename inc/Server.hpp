@@ -24,8 +24,8 @@ private:
     int m_Max = 10;
     struct timespec m_Timeout = { 0, 0L };
 
-    std::vector<struct pollfd> m_ReadList;
-    std::map<int, std::shared_ptr<IPAuthority>> m_ReadAddresses;
+    std::vector<struct pollfd> m_PeerEvents;
+    std::map<int, std::shared_ptr<IPAuthority>> m_PeerInfo;
 
     onclientconnectionevent_t m_OnClientConnectedEvent;
     onclientconnectionevent_t m_OnClientDisconnectedEvent;

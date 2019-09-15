@@ -15,7 +15,7 @@ bool Server::AvailableBytes(const int fd, int &result)
 
 bool Server::SetBlockingMode(const bool value)
 {
-    int flags = fcntl(m_FileDescriptor, F_GETFL, 0);
+    int flags = fcntl(m_Socket, F_GETFL, 0);
     if(flags == -1)
     {
         SetError(new EH_ERRNO());
@@ -37,7 +37,7 @@ bool Server::SetBlockingMode(const bool value)
         flags |= O_NONBLOCK;
     }
 
-    int ret = fcntl(m_FileDescriptor, F_SETFL, flags);
+    int ret = fcntl(m_Socket, F_SETFL, flags);
     if(ret != -1)
         return true;
 
@@ -48,7 +48,7 @@ bool Server::SetBlockingMode(const bool value)
 bool Server::SetReusableAddressMode(const bool value)
 {
     const int optionValue = value;
-    int ret = setsockopt(m_FileDescriptor, SOL_SOCKET, SO_REUSEADDR, &optionValue, sizeof(int));
+    int ret = setsockopt(m_Socket, SOL_SOCKET, SO_REUSEADDR, &optionValue, sizeof(int));
     if(ret != -1)
         return true;
 
@@ -73,9 +73,9 @@ void Server::SetOnDataReceivedEvent(const ondatarecvevent_t &value)
 
 bool Server::RemoveConnectionByFD(const int fd)
 {
-    for(size_t i = 0U; i < m_ReadList.size(); i++)
+    for(size_t i = 0U; i < m_PeerEvents.size(); i++)
     {
-        if(m_ReadList[i].fd == fd)
+        if(m_PeerEvents[i].fd == fd)
         {
             return RemoveConnection(i);
         }
@@ -86,7 +86,7 @@ bool Server::RemoveConnectionByFD(const int fd)
 
 bool Server::DisconnectClient(const std::string &address, const unsigned short port)
 {
-    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_ReadAddresses.begin(); i != m_ReadAddresses.end(); i++)
+    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
     {
         if(address == (*(i->second)).GetAddress() && (port == 0U || port == (*(i->second)).GetPort()))
         {
@@ -100,7 +100,7 @@ bool Server::DisconnectClient(const std::string &address, const unsigned short p
 bool Server::DisconnectClients(const std::string &address)
 {
     size_t count = 0U;
-    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_ReadAddresses.begin(); i != m_ReadAddresses.end(); i++)
+    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
     {
         if(address == (*(i->second)).GetAddress())
         {
@@ -121,13 +121,13 @@ bool Server::Start()
         return false;
     }
 
-    AddSocket({ m_FileDescriptor, POLLIN, 0 });
+    AddSocket({ m_Socket, POLLIN, 0 });
     return true;
 }
 
 bool Server::Bind(void)
 {
-    int ret = bind(m_FileDescriptor, (struct sockaddr *)&m_Address, sizeof(m_Address));//*
+    int ret = bind(m_Socket, (struct sockaddr *)&m_Address, sizeof(m_Address));//*
     if(ret != -1)
         return true;
 
@@ -137,7 +137,7 @@ bool Server::Bind(void)
 
 bool Server::Listen(void)
 {
-    int ret = listen(m_FileDescriptor, m_Max);
+    int ret = listen(m_Socket, m_Max);
     if(ret != -1)
         return true;
 
@@ -149,7 +149,7 @@ void Server::AddConnection(const struct pollfd &pfd, const struct sockaddr_stora
 {
     AddSocket(pfd);
     std::shared_ptr<IPAuthority> tmp = std::make_shared<IPAuthority>(IPAuthority(address));
-    m_ReadAddresses[pfd.fd] = tmp;
+    m_PeerInfo[pfd.fd] = tmp;
 
     if(m_OnClientConnectedEvent)
     {
@@ -159,14 +159,14 @@ void Server::AddConnection(const struct pollfd &pfd, const struct sockaddr_stora
 
 void Server::AddSocket(const struct pollfd &pfd)
 {
-    m_ReadList.push_back(pfd);
+    m_PeerEvents.push_back(pfd);
 }
 
 bool Server::RemoveConnection(const size_t index)
 {
     bool ret = CloseConnection(index);
-    m_ReadAddresses.erase(m_ReadList[index].fd);
-    m_ReadList.erase(m_ReadList.begin() + index);
+    m_PeerInfo.erase(m_PeerEvents[index].fd);
+    m_PeerEvents.erase(m_PeerEvents.begin() + index);
     return ret;
 }
 
@@ -174,10 +174,10 @@ bool Server::CloseConnection(const size_t index)
 {
     if(m_OnClientDisconnectedEvent)
     {
-        m_OnClientDisconnectedEvent(this, *m_ReadAddresses[m_ReadList[index].fd]);
+        m_OnClientDisconnectedEvent(this, *m_PeerInfo[m_PeerEvents[index].fd]);
     }
 
-    int ret = close(m_ReadList[index].fd);
+    int ret = close(m_PeerEvents[index].fd);
     if(ret != -1)
         return true;
 
@@ -187,7 +187,7 @@ bool Server::CloseConnection(const size_t index)
 
 bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
 {
-    int ret = ppoll(&m_ReadList[0], m_ReadList.size(), &m_Timeout, nullptr);
+    int ret = ppoll(&m_PeerEvents[0], m_PeerEvents.size(), &m_Timeout, nullptr);
     if(ret < 0)
     {
         SetError(new EH_ERRNO());
@@ -196,25 +196,25 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
     if(ret == 0)
         return true;
 
-    for(size_t i = 0; i < m_ReadList.size(); i++)
+    for(size_t i = 0; i < m_PeerEvents.size(); i++)
     {
-        if(m_ReadList[i].revents == 0)
+        if(m_PeerEvents[i].revents == 0)
             continue;
 
-        if(m_ReadList[i].revents != POLLIN)
+        if(m_PeerEvents[i].revents != POLLIN)
         {
             SetError(new EH_CUSTOM("Unexpected socket event"));
             return false;
         }
 
-        if(m_ReadList[i].fd == m_FileDescriptor)
+        if(m_PeerEvents[i].fd == m_Socket)
         {
             int fd;
             do
             {
                 struct sockaddr_storage client;
                 socklen_t s = sizeof(client);
-                fd = accept(m_FileDescriptor, (struct sockaddr *)&client, (socklen_t *)&s);
+                fd = accept(m_Socket, (struct sockaddr *)&client, (socklen_t *)&s);
                 if(fd < 0)
                 {
                     if(errno != EWOULDBLOCK)
@@ -232,7 +232,7 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
         else
         {
             int availSize;
-            if(!AvailableBytes(m_ReadList[i].fd, availSize))
+            if(!AvailableBytes(m_PeerEvents[i].fd, availSize))
             {
                 SetError(new EH_ERRNO());
                 return false;
@@ -244,7 +244,7 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
                 return true;
             }
 
-            int ret = recv(m_ReadList[i].fd, (uint8_t* const)buffer + offset, size - offset, 0);
+            int ret = recv(m_PeerEvents[i].fd, (uint8_t* const)buffer + offset, size - offset, 0);
             if(ret < 0)
             {
                 if(errno != EWOULDBLOCK)
@@ -263,7 +263,7 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
 
             if(m_OnDataReceived)
             {
-                m_OnDataReceived(this, *m_ReadAddresses[m_ReadList[i].fd], m_ReadList[i].fd, buffer, offset + ret);
+                m_OnDataReceived(this, *m_PeerInfo[m_PeerEvents[i].fd], m_PeerEvents[i].fd, buffer, offset + ret);
             }
         }
     }
@@ -293,13 +293,13 @@ bool Server::Send(const int fd, const void *const data, const size_t size)
 
 size_t Server::Count(void) const
 {
-    return m_ReadAddresses.size();
+    return m_PeerInfo.size();
 }
 
 bool Server::Close(void)
 {
     bool status = true;
-    for(size_t i = 1U; i < m_ReadList.size(); i++)
+    for(size_t i = 1U; i < m_PeerEvents.size(); i++)
     {
         if(!CloseConnection(i))
         {
@@ -307,8 +307,8 @@ bool Server::Close(void)
         }
     }
 
-    m_ReadAddresses.clear();
-    m_ReadList.clear();
+    m_PeerInfo.clear();
+    m_PeerEvents.clear();
 
     return Socket::Close() && status;
 }

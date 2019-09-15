@@ -23,7 +23,7 @@ private:
     const ErrorInfo *m_ErrorInfo = nullptr;
 
 protected:
-    int m_FileDescriptor = -1;
+    int m_Socket = -1;
     struct sockaddr_storage m_Address;
 
     void SetError(const ErrorInfo *const value);

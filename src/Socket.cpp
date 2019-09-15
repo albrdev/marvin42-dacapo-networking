@@ -137,8 +137,8 @@ bool Socket::GetHostname(std::string &result)
 
 bool Socket::Create(void)
 {
-    m_FileDescriptor = socket(m_Address.ss_family, SOCK_STREAM, 0);
-    if(m_FileDescriptor != -1)
+    m_Socket = socket(m_Address.ss_family, SOCK_STREAM, 0);
+    if(m_Socket != -1)
         return true;
 
     SetError(new EH_ERRNO());
@@ -147,13 +147,13 @@ bool Socket::Create(void)
 
 bool Socket::Close(void)
 {
-    if(m_FileDescriptor == -1)
+    if(m_Socket == -1)
     {
         return true;
     }
 
-    int ret = close(m_FileDescriptor);
-    m_FileDescriptor = -1;
+    int ret = close(m_Socket);
+    m_Socket = -1;
     if(ret != -1)
         return true;
 
