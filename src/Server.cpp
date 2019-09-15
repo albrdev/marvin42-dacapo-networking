@@ -114,7 +114,7 @@ bool Server::DisconnectClients(const std::string &address)
     return count;
 }
 
-bool Server::Start()
+bool Server::Start(void)
 {
     if(!Create() || !SetReusableAddressMode(true) || !SetBlockingMode(false) || !Bind() || !Listen())
     {

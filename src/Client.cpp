@@ -63,15 +63,16 @@ bool Client::Create(void)
         return false;
     }
 
-    return setsockopt(m_Socket, SOL_SOCKET, SO_RCVTIMEO, &m_Timeout, sizeof(m_Timeout)) != -1;
+    if(setsockopt(m_Socket, SOL_SOCKET, SO_RCVTIMEO, &m_Timeout, sizeof(m_Timeout)) != -1)
+    {
+        return true;
+    }
+
+    SetError(new EH_ERRNO());
+    return false;
 }
 
 Client::Client(const char *const address, const unsigned short port, const unsigned long timeout) : Socket(address, port)
 {
     SetTimeout(timeout);
-
-    if(!Start())
-    {
-        throw EXCEPT(GetError());
-    }
 }

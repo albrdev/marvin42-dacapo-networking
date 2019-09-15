@@ -52,7 +52,7 @@ public:
     bool DisconnectClient(const std::string &address, const unsigned short port = 0U);
     bool DisconnectClients(const std::string &address);
 
-    bool Start();
+    bool Start(void);
     bool Bind(void);
     bool Listen(void);
     bool Poll(void* const buffer, const size_t size, const size_t offset = 0U);

@@ -29,6 +29,11 @@ int main(int argc, char *argv[])
     std::cout << std::endl;
 
     Client client(addrs[0].c_str(), (unsigned short)std::stoi(argv[2]));
+    if(!client.Start())
+    {
+        fprintf(stderr, "*** Error: %s\n", client.GetError().c_str());
+        return 1;
+    }
 
     packet_motorrun_t pkt;
     packet_mkmotorrun(&pkt, 0.75f, 0.25f);
