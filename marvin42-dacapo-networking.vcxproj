@@ -78,6 +78,7 @@
     <ClCompile Include="src\Client.cpp" />
     <ClCompile Include="src\client_main.cpp" />
     <ClCompile Include="src\crc.c" />
+    <ClCompile Include="src\CustomClient.cpp" />
     <ClCompile Include="src\CustomServer.cpp" />
     <ClCompile Include="src\custom_packets.c" />
     <ClCompile Include="src\ErrorInfo.cpp" />
@@ -91,6 +92,7 @@
   <ItemGroup>
     <ClInclude Include="inc\Client.hpp" />
     <ClInclude Include="inc\crc.h" />
+    <ClInclude Include="inc\CustomClient.hpp" />
     <ClInclude Include="inc\CustomServer.hpp" />
     <ClInclude Include="inc\custom_packets.h" />
     <ClInclude Include="inc\ErrorInfo.hpp" />

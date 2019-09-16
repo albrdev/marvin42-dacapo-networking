@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "Client.hpp"
+#include "CustomClient.hpp"
 #include "Exception.hpp"
 #include "packet.h"
 #include "custom_packets.h"
@@ -28,29 +29,21 @@ int main(int argc, char *argv[])
     }
     std::cout << std::endl;
 
-    Client client(addrs[0].c_str(), (unsigned short)std::stoi(argv[2]), 1000UL);
+    CustomClient client(addrs[0].c_str(), (unsigned short)std::stoi(argv[2]), 1000UL);
     if(!client.Start())
     {
         fprintf(stderr, "*** Error: %s\n", client.GetError().c_str());
         return 1;
     }
 
-    packet_motorrun_t pkt;
-    packet_mkmotorrun(&pkt, 0.75f, 0.25f);
-
-    //packet_header_t pkt;
-    //packet_mkbasic(&pkt, CPT_MOTORSTOP);
-
-    size_t size = sizeof(pkt);
-    if(!client.Send(&pkt, size))
+    if(!client.SendMotorRun(0.25f, 0.75f))
     {
         fprintf(stderr, "*** Error: %s\n", client.GetError().c_str());
         return 1;
     }
 
-    printf("Sent: %zu\n", size);
-
     char buf[1024];
+    size_t size;
     if(!client.Receive(buf, sizeof(buf), size))
     {
         fprintf(stderr, "*** Error: %s\n", client.GetError().c_str());

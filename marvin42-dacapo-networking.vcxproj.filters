@@ -37,6 +37,9 @@
     <ClCompile Include="src\CustomServer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\CustomClient.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="inc">
@@ -75,6 +78,9 @@
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\CustomServer.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\CustomClient.hpp">
       <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>
