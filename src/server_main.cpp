@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    CustomServer server("127.0.0.1", 12345);
+    CustomServer server("0.0.0.0", 1042);
     if(!server.Start())
     {
         fprintf(stderr, "*** Error: %s\n", server.GetError().c_str());
