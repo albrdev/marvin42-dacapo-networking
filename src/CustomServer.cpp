@@ -29,7 +29,7 @@ void CustomServer::OnClientDisconnected(Server* const self, const IPAuthority& a
 /*void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
-    fprintf(stderr, "Preamble: size=%zu, hex=%s\n", size, hexstr(data, size));
+    fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
     CustomServer* const tmpSelf = ((CustomServer * const)self);
 
@@ -101,7 +101,7 @@ void CustomServer::OnClientDisconnected(Server* const self, const IPAuthority& a
 void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
-    fprintf(stderr, "Preamble: size=%zu, hex=%s\n", size, hexstr(data, size));
+    fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
     CustomServer* const tmpSelf = ((CustomServer * const)self);
     tmpSelf->m_SerialPort.Write(data, size, 1000U);
