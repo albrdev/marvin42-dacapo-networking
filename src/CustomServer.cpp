@@ -101,13 +101,13 @@ bool CustomServer::Poll(void)
     return Server::Poll(m_Buffer, sizeof(m_Buffer));
 }
 
-CustomServer::CustomServer(const char* const address, const unsigned short port, const long timeout) : Server(address, port, timeout)
+CustomServer::CustomServer(const char* const serialPortName, const char* const address, const unsigned short port, const long timeout) : Server(address, port, timeout)
 {
     SetOnClientConnectedEvent(CustomServer::OnClientConnected);
     SetOnClientDisconnectedEvent(CustomServer::OnClientDisconnected);
     SetOnDataReceivedEvent(CustomServer::OnDataReceived);
 
-    m_SerialPort = new SerialPort("/dev/ttyS0");
+    m_SerialPort = new SerialPort(serialPortName);
     if(!m_SerialPort->Begin(SP_MODE_WRITE))
         throw;
 

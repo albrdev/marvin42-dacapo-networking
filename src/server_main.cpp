@@ -8,8 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-    CustomServer server("0.0.0.0", 1042);
-    fprintf(stderr, "done\n");
+    CustomServer server("/dev/ttyS0", "0.0.0.0", 1042);
     if(!server.Start())
     {
         fprintf(stderr, "*** Error: %s\n", server.GetError().c_str());
