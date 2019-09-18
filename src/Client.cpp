@@ -19,7 +19,7 @@ bool Client::Connect(void)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -29,7 +29,7 @@ bool Client::Send(const char *const data)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -39,7 +39,7 @@ bool Client::Send(const void *const data, const size_t size)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -57,7 +57,7 @@ bool Client::Receive(void *const data, const size_t size, size_t &result)
         return true;
     }
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -73,7 +73,7 @@ bool Client::Create(void)
         return true;
     }
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 

@@ -18,7 +18,7 @@ bool Server::SetBlockingMode(const bool value)
     int flags = fcntl(m_Socket, F_GETFL, 0);
     if(flags == -1)
     {
-        SetError(new EH_ERRNO());
+        SetError(new EI_ERRNO());
         return false;
     }
 
@@ -41,7 +41,7 @@ bool Server::SetBlockingMode(const bool value)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -52,7 +52,7 @@ bool Server::SetReusableAddressMode(const bool value)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -131,7 +131,7 @@ bool Server::Bind(void)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -141,7 +141,7 @@ bool Server::Listen(void)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -181,7 +181,7 @@ bool Server::CloseConnection(const size_t index)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -190,7 +190,7 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
     int ret = ppoll(&m_PeerEvents[0], m_PeerEvents.size(), &m_Timeout, nullptr);
     if(ret < 0)
     {
-        SetError(new EH_ERRNO());
+        SetError(new EI_ERRNO());
         return false;
     }
     if(ret == 0)
@@ -203,7 +203,7 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
 
         if(m_PeerEvents[i].revents != POLLIN)
         {
-            SetError(new EH_CUSTOM("Unexpected socket event"));
+            SetError(new EI_CUSTOM("Unexpected socket event"));
             return false;
         }
 
@@ -219,7 +219,7 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
                 {
                     if(errno != EWOULDBLOCK)
                     {
-                        SetError(new EH_ERRNO());
+                        SetError(new EI_ERRNO());
                         return false;
                     }
 
@@ -234,7 +234,7 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
             int availSize;
             if(!AvailableBytes(m_PeerEvents[i].fd, availSize))
             {
-                SetError(new EH_ERRNO());
+                SetError(new EI_ERRNO());
                 return false;
             }
 
@@ -249,7 +249,7 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
             {
                 if(errno != EWOULDBLOCK)
                 {
-                    SetError(new EH_ERRNO());
+                    SetError(new EI_ERRNO());
                     return false;
                 }
 
@@ -277,7 +277,7 @@ bool Server::Send(const int fd, const char *const data)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -287,7 +287,7 @@ bool Server::Send(const int fd, const void *const data, const size_t size)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 

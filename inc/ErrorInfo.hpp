@@ -54,8 +54,9 @@ public:
     virtual ~CustomErrorInfo(void) override;
 };
 
-#define EH_ERRNO() ErrnoErrorInfo(errno)
-#define EH_GAI(x) GAIErrorInfo(x)
-#define EH_CUSTOM(msg) CustomErrorInfo(msg)
+#define EI_ERRNO() ErrnoErrorInfo(errno)
+#define EI_GAI(x) GAIErrorInfo(x)
+#define EI_SP(x) SerialPortErrorInfo(x)
+#define EI_CUSTOM(msg) CustomErrorInfo(msg)
 
 #endif // _ErrorInfo_HPP_
