@@ -101,7 +101,8 @@ void CustomServer::OnClientDisconnected(Server* const self, const IPAuthority& a
 
 void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
-    m_SerialPort.Write(data, size, 1000U);
+    CustomServer* const tmpSelf = ((CustomServer * const)self);
+    tmpSelf->m_SerialPort.Write(data, size, 1000U);
 }
 
 bool CustomServer::Poll(void)
