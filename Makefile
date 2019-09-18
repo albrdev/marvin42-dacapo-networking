@@ -25,7 +25,9 @@ SRCS_CPP	:= $(filter-out $(DIR_SRC)/%_main.cpp,$(wildcard $(DIR_SRC)/*.cpp))
 OBJS_CPP	:= $(patsubst $(DIR_SRC)/%.cpp,$(DIR_OBJ)/%.o,$(SRCS_CPP))
 SRCS_SLC	:= $(DIR_SL)/crc.c $(DIR_SL)/packet.c $(DIR_SL)/custom_packets.c
 OBJS_SLC	:= $(patsubst $(DIR_SL)/%.c,$(DIR_OBJ)/%.o,$(SRCS_SLC))
-OBJS		:= $(OBJS_C) $(OBJS_CPP) $(OBJS_SLC)
+SRCS_SLCPP	:= $(DIR_SL)/generic.cpp
+OBJS_SLCPP	:= $(patsubst $(DIR_SL)/%.cpp,$(DIR_OBJ)/%.o,$(SRCS_SLCPP))
+OBJS		:= $(OBJS_C) $(OBJS_CPP) $(OBJS_SLC) $(OBJS_SLCPP)
 
 TRG_BIN		:= $(DIR_BIN)/$(APP_BIN)
 
@@ -87,12 +89,15 @@ $(DIR_OBJ)/server_main.o: $(DIR_SRC)/server_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/custom_packets.o: $(DIR_SL)/custom_packets.c $(DIR_SL)/custom_packets.h
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
+	$(CC_C) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/packet.o: $(DIR_SL)/packet.c $(DIR_SL)/packet.h
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
+	$(CC_C) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/crc.o: $(DIR_SL)/crc.c $(DIR_SL)/crc.h
+	$(CC_C) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
+
+$(DIR_OBJ)/generic.o: $(DIR_SL)/generic.cpp $(DIR_SL)/generic.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/SerialPort.o: $(DIR_SRC)/SerialPort.cpp $(DIR_INC)/SerialPort.hpp

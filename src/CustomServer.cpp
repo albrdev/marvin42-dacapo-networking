@@ -1,20 +1,9 @@
 #include "CustomServer.hpp"
+#include "generic.hpp"
 #include "crc.h"
 #include "packet.h"
 #include "custom_packets.h"
 #include "ErrorInfo.hpp"
-
-static char tmpbuf[256 + 1];
-static const char* hexstr(const void* const data, const size_t size)
-{
-    const unsigned char* ptr = (const unsigned char*)data;
-    for(size_t i = 0U; i < size; i++)
-    {
-        snprintf(tmpbuf + (i * 2), 2 + 1, "%02hhX", ptr[i]);
-    }
-
-    return tmpbuf;
-}
 
 void CustomServer::OnClientConnected(Server* const self, const IPAuthority& address)
 {
