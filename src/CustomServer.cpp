@@ -29,6 +29,7 @@ void CustomServer::OnClientDisconnected(Server* const self, const IPAuthority& a
 /*void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
+    fprintf(stderr, "Preamble: size=%zu, hex=%s\n", size, hexstr(data, size));
 
     CustomServer* const tmpSelf = ((CustomServer * const)self);
 
@@ -38,8 +39,6 @@ void CustomServer::OnClientDisconnected(Server* const self, const IPAuthority& a
         fprintf(stderr, "Not enough header data: %zu\n", size);
         return;
     }
-
-    fprintf(stderr, "Preamble: size=%zu, hex=%s\n", size, hexstr(data, size));
 
     uint16_t chksum = mkcrc16((uint8_t*)hdr + sizeof(hdr->chksum_header), sizeof(*hdr) - sizeof(hdr->chksum_header));
     fprintf(stderr, "Header:   chksum_header=%hX, chksum_data=%hX, type=%hhu, size=%hu (chksum=%hX, hex=%s)\n", hdr->chksum_header, hdr->chksum_data, hdr->type, hdr->size, chksum, hexstr(data, sizeof(*hdr)));
@@ -101,6 +100,9 @@ void CustomServer::OnClientDisconnected(Server* const self, const IPAuthority& a
 
 void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
+    std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
+    fprintf(stderr, "Preamble: size=%zu, hex=%s\n", size, hexstr(data, size));
+
     CustomServer* const tmpSelf = ((CustomServer * const)self);
     tmpSelf->m_SerialPort.Write(data, size, 1000U);
 }
