@@ -7,11 +7,13 @@
 #include <iostream>
 #include "Server.hpp"
 #include "IPAuthority.hpp"
+#include "SerialPort.hpp"
 
 class CustomServer : public Server
 {
 private:
     uint8_t m_Buffer[1024];
+    SerialPort m_SerialPort;
 
     static void OnClientConnected(Server* const self, const IPAuthority& address);
     static void OnClientDisconnected(Server* const self, const IPAuthority& address);

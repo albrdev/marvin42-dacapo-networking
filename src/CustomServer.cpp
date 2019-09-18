@@ -26,7 +26,7 @@ void CustomServer::OnClientDisconnected(Server* const self, const IPAuthority& a
     std::cout << "OnClientDisconnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
 }
 
-void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
+/*void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
 
@@ -97,6 +97,11 @@ void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address
 
     packet_mkbasic(&rsp, PT_TRUE);
     tmpSelf->Send(fd, &rsp, sizeof(rsp));
+}*/
+
+void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
+{
+    m_SerialPort.Write(data, size, 1000U);
 }
 
 bool CustomServer::Poll(void)
@@ -109,4 +114,13 @@ CustomServer::CustomServer(const char* const address, const unsigned short port,
     SetOnClientConnectedEvent(CustomServer::OnClientConnected);
     SetOnClientDisconnectedEvent(CustomServer::OnClientDisconnected);
     SetOnDataReceivedEvent(CustomServer::OnDataReceived);
+
+    m_SerialPort = SerialPort("/dev/ttyS0");
+    m_SerialPort.SetBaudRate(9600);
+    m_SerialPort.SetDataBits(8);
+    m_SerialPort.SetStopBits(1);
+    m_SerialPort.SetParity(SP_PARITY_NONE);
+    m_SerialPort.SetFlowControl(SP_FLOWCONTROL_DTRDSR);
+
+    m_SerialPort.Begin(SP_MODE_WRITE);
 }
