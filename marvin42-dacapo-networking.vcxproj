@@ -75,16 +75,16 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="shared_libraries\crc.c" />
+    <ClCompile Include="shared_libraries\custom_packets.c" />
+    <ClCompile Include="shared_libraries\packet.c" />
     <ClCompile Include="src\Client.cpp" />
     <ClCompile Include="src\client_main.cpp" />
-    <ClCompile Include="src\crc.c" />
     <ClCompile Include="src\CustomClient.cpp" />
     <ClCompile Include="src\CustomServer.cpp" />
-    <ClCompile Include="src\custom_packets.c" />
     <ClCompile Include="src\ErrorInfo.cpp" />
     <ClCompile Include="src\Exception.cpp" />
     <ClCompile Include="src\IPAuthority.cpp" />
-    <ClCompile Include="src\packet.c" />
     <ClCompile Include="src\SerialPort.cpp" />
     <ClCompile Include="src\Server.cpp" />
     <ClCompile Include="src\server_main.cpp" />
@@ -92,17 +92,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Client.hpp" />
-    <ClInclude Include="inc\crc.h" />
     <ClInclude Include="inc\CustomClient.hpp" />
     <ClInclude Include="inc\CustomServer.hpp" />
-    <ClInclude Include="inc\custom_packets.h" />
     <ClInclude Include="inc\ErrorInfo.hpp" />
     <ClInclude Include="inc\Exception.hpp" />
     <ClInclude Include="inc\IPAuthority.hpp" />
-    <ClInclude Include="inc\packet.h" />
     <ClInclude Include="inc\SerialPort.hpp" />
     <ClInclude Include="inc\Server.hpp" />
     <ClInclude Include="inc\Socket.hpp" />
+    <ClInclude Include="shared_libraries\crc.h" />
+    <ClInclude Include="shared_libraries\custom_packets.h" />
+    <ClInclude Include="shared_libraries\packet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

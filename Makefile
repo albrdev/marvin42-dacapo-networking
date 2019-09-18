@@ -12,6 +12,7 @@ DIR_INC		:= inc
 DIR_SRC		:= src
 DIR_OBJ		:= obj
 DIR_BIN		:= bin
+DIR_SL		:= shared_libraries
 
 CMD_CP		:= cp -f
 CMD_RM		:= rm -f
@@ -22,7 +23,9 @@ SRCS_C		:= $(filter-out $(DIR_SRC)/%_main.c,$(wildcard $(DIR_SRC)/*.c))
 OBJS_C		:= $(patsubst $(DIR_SRC)/%.c,$(DIR_OBJ)/%.o,$(SRCS_C))
 SRCS_CPP	:= $(filter-out $(DIR_SRC)/%_main.cpp,$(wildcard $(DIR_SRC)/*.cpp))
 OBJS_CPP	:= $(patsubst $(DIR_SRC)/%.cpp,$(DIR_OBJ)/%.o,$(SRCS_CPP))
-OBJS		:= $(OBJS_C) $(OBJS_CPP)
+SRCS_SLC	:= $(DIR_SL)/crc.c $(DIR_SL)/packet.c $(DIR_SL)/custom_packets.c
+OBJS_SLC	:= $(patsubst $(DIR_SL)/%.c,$(DIR_OBJ)/%.o,$(SRCS_SLC))
+OBJS		:= $(OBJS_C) $(OBJS_CPP) $(OBJS_SLC)
 
 TRG_BIN		:= $(DIR_BIN)/$(APP_BIN)
 
@@ -104,13 +107,13 @@ $(DIR_OBJ)/Socket.o: $(DIR_SRC)/Socket.cpp $(DIR_INC)/Socket.hpp
 $(DIR_OBJ)/IPAuthority.o: $(DIR_SRC)/IPAuthority.cpp $(DIR_INC)/IPAuthority.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
-$(DIR_OBJ)/custom_packets.o: $(DIR_SRC)/custom_packets.c $(DIR_INC)/custom_packets.h
+$(DIR_OBJ)/custom_packets.o: $(DIR_SL)/custom_packets.c $(DIR_SL)/custom_packets.h
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
-$(DIR_OBJ)/packet.o: $(DIR_SRC)/packet.c $(DIR_INC)/packet.h
+$(DIR_OBJ)/packet.o: $(DIR_SL)/packet.c $(DIR_SL)/packet.h
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
-$(DIR_OBJ)/crc.o: $(DIR_SRC)/crc.c $(DIR_INC)/crc.h
+$(DIR_OBJ)/crc.o: $(DIR_SL)/crc.c $(DIR_SL)/crc.h
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/ErrorInfo.o: $(DIR_SRC)/ErrorInfo.cpp $(DIR_INC)/ErrorInfo.hpp
