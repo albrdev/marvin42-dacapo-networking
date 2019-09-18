@@ -85,6 +85,7 @@
     <ClCompile Include="src\Exception.cpp" />
     <ClCompile Include="src\IPAuthority.cpp" />
     <ClCompile Include="src\packet.c" />
+    <ClCompile Include="src\SerialPort.cpp" />
     <ClCompile Include="src\Server.cpp" />
     <ClCompile Include="src\server_main.cpp" />
     <ClCompile Include="src\Socket.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="inc\Exception.hpp" />
     <ClInclude Include="inc\IPAuthority.hpp" />
     <ClInclude Include="inc\packet.h" />
+    <ClInclude Include="inc\SerialPort.hpp" />
     <ClInclude Include="inc\Server.hpp" />
     <ClInclude Include="inc\Socket.hpp" />
   </ItemGroup>

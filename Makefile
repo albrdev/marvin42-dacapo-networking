@@ -3,7 +3,7 @@ APP_BIN		:= m42net
 CC_C		:= gcc
 CC_CPP		:= g++
 CC_FLAGS	:= -pedantic -Wall -Wextra -Wconversion -std=c++11
-CC_LIBS		:= -lm
+CC_LIBS		:= -lm -lserialport
 
 FLAGS_DBG	:= -g
 FLAGS_RLS	:= -DNDEBUG
@@ -81,6 +81,9 @@ $(DIR_OBJ)/client_main.o: $(DIR_SRC)/client_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/server_main.o: $(DIR_SRC)/server_main.cpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+
+$(DIR_OBJ)/SerialPort.o: $(DIR_SRC)/SerialPort.cpp $(DIR_INC)/SerialPort.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/CustomClient.o: $(DIR_SRC)/CustomClient.cpp $(DIR_INC)/CustomClient.hpp
