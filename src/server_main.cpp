@@ -4,6 +4,7 @@
 #include <string>
 #include "Server.hpp"
 #include "CustomServer.hpp"
+#include "SerialPort.hpp"
 
 int main(int argc, char *argv[])
 {
