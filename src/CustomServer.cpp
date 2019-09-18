@@ -104,7 +104,7 @@ void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address
     fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
     CustomServer* const tmpSelf = ((CustomServer * const)self);
-    tmpSelf->m_SerialPort.Write(data, size, 1000U);
+    tmpSelf->m_SerialPort.Write(data, size);
 }
 
 bool CustomServer::Poll(void)

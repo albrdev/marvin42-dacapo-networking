@@ -74,7 +74,8 @@ int SerialPort::AvailableBytes(void)
 
 bool SerialPort::Read(void* const data, const size_t size, unsigned int timeout)
 {
-    int ret = sp_blocking_read(m_Port, data, size, timeout);
+    int ret = sp_nonblocking_read(m_Port, data, size); // just in case
+    //int ret = sp_blocking_read(m_Port, data, size, timeout);
     if(ret == SP_OK)
         return true;
 
@@ -88,7 +89,8 @@ bool SerialPort::Write(const char* const data, unsigned int timeout)
 
 bool SerialPort::Write(const void* const data, const size_t size, unsigned int timeout)
 {
-    int ret = sp_blocking_write(m_Port, data, size, timeout);
+    int ret = sp_nonblocking_write(m_Port, data, size);
+    //int ret = sp_blocking_write(m_Port, data, size, timeout); // crashes! segfault...
     if(ret == SP_OK)
         return true;
 
