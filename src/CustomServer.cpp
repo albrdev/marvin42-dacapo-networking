@@ -104,7 +104,7 @@ void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address
     fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
     CustomServer* const tmpSelf = ((CustomServer * const)self);
-    tmpSelf->m_SerialPort.Write(data, size);
+    tmpSelf->m_SerialPort->Write(data, size);
 }
 
 bool CustomServer::Poll(void)
@@ -118,12 +118,21 @@ CustomServer::CustomServer(const char* const address, const unsigned short port,
     SetOnClientDisconnectedEvent(CustomServer::OnClientDisconnected);
     SetOnDataReceivedEvent(CustomServer::OnDataReceived);
 
-    m_SerialPort = SerialPort("/dev/ttyS0");
-    m_SerialPort.SetBaudRate(9600);
-    m_SerialPort.SetDataBits(8);
-    m_SerialPort.SetStopBits(1);
-    m_SerialPort.SetParity(SP_PARITY_NONE);
-    m_SerialPort.SetFlowControl(SP_FLOWCONTROL_DTRDSR);
+    m_SerialPort = new SerialPort("/dev/ttyS0");
+    if(!m_SerialPort->Begin(SP_MODE_READ_WRITE))
+        throw;
 
-    m_SerialPort.Begin(SP_MODE_WRITE);
+    m_SerialPort->SetBaudRate(115200);
+    m_SerialPort->SetDataBits(8);
+    m_SerialPort->SetStopBits(1);
+    m_SerialPort->SetParity(SP_PARITY_NONE);
+    m_SerialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
+}
+
+CustomServer::~CustomServer(void)
+{
+    if(m_SerialPort != nullptr)
+    {
+        delete m_SerialPort;
+    }
 }

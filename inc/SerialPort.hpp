@@ -9,7 +9,6 @@ class SerialPort
 {
 private:
     struct sp_port* m_Port = nullptr;
-    struct sp_port_config* m_Config = nullptr;
     bool m_IsOpen = false;
 
 public:
@@ -33,7 +32,7 @@ public:
     bool Write(const char* const data, unsigned int timeout = 0U);
     bool Write(const void* const data, const size_t size, unsigned int timeout = 0U);
 
-    bool Begin(const enum sp_mode flags);
+    bool Begin(const enum sp_mode mode);
     bool Close(void);
 
     SerialPort(const char* const port);

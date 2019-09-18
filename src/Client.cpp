@@ -51,6 +51,11 @@ bool Client::Receive(void *const data, const size_t size, size_t &result)
         result = ret;
         return true;
     }
+    else if(errno == EWOULDBLOCK)
+    {
+        result = 0U;
+        return true;
+    }
 
     SetError(new EH_ERRNO());
     return false;
