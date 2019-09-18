@@ -43,6 +43,9 @@
     <ClCompile Include="shared_libraries\packet.c">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\IError.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="inc">
@@ -87,6 +90,9 @@
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="shared_libraries\packet.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\IError.hpp">
       <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>

@@ -84,6 +84,7 @@
     <ClCompile Include="src\CustomServer.cpp" />
     <ClCompile Include="src\ErrorInfo.cpp" />
     <ClCompile Include="src\Exception.cpp" />
+    <ClCompile Include="src\IError.cpp" />
     <ClCompile Include="src\IPAuthority.cpp" />
     <ClCompile Include="src\SerialPort.cpp" />
     <ClCompile Include="src\Server.cpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="inc\CustomServer.hpp" />
     <ClInclude Include="inc\ErrorInfo.hpp" />
     <ClInclude Include="inc\Exception.hpp" />
+    <ClInclude Include="inc\IError.hpp" />
     <ClInclude Include="inc\IPAuthority.hpp" />
     <ClInclude Include="inc\SerialPort.hpp" />
     <ClInclude Include="inc\Server.hpp" />
