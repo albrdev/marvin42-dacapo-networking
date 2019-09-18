@@ -119,7 +119,7 @@ CustomServer::CustomServer(const char* const address, const unsigned short port,
     SetOnDataReceivedEvent(CustomServer::OnDataReceived);
 
     m_SerialPort = new SerialPort("/dev/ttyS0");
-    if(!m_SerialPort->Begin(SP_MODE_READ_WRITE))
+    if(!m_SerialPort->Begin(SP_MODE_WRITE))
         throw;
 
     m_SerialPort->SetBaudRate(115200);

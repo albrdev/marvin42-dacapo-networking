@@ -1,11 +1,11 @@
 #ifndef _SERIALPORT_HPP_
 #define _SERIALPORT_HPP_
 
-#include <cstdio>
 #include <string>
 #include <libserialport.h>
+#include "IError.hpp"
 
-class SerialPort
+class SerialPort : public IError
 {
 private:
     struct sp_port* m_Port = nullptr;

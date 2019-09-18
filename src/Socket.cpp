@@ -1,5 +1,6 @@
 #include "Socket.hpp"
 #include <climits> /* HOST_NAME_MAX */
+#include "ErrorInfo.hpp"
 #include "Exception.hpp"
 
 int Socket::StringToNetworkAddress(const char *const address, void *const result)
@@ -141,7 +142,7 @@ bool Socket::Create(void)
     if(m_Socket != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
 }
 
@@ -157,28 +158,8 @@ bool Socket::Close(void)
     if(ret != -1)
         return true;
 
-    SetError(new EH_ERRNO());
+    SetError(new EI_ERRNO());
     return false;
-}
-
-std::string Socket::GetError(void) const
-{
-    return m_ErrorInfo != nullptr ? m_ErrorInfo->GetMessage() : "N/A";
-}
-
-void Socket::SetError(const ErrorInfo *const value)
-{
-    ClearError();
-    m_ErrorInfo = value;
-}
-
-void Socket::ClearError(void)
-{
-    if(m_ErrorInfo == nullptr)
-        return;
-
-    delete m_ErrorInfo;
-    m_ErrorInfo = nullptr;
 }
 
 Socket::Socket(const char *address, unsigned short port)
@@ -212,5 +193,4 @@ Socket::Socket(const char *address, unsigned short port)
 Socket::~Socket(void)
 {
     Close();
-    ClearError();
 }

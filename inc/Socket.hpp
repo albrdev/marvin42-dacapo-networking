@@ -9,7 +9,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include "ErrorInfo.hpp"
+#include "IError.hpp"
 
 union _ipx
 {
@@ -17,17 +17,11 @@ union _ipx
     struct in6_addr ip6;
 } typedef ipx;
 
-class Socket
+class Socket : public IError
 {
-private:
-    const ErrorInfo *m_ErrorInfo = nullptr;
-
 protected:
     int m_Socket = -1;
     struct sockaddr_storage m_Address;
-
-    void SetError(const ErrorInfo *const value);
-    void ClearError(void);
 
 public:
     static int StringToNetworkAddress(const char *const address, void *const result);
@@ -40,8 +34,6 @@ public:
 
     virtual bool Create(void);
     virtual bool Close(void);
-
-    std::string GetError(void) const;
 
     Socket(const char *address, unsigned short port);
     virtual ~Socket(void);

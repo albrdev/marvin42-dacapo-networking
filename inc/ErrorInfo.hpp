@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <libserialport.h>
 
 class ErrorInfo
 {
@@ -39,6 +40,19 @@ public:
     GAIErrorInfo(const int code);
     GAIErrorInfo(void);
     virtual ~GAIErrorInfo(void) override;
+};
+
+class SerialPortErrorInfo : public ErrorInfo
+{
+private:
+    enum sp_return m_Code = SP_OK;
+
+public:
+    std::string GetMessage(void) const override;
+
+    SerialPortErrorInfo(const enum sp_return code);
+    SerialPortErrorInfo(void);
+    virtual ~SerialPortErrorInfo(void) override;
 };
 
 class CustomErrorInfo : public ErrorInfo
