@@ -81,7 +81,7 @@ $(DIR_BIN)/$(BIN_CLIENT): $(OBJS) $(DIR_OBJ)/client_main.o
 	$(CC_CPP) $(CC_LIBS) $^ -o $@
 
 $(DIR_OBJ)/client_main.o: $(DIR_SRC)/client_main.cpp
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/server_main.o: $(DIR_SRC)/server_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
@@ -90,10 +90,10 @@ $(DIR_OBJ)/SerialPort.o: $(DIR_SRC)/SerialPort.cpp $(DIR_INC)/SerialPort.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/CustomClient.o: $(DIR_SRC)/CustomClient.cpp $(DIR_INC)/CustomClient.hpp
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/CustomServer.o: $(DIR_SRC)/CustomServer.cpp $(DIR_INC)/CustomServer.hpp
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/Client.o: $(DIR_SRC)/Client.cpp $(DIR_INC)/Client.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
@@ -108,13 +108,13 @@ $(DIR_OBJ)/IPAuthority.o: $(DIR_SRC)/IPAuthority.cpp $(DIR_INC)/IPAuthority.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/custom_packets.o: $(DIR_SL)/custom_packets.c $(DIR_SL)/custom_packets.h
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/packet.o: $(DIR_SL)/packet.c $(DIR_SL)/packet.h
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/crc.o: $(DIR_SL)/crc.c $(DIR_SL)/crc.h
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/ErrorInfo.o: $(DIR_SRC)/ErrorInfo.cpp $(DIR_INC)/ErrorInfo.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
