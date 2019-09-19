@@ -38,6 +38,7 @@ public:
     std::string GetArgument(const size_t index) const;
     void SetArguments(const std::vector<std::string>& value);
     void AddArgument(const std::string& value);
+    void ClearArguments(void);
 
     int GetTimeout(void) const;
     void SetTimeout(const int value);
@@ -53,6 +54,8 @@ public:
     void SetPrintUsage(const bool value);
 
     bool ParseArguments(char* const args[], const int count);
+
+    Options(const std::string& address, const uint16_t port, const std::string& command, const std::vector<std::string>& arguments, const int timeout, const bool interactive, const bool verbose, const bool printUsage);
 };
 
 #endif // __OPTIONS_HPP__

@@ -33,6 +33,7 @@ const std::vector<std::string>& Options::GetArguments(void) const { return m_Arg
 std::string Options::GetArgument(const size_t index) const { return m_Arguments[index]; }
 void Options::SetArguments(const std::vector<std::string>& value) { m_Arguments = value; }
 void Options::AddArgument(const std::string& value) { m_Arguments.push_back(value); }
+void Options::ClearArguments(void) { m_Arguments.clear(); }
 
 int Options::GetTimeout(void) const { return m_Timeout; }
 void Options::SetTimeout(const int value) { m_Timeout = value; }
@@ -100,4 +101,16 @@ bool Options::ParseArguments(char* const args[], const int count)
     }
 
     return true;
+}
+
+Options::Options(const std::string& address, const uint16_t port, const std::string& command, const std::vector<std::string>& arguments, const int timeout, const bool interactive, const bool verbose, const bool printUsage)
+{
+    SetAddress(address);
+    SetPort(port);
+    SetCommand(command);
+    SetArguments(arguments);
+    SetTimeout(timeout);
+    SetInteractive(interactive);
+    SetVerbose(verbose);
+    SetPrintUsage(printUsage);
 }
