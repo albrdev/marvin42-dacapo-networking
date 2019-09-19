@@ -100,6 +100,9 @@ $(DIR_OBJ)/crc.o: $(DIR_SL)/crc.c $(DIR_SL)/crc.h
 $(DIR_OBJ)/generic.o: $(DIR_SL)/generic.cpp $(DIR_SL)/generic.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
+$(DIR_OBJ)/Options.o: $(DIR_SRC)/Options.cpp $(DIR_INC)/Options.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+
 $(DIR_OBJ)/SerialPort.o: $(DIR_SRC)/SerialPort.cpp $(DIR_INC)/SerialPort.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
