@@ -20,6 +20,8 @@ public:
 
     std::string GetError(void) const;
 
+    operator bool(void) const;
+
     IError(const std::string& defaultMessage);
     IError(void);
     virtual ~IError(void);

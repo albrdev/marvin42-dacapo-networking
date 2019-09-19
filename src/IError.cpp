@@ -30,6 +30,11 @@ void IError::SetDefaultMessage(const std::string& value)
     m_DefaultMessage = value;
 }
 
+IError::operator bool(void) const
+{
+    return m_ErrorInfo == nullptr;
+}
+
 IError::IError(const std::string& defaultMessage)
 {
     SetDefaultMessage(defaultMessage);
