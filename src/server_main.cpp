@@ -1,4 +1,3 @@
-#include <cstdio>
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -11,7 +10,7 @@ int main(int argc, char *argv[])
     CustomServer server("/dev/ttyS0", "0.0.0.0", 1042);
     if(!server.Start())
     {
-        fprintf(stderr, "*** Error: %s\n", server.GetError().c_str());
+        std::cerr << "*** Error: " << server.GetError() << std::endl;
         return 1;
     }
 
@@ -19,7 +18,7 @@ int main(int argc, char *argv[])
     {
         if(!server.Poll())
         {
-            fprintf(stderr, "*** Error: %s\n", server.GetError().c_str());
+            std::cerr << "*** Error: " << server.GetError() << std::endl;
             return 1;
         }
     }
