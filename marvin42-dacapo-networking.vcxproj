@@ -86,6 +86,7 @@
     <ClCompile Include="src\Exception.cpp" />
     <ClCompile Include="src\IError.cpp" />
     <ClCompile Include="src\IPAuthority.cpp" />
+    <ClCompile Include="src\Options.cpp" />
     <ClCompile Include="src\SerialPort.cpp" />
     <ClCompile Include="src\Server.cpp" />
     <ClCompile Include="src\server_main.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="inc\Exception.hpp" />
     <ClInclude Include="inc\IError.hpp" />
     <ClInclude Include="inc\IPAuthority.hpp" />
+    <ClInclude Include="inc\Options.hpp" />
     <ClInclude Include="inc\SerialPort.hpp" />
     <ClInclude Include="inc\Server.hpp" />
     <ClInclude Include="inc\Socket.hpp" />
