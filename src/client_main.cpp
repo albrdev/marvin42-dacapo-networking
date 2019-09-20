@@ -9,10 +9,10 @@
 #include "generic.hpp"
 #include "packet.h"
 #include "custom_packets.h"
-#include "Options.hpp"
+#include "ClientOptions.hpp"
 #include "Exception.hpp"
 
-void printOptions(const Options& options)
+void printOptions(const ClientOptions& options)
 {
     std::cout << "Address: " << options.GetAddress() << std::endl;
     std::cout << "Port: " << options.GetPort() << std::endl;
@@ -30,7 +30,7 @@ void printOptions(const Options& options)
 
 int main(int argc, char *argv[])
 {
-    Options options("127.0.0.1", 1042, "", std::vector<std::string>(), 1000, false, false, false);
+    ClientOptions options("127.0.0.1", 1042, "", std::vector<std::string>(), 1000, false, false, false);
     if(!options.ParseArguments(argv, argc))
     {
         std::cerr << "*** Error: " << options.GetError() << std::endl;
