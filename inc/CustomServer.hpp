@@ -23,7 +23,7 @@ public:
     bool bla = false;
     bool Poll(void);
 
-    CustomServer(const char* const serialPortName, const char* const address, const unsigned short port, const long timeout = 0L);
+    CustomServer(const char* const address, const unsigned short port, const char* const serialPortName, const long timeout = 0L);
     ~CustomServer(void) override;
 };
 

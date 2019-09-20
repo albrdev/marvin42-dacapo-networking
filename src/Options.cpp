@@ -1,6 +1,5 @@
 #include "Options.hpp"
 #include <unistd.h>
-#include <getopt.h>
 #include "ErrorInfo.hpp"
 
 static const struct option _argopts[] =
@@ -35,6 +34,28 @@ void Options::SetVerbose(const bool value) { m_Verbose = value; }
 
 bool Options::GetPrintUsage(void) const { return m_PrintUsage; }
 void Options::SetPrintUsage(const bool value) { m_PrintUsage = value; }
+
+void Options::AddOption(const option info)
+{
+    m_Options[m_Options.size() - 1] = info;
+    m_Options.push_back({ NULL, 0, NULL, 0 });
+
+    std::string str;
+    str += (char)info.val;
+    switch(info.has_arg)
+    {
+        case required_argument:
+            str += ":";
+            break;
+        case optional_argument:
+            str += "::";
+            break;
+        case no_argument: default:
+            break;
+    }
+
+    m_OptionString += str;
+}
 
 bool Options::ParseOption(const int option, const char* const argument, const char* const value)
 {
@@ -79,7 +100,7 @@ bool Options::ParseArguments(char* const args[], const int count)
 {
     int opt = 0;
     opterr = 0;
-    while((opt = getopt_long(count, args, "-:a:p:c:t:iVh", _argopts, NULL)) != -1)
+    while((opt = getopt_long(count, args, m_OptionString.c_str(), &m_Options[0], NULL)) != -1)
     {
         if(!ParseOption(opt, args[optind - 1], optarg))
             return false;

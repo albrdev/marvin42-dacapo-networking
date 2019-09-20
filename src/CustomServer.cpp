@@ -101,7 +101,7 @@ bool CustomServer::Poll(void)
     return Server::Poll(m_Buffer, sizeof(m_Buffer));
 }
 
-CustomServer::CustomServer(const char* const serialPortName, const char* const address, const unsigned short port, const long timeout) : Server(address, port, timeout)
+CustomServer::CustomServer(const char* const address, const unsigned short port, const char* const serialPortName, const long timeout) : Server(address, port, timeout)
 {
     SetOnClientConnectedEvent(CustomServer::OnClientConnected);
     SetOnClientDisconnectedEvent(CustomServer::OnClientDisconnected);

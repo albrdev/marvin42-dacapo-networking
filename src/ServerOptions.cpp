@@ -18,6 +18,9 @@ bool ServerOptions::ParseOption(const int option, const char* const argument, co
         case '\?':
             SetError(new EI_CUSTOM("Unknown option"));
             return false;
+
+        default:
+            return Options::ParseOption(option, argument, value);
     }
 
     return true;
@@ -25,5 +28,7 @@ bool ServerOptions::ParseOption(const int option, const char* const argument, co
 
 ServerOptions::ServerOptions(const std::string& address, const uint16_t port, const std::string& serialPort, const long timeout, const bool verbose, const bool printUsage) : Options(address, port, timeout, verbose, printUsage)
 {
+    AddOption({ "serialport", required_argument, NULL, 's' });
+
     SetSerialPort(serialPort);
 }

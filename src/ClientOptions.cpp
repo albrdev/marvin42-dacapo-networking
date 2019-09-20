@@ -28,6 +28,9 @@ bool ClientOptions::ParseOption(const int option, const char* const argument, co
         case 'i':
             SetInteractive(true);
             break;
+
+        default:
+            return Options::ParseOption(option, argument, value);
     }
 
     return true;
@@ -35,6 +38,9 @@ bool ClientOptions::ParseOption(const int option, const char* const argument, co
 
 ClientOptions::ClientOptions(const std::string& address, const uint16_t port, const std::string& command, const std::vector<std::string>& arguments, const long timeout, const bool interactive, const bool verbose, const bool printUsage) : Options(address, port, timeout, verbose, printUsage)
 {
+    AddOption({ "cmd", required_argument, NULL, 'c' });
+    AddOption({ "interactive", no_argument, NULL, 'i' });
+
     SetCommand(command);
     SetArguments(arguments);
     SetInteractive(interactive);
