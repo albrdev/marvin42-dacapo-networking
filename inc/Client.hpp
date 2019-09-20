@@ -20,7 +20,7 @@ public:
     bool Send(const void *const data, const size_t size);
     bool Receive(void *const data, const size_t size, size_t &result);
 
-    virtual bool Create(void) override;
+    bool SetOptions(void);
 
     Client(const char *const address, const unsigned short port, const unsigned long timeout = 0UL);
 };

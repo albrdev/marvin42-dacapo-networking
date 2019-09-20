@@ -136,9 +136,9 @@ bool Socket::GetHostname(std::string &result)
     }
 }
 
-bool Socket::Create(void)
+bool Socket::Create(const int protocol)
 {
-    m_Socket = socket(m_Address.ss_family, SOCK_STREAM, 0);
+    m_Socket = socket(m_Address.ss_family, protocol, 0);
     if(m_Socket != -1)
         return true;
 

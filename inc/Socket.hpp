@@ -32,7 +32,7 @@ public:
 
     static bool GetHostname(std::string &result);
 
-    virtual bool Create(void);
+    virtual bool Create(const int protocol);
     virtual bool Close(void);
 
     Socket(const char *address, unsigned short port);

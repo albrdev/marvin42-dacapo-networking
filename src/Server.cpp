@@ -116,7 +116,7 @@ bool Server::DisconnectClients(const std::string &address)
 
 bool Server::Start(void)
 {
-    if(!Create() || !SetReusableAddressMode(true) || !SetBlockingMode(false) || !Bind() || !Listen())
+    if(!Create(SOCK_STREAM) || !SetReusableAddressMode(true) || !SetBlockingMode(false) || !Bind() || !Listen())
     {
         return false;
     }

@@ -10,7 +10,7 @@ void Client::SetTimeout(const unsigned long value)
 
 bool Client::Start()
 {
-    return Create() && Connect();
+    return Create(SOCK_STREAM) && SetOptions() && Connect();
 }
 
 bool Client::Connect(void)
@@ -61,17 +61,10 @@ bool Client::Receive(void *const data, const size_t size, size_t &result)
     return false;
 }
 
-bool Client::Create(void)
+bool Client::SetOptions(void)
 {
-    if(!Socket::Create())
-    {
-        return false;
-    }
-
     if(setsockopt(m_Socket, SOL_SOCKET, SO_RCVTIMEO, &m_Timeout, sizeof(m_Timeout)) != -1)
-    {
         return true;
-    }
 
     SetError(new EI_ERRNO());
     return false;
