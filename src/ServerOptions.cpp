@@ -23,7 +23,7 @@ bool ServerOptions::ParseOption(const int option, const char* const argument, co
     return true;
 }
 
-ServerOptions::Options(const std::string& address, const uint16_t port, const std::string& serialPort, const long timeout, const bool verbose, const bool printUsage) : Option(address, port, timeout, verbose, printUsage)
+ServerOptions::ServerOptions(const std::string& address, const uint16_t port, const std::string& serialPort, const long timeout, const bool verbose, const bool printUsage) : Options(address, port, timeout, verbose, printUsage)
 {
     SetSerialPort(serialPort);
 }
