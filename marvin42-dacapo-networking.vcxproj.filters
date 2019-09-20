@@ -49,6 +49,12 @@
     <ClCompile Include="src\Options.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ClientOptions.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ServerOptions.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="inc">
@@ -99,6 +105,12 @@
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\Options.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ClientOptions.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ServerOptions.hpp">
       <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>

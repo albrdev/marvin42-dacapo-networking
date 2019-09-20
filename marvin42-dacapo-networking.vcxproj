@@ -79,6 +79,7 @@
     <ClCompile Include="shared_libraries\custom_packets.c" />
     <ClCompile Include="shared_libraries\packet.c" />
     <ClCompile Include="src\Client.cpp" />
+    <ClCompile Include="src\ClientOptions.cpp" />
     <ClCompile Include="src\client_main.cpp" />
     <ClCompile Include="src\CustomClient.cpp" />
     <ClCompile Include="src\CustomServer.cpp" />
@@ -89,11 +90,13 @@
     <ClCompile Include="src\Options.cpp" />
     <ClCompile Include="src\SerialPort.cpp" />
     <ClCompile Include="src\Server.cpp" />
+    <ClCompile Include="src\ServerOptions.cpp" />
     <ClCompile Include="src\server_main.cpp" />
     <ClCompile Include="src\Socket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Client.hpp" />
+    <ClInclude Include="inc\ClientOptions.hpp" />
     <ClInclude Include="inc\CustomClient.hpp" />
     <ClInclude Include="inc\CustomServer.hpp" />
     <ClInclude Include="inc\ErrorInfo.hpp" />
@@ -103,6 +106,7 @@
     <ClInclude Include="inc\Options.hpp" />
     <ClInclude Include="inc\SerialPort.hpp" />
     <ClInclude Include="inc\Server.hpp" />
+    <ClInclude Include="inc\ServerOptions.hpp" />
     <ClInclude Include="inc\Socket.hpp" />
     <ClInclude Include="shared_libraries\crc.h" />
     <ClInclude Include="shared_libraries\custom_packets.h" />

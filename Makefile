@@ -100,6 +100,12 @@ $(DIR_OBJ)/crc.o: $(DIR_SL)/crc.c $(DIR_SL)/crc.h
 $(DIR_OBJ)/generic.o: $(DIR_SL)/generic.cpp $(DIR_SL)/generic.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
+$(DIR_OBJ)/ClientOptions.o: $(DIR_SRC)/ClientOptions.cpp $(DIR_INC)/ClientOptions.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+
+$(DIR_OBJ)/ServerOptions.o: $(DIR_SRC)/ServerOptions.cpp $(DIR_INC)/ServerOptions.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+
 $(DIR_OBJ)/Options.o: $(DIR_SRC)/Options.cpp $(DIR_INC)/Options.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
