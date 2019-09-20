@@ -25,12 +25,7 @@ bool Client::Connect(void)
 
 bool Client::Send(const char *const data)
 {
-    int ret = send(m_Socket, data, strlen(data) + 1U, 0);
-    if(ret != -1)
-        return true;
-
-    SetError(new EI_ERRNO());
-    return false;
+    return Send(data, strlen(data) + 1U);
 }
 
 bool Client::Send(const void *const data, const size_t size)

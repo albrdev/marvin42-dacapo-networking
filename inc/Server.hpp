@@ -15,8 +15,8 @@
 #include "IPAuthority.hpp"
 
 class Server;
-typedef std::function<void(Server* const, const IPAuthority&)> onclientconnectionevent_t;
-typedef std::function<void(Server* const, const IPAuthority&, const int, const void* const, const size_t)> ondatarecvevent_t;
+typedef std::function<void(Server* const, const IPAuthority&)> OnClientConnectionEventHandler;
+typedef std::function<void(Server* const, const IPAuthority&, const int, const void* const, const size_t)> OnTCPDataReceivedEventHandler;
 
 class Server : public Socket
 {
@@ -27,9 +27,9 @@ private:
     std::vector<struct pollfd> m_PeerEvents;
     std::map<int, std::shared_ptr<IPAuthority>> m_PeerInfo;
 
-    onclientconnectionevent_t m_OnClientConnectedEvent;
-    onclientconnectionevent_t m_OnClientDisconnectedEvent;
-    ondatarecvevent_t m_OnDataReceived;
+    OnClientConnectionEventHandler m_OnClientConnectedEvent;
+    OnClientConnectionEventHandler m_OnClientDisconnectedEvent;
+    OnTCPDataReceivedEventHandler m_OnDataReceived;
 
     void SetTimeout(const long value);
 
@@ -45,9 +45,9 @@ private:
     bool CloseConnection(const size_t index);
 
 public:
-    void SetOnClientConnectedEvent(const onclientconnectionevent_t &value);
-    void SetOnClientDisconnectedEvent(const onclientconnectionevent_t &value);
-    void SetOnDataReceivedEvent(const ondatarecvevent_t &value);
+    void SetOnClientConnectedEvent(const OnClientConnectionEventHandler& value);
+    void SetOnClientDisconnectedEvent(const OnClientConnectionEventHandler& value);
+    void SetOnDataReceivedEvent(const OnTCPDataReceivedEventHandler& value);
 
     bool DisconnectClient(const std::string &address, const unsigned short port = 0U);
     bool DisconnectClients(const std::string &address);

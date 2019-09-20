@@ -56,17 +56,17 @@ bool Server::SetReusableAddressMode(const bool value)
     return false;
 }
 
-void Server::SetOnClientConnectedEvent(const onclientconnectionevent_t &value)
+void Server::SetOnClientConnectedEvent(const OnClientConnectionEventHandler& value)
 {
     m_OnClientConnectedEvent = value;
 }
 
-void Server::SetOnClientDisconnectedEvent(const onclientconnectionevent_t &value)
+void Server::SetOnClientDisconnectedEvent(const OnClientConnectionEventHandler& value)
 {
     m_OnClientDisconnectedEvent = value;
 }
 
-void Server::SetOnDataReceivedEvent(const ondatarecvevent_t &value)
+void Server::SetOnDataReceivedEvent(const OnTCPDataReceivedEventHandler& value)
 {
     m_OnDataReceived = value;
 }
@@ -273,12 +273,7 @@ bool Server::Poll(void *const buffer, const size_t size, const size_t offset)
 
 bool Server::Send(const int fd, const char *const data)
 {
-    int ret = send(fd, data, strlen(data) + 1U, 0);
-    if(ret != -1)
-        return true;
-
-    SetError(new EI_ERRNO());
-    return false;
+    return Send(fd, data, strlen(data) + 1U);
 }
 
 bool Server::Send(const int fd, const void *const data, const size_t size)
