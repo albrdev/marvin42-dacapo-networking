@@ -12,15 +12,16 @@ private:
     struct timeval m_Timeout = { 0, 0UL };
 
 public:
+    unsigned long GetTimeout(void) const;
     void SetTimeout(const unsigned long value);
 
-    bool Start();
-    bool Connect(void);
-    bool Send(const char *const data);
-    bool Send(const void *const data, const size_t size);
+    bool SetOptions(void);
+
+    virtual bool Send(const char *const data);
+    virtual bool Send(const void* const data, const size_t size) = 0;
     bool Receive(void *const data, const size_t size, size_t &result);
 
-    bool SetOptions(void);
+    virtual bool Start(void) = 0;
 
     Client(const char *const address, const unsigned short port, const unsigned long timeout = 0UL);
 };

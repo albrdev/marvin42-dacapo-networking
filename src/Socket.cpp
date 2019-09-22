@@ -162,6 +162,24 @@ bool Socket::Close(void)
     return false;
 }
 
+bool Socket::SetDevice(const char* const value)
+{
+    if(setsockopt(m_Socket, SOL_SOCKET, SO_BINDTODEVICE, value, strlen(value)) != -1)
+        return true;
+
+    SetError(new EI_ERRNO());
+    return false;
+}
+
+bool Socket::UnsetDevice(void)
+{
+    if(setsockopt(m_Socket, SOL_SOCKET, SO_BINDTODEVICE, "", 0) != -1)
+        return true;
+
+    SetError(new EI_ERRNO());
+    return false;
+}
+
 Socket::Socket(const char *address, unsigned short port)
 {
     if(port == 0)

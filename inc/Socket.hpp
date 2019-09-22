@@ -35,6 +35,9 @@ public:
     virtual bool Create(const int protocol);
     virtual bool Close(void);
 
+    bool SetDevice(const char* const value);
+    bool UnsetDevice(void);
+
     Socket(const char *address, unsigned short port);
     virtual ~Socket(void);
 };

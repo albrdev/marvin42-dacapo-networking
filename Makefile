@@ -5,7 +5,7 @@ CC_CPP		:= g++
 CC_FLAGS	:= -pedantic -Wall -Wextra -Wconversion -std=c++11
 CC_LIBS		:= -lm -lserialport
 
-FLAGS_DBG	:= -g
+FLAGS_DBG	:= -g -Wno-unused-parameter
 FLAGS_RLS	:= -DNDEBUG
 
 DIR_INC		:= inc
@@ -19,9 +19,9 @@ CMD_RM		:= rm -f
 CMD_MKDIR	:= mkdir -p
 CMD_PRINT	:= @printf
 
-SRCS_C		:= $(filter-out $(DIR_SRC)/%_main.c,$(wildcard $(DIR_SRC)/*.c))
+SRCS_C		:= $(wildcard $(DIR_SRC)/*.c)
 OBJS_C		:= $(patsubst $(DIR_SRC)/%.c,$(DIR_OBJ)/%.o,$(SRCS_C))
-SRCS_CPP	:= $(filter-out $(DIR_SRC)/%_main.cpp,$(wildcard $(DIR_SRC)/*.cpp))
+SRCS_CPP	:= $(wildcard $(DIR_SRC)/*.cpp)
 OBJS_CPP	:= $(patsubst $(DIR_SRC)/%.cpp,$(DIR_OBJ)/%.o,$(SRCS_CPP))
 SRCS_SLC	:= $(DIR_SL)/crc.c $(DIR_SL)/packet.c $(DIR_SL)/custom_packets.c
 OBJS_SLC	:= $(patsubst $(DIR_SL)/%.c,$(DIR_OBJ)/%.o,$(SRCS_SLC))
@@ -31,11 +31,13 @@ OBJS		:= $(OBJS_C) $(OBJS_CPP) $(OBJS_SLC) $(OBJS_SLCPP)
 
 TRG_BIN		:= $(DIR_BIN)/$(APP_BIN)
 
-BIN_SERVER	:= $(APP_BIN)_srv
-BIN_CLIENT	:= $(APP_BIN)_cli
+BIN_SERVER1	:= $(APP_BIN)_tcpsrv
+BIN_SERVER2	:= $(APP_BIN)_udpsrv
+BIN_CLIENT1	:= $(APP_BIN)_tcpcli
+BIN_CLIENT2	:= $(APP_BIN)_udpcli
 
-TRG_SERVER	:= $(DIR_BIN)/$(BIN_SERVER)
-TRG_CLIENT	:= $(DIR_BIN)/$(BIN_CLIENT)
+TRG_SERVER	:= $(DIR_BIN)/$(BIN_SERVER1) $(DIR_BIN)/$(BIN_SERVER2)
+TRG_CLIENT	:= $(DIR_BIN)/$(BIN_CLIENT1) $(DIR_BIN)/$(BIN_CLIENT2)
 
 TRG_BINS	:= $(TRG_SERVER) $(TRG_CLIENT)
 
@@ -60,8 +62,7 @@ distclean: clean
 
 .PHONY: test
 test:
-	$(CMD_PRINT) "$(DIR_BIN)/$(BIN_SERVER)\n"
-	$(CMD_PRINT) "$(TRG_BINS)\n"
+	$(CMD_PRINT) "\n"
 
 .PHONY: run
 run: $(TRG_BIN)
@@ -76,18 +77,32 @@ $(DIR_OBJ):
 $(DIR_BIN):
 	$(CMD_MKDIR) $@
 
-$(DIR_BIN)/$(BIN_SERVER): $(OBJS) $(DIR_OBJ)/server_main.o
+# Main
+$(DIR_BIN)/$(BIN_SERVER1): $(OBJS) $(DIR_OBJ)/tcpserver_main.o
 	$(CC_CPP) $(CC_LIBS) $^ -o $@
 
-$(DIR_BIN)/$(BIN_CLIENT): $(OBJS) $(DIR_OBJ)/client_main.o
+$(DIR_BIN)/$(BIN_SERVER2): $(OBJS) $(DIR_OBJ)/udpserver_main.o
 	$(CC_CPP) $(CC_LIBS) $^ -o $@
 
-$(DIR_OBJ)/client_main.o: $(DIR_SRC)/client_main.cpp
+$(DIR_BIN)/$(BIN_CLIENT1): $(OBJS) $(DIR_OBJ)/tcpclient_main.o
+	$(CC_CPP) $(CC_LIBS) $^ -o $@
+
+$(DIR_BIN)/$(BIN_CLIENT2): $(OBJS) $(DIR_OBJ)/udpclient_main.o
+	$(CC_CPP) $(CC_LIBS) $^ -o $@
+
+$(DIR_OBJ)/tcpclient_main.o: tcpclient_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
 
-$(DIR_OBJ)/server_main.o: $(DIR_SRC)/server_main.cpp
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+$(DIR_OBJ)/udpclient_main.o: udpclient_main.cpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
 
+$(DIR_OBJ)/tcpserver_main.o: tcpserver_main.cpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
+
+$(DIR_OBJ)/udpserver_main.o: udpserver_main.cpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
+
+# External/Shared
 $(DIR_OBJ)/custom_packets.o: $(DIR_SL)/custom_packets.c $(DIR_SL)/custom_packets.h
 	$(CC_C) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
@@ -100,6 +115,7 @@ $(DIR_OBJ)/crc.o: $(DIR_SL)/crc.c $(DIR_SL)/crc.h
 $(DIR_OBJ)/generic.o: $(DIR_SL)/generic.cpp $(DIR_SL)/generic.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL) -c $< -o $@
 
+# Units
 $(DIR_OBJ)/ClientOptions.o: $(DIR_SRC)/ClientOptions.cpp $(DIR_INC)/ClientOptions.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
@@ -112,11 +128,17 @@ $(DIR_OBJ)/Options.o: $(DIR_SRC)/Options.cpp $(DIR_INC)/Options.hpp
 $(DIR_OBJ)/SerialPort.o: $(DIR_SRC)/SerialPort.cpp $(DIR_INC)/SerialPort.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
-$(DIR_OBJ)/CustomClient.o: $(DIR_SRC)/CustomClient.cpp $(DIR_INC)/CustomClient.hpp
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
+$(DIR_OBJ)/UDPClient.o: $(DIR_SRC)/UDPClient.cpp $(DIR_INC)/UDPClient.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
-$(DIR_OBJ)/CustomServer.o: $(DIR_SRC)/CustomServer.cpp $(DIR_INC)/CustomServer.hpp
-	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
+$(DIR_OBJ)/UDPServer.o: $(DIR_SRC)/UDPServer.cpp $(DIR_INC)/UDPServer.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+
+$(DIR_OBJ)/TCPClient.o: $(DIR_SRC)/TCPClient.cpp $(DIR_INC)/TCPClient.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+
+$(DIR_OBJ)/TCPServer.o: $(DIR_SRC)/TCPServer.cpp $(DIR_INC)/TCPServer.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/Client.o: $(DIR_SRC)/Client.cpp $(DIR_INC)/Client.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@

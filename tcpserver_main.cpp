@@ -1,21 +1,22 @@
-#include "CustomServer.hpp"
+#include <cstring>
+#include <iostream>
+#include <string>
+#include "TCPServer.hpp"
+#include "SerialPort.hpp"
+#include "ServerOptions.hpp"
 #include "generic.hpp"
-#include "crc.h"
-#include "packet.h"
-#include "custom_packets.h"
-#include "ErrorInfo.hpp"
 
-void CustomServer::OnClientConnected(Server* const self, const IPAuthority& address)
+void OnClientConnected(TCPServer* const self, const IPAuthority& address)
 {
     std::cout << "OnClientConnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
 }
 
-void CustomServer::OnClientDisconnected(Server* const self, const IPAuthority& address)
+void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
 {
     std::cout << "OnClientDisconnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
 }
 
-/*void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
+/*void OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
     fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
@@ -87,41 +88,74 @@ void CustomServer::OnClientDisconnected(Server* const self, const IPAuthority& a
     tmpSelf->Send(fd, &rsp, sizeof(rsp));
 }*/
 
-void CustomServer::OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
+SerialPort* serialPort;
+void OnDataReceived(TCPServer* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
     fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
-    CustomServer* const tmpSelf = ((CustomServer * const)self);
-    tmpSelf->m_SerialPort->Write(data, size);
+    serialPort->Write(data, size);
 }
 
-bool CustomServer::Poll(void)
+int main(int argc, char *argv[])
 {
-    return Server::Poll(m_Buffer, sizeof(m_Buffer));
-}
-
-CustomServer::CustomServer(const char* const address, const unsigned short port, const char* const serialPortName, const long timeout) : Server(address, port, timeout)
-{
-    SetOnClientConnectedEvent(CustomServer::OnClientConnected);
-    SetOnClientDisconnectedEvent(CustomServer::OnClientDisconnected);
-    SetOnDataReceivedEvent(CustomServer::OnDataReceived);
-
-    m_SerialPort = new SerialPort(serialPortName);
-    if(!m_SerialPort->Begin(SP_MODE_WRITE))
-        throw;
-
-    m_SerialPort->SetBaudRate(115200);
-    m_SerialPort->SetDataBits(8);
-    m_SerialPort->SetStopBits(1);
-    m_SerialPort->SetParity(SP_PARITY_NONE);
-    m_SerialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
-}
-
-CustomServer::~CustomServer(void)
-{
-    if(m_SerialPort != nullptr)
+    ServerOptions options("0.0.0.0", 1042, "", 0L, false, false);
+    if(!options.ParseArguments(argv, argc))
     {
-        delete m_SerialPort;
+        std::cerr << "*** Error: " << options.GetError() << std::endl;
+        return 1;
     }
+
+    if(options.GetAddress().empty())
+    {
+        std::cerr << "*** Error: No address specified" << std::endl;
+        return 1;
+    }
+
+    if(options.GetPort() == 0U)
+    {
+        std::cerr << "*** Error: No port specified" << std::endl;
+        return 1;
+    }
+
+    if(options.GetSerialPort().empty())
+    {
+        std::cerr << "*** Error: No serial port specified" << std::endl;
+        return 1;
+    }
+
+    serialPort = new SerialPort(options.GetSerialPort().c_str());
+    if(!serialPort->Begin(SP_MODE_WRITE))
+    {
+        std::cerr << "*** Error: " << serialPort->GetError() << std::endl;
+        return 1;
+    }
+
+    serialPort->SetBaudRate(115200);
+    serialPort->SetDataBits(8);
+    serialPort->SetStopBits(1);
+    serialPort->SetParity(SP_PARITY_NONE);
+    serialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
+
+    TCPServer server(options.GetAddress().c_str(), options.GetPort());
+    server.SetOnClientConnectedEvent(OnClientConnected);
+    server.SetOnClientDisconnectedEvent(OnClientDisconnected);
+    server.SetOnDataReceivedEvent(OnDataReceived);
+    if(!server.Start(true, false))
+    {
+        std::cerr << "*** Error: " << server.GetError() << std::endl;
+        return 1;
+    }
+
+    uint8_t buffer[1024];
+    while(true)
+    {
+        if(!server.Poll(buffer, sizeof(buffer)))
+        {
+            std::cerr << "*** Error: " << server.GetError() << std::endl;
+            return 1;
+        }
+    }
+
+    return 0;
 }

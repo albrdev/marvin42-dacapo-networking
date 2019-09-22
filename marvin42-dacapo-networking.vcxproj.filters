@@ -4,9 +4,6 @@
     <ClCompile Include="src\Client.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\client_main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\ErrorInfo.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -19,16 +16,7 @@
     <ClCompile Include="src\Server.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\server_main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Socket.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CustomServer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CustomClient.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\SerialPort.cpp">
@@ -53,6 +41,22 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\ServerOptions.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UDPClient.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UDPServer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="tcpclient_main.cpp" />
+    <ClCompile Include="tcpserver_main.cpp" />
+    <ClCompile Include="udpclient_main.cpp" />
+    <ClCompile Include="udpserver_main.cpp" />
+    <ClCompile Include="src\TCPClient.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TCPServer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,12 +87,6 @@
     <ClInclude Include="inc\Socket.hpp">
       <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="inc\CustomServer.hpp">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\CustomClient.hpp">
-      <Filter>inc</Filter>
-    </ClInclude>
     <ClInclude Include="inc\SerialPort.hpp">
       <Filter>inc</Filter>
     </ClInclude>
@@ -111,6 +109,18 @@
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\ServerOptions.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\UDPClient.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\UDPServer.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\TCPClient.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\TCPServer.hpp">
       <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>
