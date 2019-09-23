@@ -140,6 +140,11 @@ int main(int argc, char* argv[])
         std::cout << std::endl;
 
         UDPClient client(addresses[0].c_str(), options.GetPort(), options.GetTimeout() < 0 ? 0 : options.GetTimeout());
+        if(!options.GetInterface().empty())
+        {
+            client.SetInterface(options.GetInterface().c_str());
+        }
+
         if(!client.Start())
         {
             std::cerr << "*** Error: " << client.GetError() << std::endl;

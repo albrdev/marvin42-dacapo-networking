@@ -2,8 +2,10 @@
 #include <iostream>
 #include <string>
 #include "TCPServer.hpp"
-#include "SerialPort.hpp"
 #include "ServerOptions.hpp"
+#include "crc.h"
+#include "packet.h"
+#include "custom_packets.h"
 #include "generic.hpp"
 
 void OnClientConnected(TCPServer* const self, const IPAuthority& address)
@@ -16,12 +18,10 @@ void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
     std::cout << "OnClientDisconnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
 }
 
-/*void OnDataReceived(Server* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
+void OnDataReceived(TCPServer* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
     fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
-
-    CustomServer* const tmpSelf = ((CustomServer * const)self);
 
     const packet_header_t* hdr = (const packet_header_t*)data;
     if(size < sizeof(*hdr))
@@ -43,7 +43,7 @@ void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
     if(packet_verifyheader(hdr) == 0)
     {
         packet_mkbasic(&rsp, PT_FALSE);
-        tmpSelf->Send(fd, &rsp, sizeof(rsp));
+        self->Send(fd, &rsp, sizeof(rsp));
         return;
     }
 
@@ -53,7 +53,7 @@ void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
     if(packet_verifydata(hdr) == 0)
     {
         packet_mkbasic(&rsp, PT_FALSE);
-        tmpSelf->Send(fd, &rsp, sizeof(rsp));
+        self->Send(fd, &rsp, sizeof(rsp));
         return;
     }
 
@@ -79,22 +79,13 @@ void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
         {
             fprintf(stderr, "Unknown packet type\n");
             packet_mkbasic(&rsp, PT_FALSE);
-            tmpSelf->Send(fd, &rsp, sizeof(rsp));
+            self->Send(fd, &rsp, sizeof(rsp));
             return;
         }
     }
 
     packet_mkbasic(&rsp, PT_TRUE);
-    tmpSelf->Send(fd, &rsp, sizeof(rsp));
-}*/
-
-SerialPort* serialPort;
-void OnDataReceived(TCPServer* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
-{
-    std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
-    fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
-
-    serialPort->Write(data, size);
+    self->Send(fd, &rsp, sizeof(rsp));
 }
 
 int main(int argc, char *argv[])
@@ -118,29 +109,15 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if(options.GetSerialPort().empty())
-    {
-        std::cerr << "*** Error: No serial port specified" << std::endl;
-        return 1;
-    }
-
-    serialPort = new SerialPort(options.GetSerialPort().c_str());
-    if(!serialPort->Begin(SP_MODE_WRITE))
-    {
-        std::cerr << "*** Error: " << serialPort->GetError() << std::endl;
-        return 1;
-    }
-
-    serialPort->SetBaudRate(115200);
-    serialPort->SetDataBits(8);
-    serialPort->SetStopBits(1);
-    serialPort->SetParity(SP_PARITY_NONE);
-    serialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
-
     TCPServer server(options.GetAddress().c_str(), options.GetPort());
     server.SetOnClientConnectedEvent(OnClientConnected);
     server.SetOnClientDisconnectedEvent(OnClientDisconnected);
     server.SetOnDataReceivedEvent(OnDataReceived);
+    if(!options.GetInterface().empty())
+    {
+        server.SetInterface(options.GetInterface().c_str());
+    }
+
     if(!server.Start(true, false))
     {
         std::cerr << "*** Error: " << server.GetError() << std::endl;

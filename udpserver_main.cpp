@@ -2,17 +2,88 @@
 #include <iostream>
 #include <string>
 #include "UDPServer.hpp"
-#include "SerialPort.hpp"
+#include "UDPClient.hpp"
 #include "ServerOptions.hpp"
+#include "crc.h"
+#include "packet.h"
+#include "custom_packets.h"
 #include "generic.hpp"
 
-SerialPort* serialPort;
 void OnDataReceived(UDPServer* const self, const IPAuthority& address, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
     fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
-    serialPort->Write(data, size);
+    const packet_header_t* hdr = (const packet_header_t*)data;
+    if(size < sizeof(*hdr))
+    {
+        fprintf(stderr, "Not enough header data: %zu\n", size);
+        return;
+    }
+
+    uint16_t chksum = mkcrc16((uint8_t*)hdr + sizeof(hdr->chksum_header), sizeof(*hdr) - sizeof(hdr->chksum_header));
+    fprintf(stderr, "Header:   chksum_header=%hX, chksum_data=%hX, type=%hhu, size=%hu (chksum=%hX, hex=%s)\n", hdr->chksum_header, hdr->chksum_data, hdr->type, hdr->size, chksum, hexstr(data, sizeof(*hdr)));
+
+    if(size < sizeof(*hdr) + hdr->size)
+    {
+        fprintf(stderr, "Not enough content data: %zu\n", size);
+        return;
+    }
+
+    UDPClient client(address.GetAddress().c_str(), address.GetPort());
+    if(!client.Start())
+    {
+        std::cerr << "*** Error: " << client.GetError() << std::endl;
+        return;
+    }
+
+    packet_header_t rsp;
+    if(packet_verifyheader(hdr) == 0)
+    {
+        packet_mkbasic(&rsp, PT_FALSE);
+        client.Send(&rsp, sizeof(rsp));
+        return;
+    }
+
+    chksum = mkcrc16((uint8_t*)hdr + sizeof(*hdr), hdr->size);
+    fprintf(stderr, "Content:  chksum_data=%hX, size=%zu (chksum=%hX, hex=%s)\n", hdr->chksum_data, hdr->size, chksum, hexstr((uint8_t*)data + sizeof(*hdr), hdr->size));
+
+    if(packet_verifydata(hdr) == 0)
+    {
+        packet_mkbasic(&rsp, PT_FALSE);
+        client.Send(&rsp, sizeof(rsp));
+        return;
+    }
+
+    switch(hdr->type)
+    {
+        case CPT_MOTORRUN:
+        {
+            const packet_motorrun_t* hdr = (const packet_motorrun_t*)data;
+            float left, right;
+            memcpy(&left, &hdr->left, sizeof(hdr->left));
+            memcpy(&right, &hdr->right, sizeof(hdr->right));
+            fprintf(stderr, "CPT_MOTORRUN: left=%.2f, right=%.2f\n", left, right);
+            break;
+        }
+
+        case CPT_MOTORSTOP:
+        {
+            fprintf(stderr, "CPT_MOTORSTOP\n");
+            break;
+        }
+
+        default:
+        {
+            fprintf(stderr, "Unknown packet type\n");
+            packet_mkbasic(&rsp, PT_FALSE);
+            client.Send(&rsp, sizeof(rsp));
+            return;
+        }
+    }
+
+    packet_mkbasic(&rsp, PT_TRUE);
+    client.Send(&rsp, sizeof(rsp));
 }
 
 int main(int argc, char* argv[])
@@ -36,27 +107,13 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    if(options.GetSerialPort().empty())
-    {
-        std::cerr << "*** Error: No serial port specified" << std::endl;
-        return 1;
-    }
-
-    serialPort = new SerialPort(options.GetSerialPort().c_str());
-    if(!serialPort->Begin(SP_MODE_WRITE))
-    {
-        std::cerr << "*** Error: " << serialPort->GetError() << std::endl;
-        return 1;
-    }
-
-    serialPort->SetBaudRate(115200);
-    serialPort->SetDataBits(8);
-    serialPort->SetStopBits(1);
-    serialPort->SetParity(SP_PARITY_NONE);
-    serialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
-
     UDPServer server(options.GetAddress().c_str(), options.GetPort());
     server.SetOnDataReceivedEvent(OnDataReceived);
+    if(!options.GetInterface().empty())
+    {
+        server.SetInterface(options.GetInterface().c_str());
+    }
+
     if(!server.Start(true, true))
     {
         std::cerr << "*** Error: " << server.GetError() << std::endl;
