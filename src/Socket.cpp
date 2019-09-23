@@ -3,13 +3,13 @@
 #include "ErrorInfo.hpp"
 #include "Exception.hpp"
 
-int Socket::StringToNetworkAddress(const char *const address, void *const result)
+int Socket::StringToNetworkAddress(const std::string& address, void *const result)
 {
-    if(inet_pton(AF_INET, address, result) > 0)
+    if(inet_pton(AF_INET, address.c_str(), result) > 0)
     {
         return AF_INET;
     }
-    else if(inet_pton(AF_INET6, address, result) > 0)
+    else if(inet_pton(AF_INET6, address.c_str(), result) > 0)
     {
         return AF_INET6;
     }
@@ -19,7 +19,7 @@ int Socket::StringToNetworkAddress(const char *const address, void *const result
     }
 }
 
-bool Socket::NetworkToStringAddress(const struct sockaddr_storage &value, std::string &resultAddress, unsigned short &resultPort)
+bool Socket::NetworkToStringAddress(const struct sockaddr_storage& value, std::string& resultAddress, uint16_t& resultPort)
 {
     const void *addr;
     switch(value.ss_family)
@@ -48,7 +48,7 @@ bool Socket::NetworkToStringAddress(const struct sockaddr_storage &value, std::s
     }
 }
 
-bool Socket::GetAddressInfo(const char *const name, std::string &result, const char *const service, const int family)
+bool Socket::GetAddressInfo(const std::string& name, std::string& result, const std::string& service, const int family)
 {
     struct addrinfo hints;
     struct addrinfo *res;
@@ -58,7 +58,8 @@ bool Socket::GetAddressInfo(const char *const name, std::string &result, const c
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
 
-    if(getaddrinfo(name, service, &hints, &res) != 0 || res == nullptr)
+    const char* const tmpService = service.empty() ? nullptr : service.c_str();
+    if(getaddrinfo(name.c_str(), tmpService, &hints, &res) != 0 || res == nullptr)
     {
         return false;
     }
@@ -84,7 +85,7 @@ bool Socket::GetAddressInfo(const char *const name, std::string &result, const c
     return true;
 }
 
-bool Socket::GetAddressInfoList(const char *const name, std::vector<std::string> &results, const char *const service, const int family)
+bool Socket::GetAddressInfoList(const std::string& name, std::vector<std::string>& results, const std::string& service, const int family)
 {
     struct addrinfo hints;
     struct addrinfo *res;
@@ -94,7 +95,8 @@ bool Socket::GetAddressInfoList(const char *const name, std::vector<std::string>
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
 
-    if(getaddrinfo(name, service, &hints, &res) != 0)
+    const char* const tmpService = service.empty() ? nullptr : service.c_str();
+    if(getaddrinfo(name.c_str(), tmpService, &hints, &res) != 0)
     {
         return false;
     }
@@ -162,16 +164,16 @@ bool Socket::Close(void)
     return false;
 }
 
-bool Socket::SetDevice(const char* const value)
+bool Socket::SetInterface(const std::string& value)
 {
-    if(setsockopt(m_Socket, SOL_SOCKET, SO_BINDTODEVICE, value, strlen(value)) != -1)
+    if(setsockopt(m_Socket, SOL_SOCKET, SO_BINDTODEVICE, value.c_str(), (socklen_t)value.length()) != -1)
         return true;
 
     SetError(new EI_ERRNO());
     return false;
 }
 
-bool Socket::UnsetDevice(void)
+bool Socket::UnsetInterface(void)
 {
     if(setsockopt(m_Socket, SOL_SOCKET, SO_BINDTODEVICE, "", 0) != -1)
         return true;
@@ -180,7 +182,7 @@ bool Socket::UnsetDevice(void)
     return false;
 }
 
-Socket::Socket(const char *address, unsigned short port)
+Socket::Socket(const std::string&  address, const uint16_t port)
 {
     if(port == 0)
     {
