@@ -31,12 +31,13 @@ OBJS		:= $(OBJS_C) $(OBJS_CPP) $(OBJS_SLC) $(OBJS_SLCPP)
 
 TRG_BIN		:= $(DIR_BIN)/$(APP_BIN)
 
+BIN_SERVER	:= $(APP_BIN)_srv
 BIN_SERVER1	:= $(APP_BIN)_tcpsrv
 BIN_SERVER2	:= $(APP_BIN)_udpsrv
 BIN_CLIENT1	:= $(APP_BIN)_tcpcli
 BIN_CLIENT2	:= $(APP_BIN)_udpcli
 
-TRG_SERVER	:= $(DIR_BIN)/$(BIN_SERVER1) $(DIR_BIN)/$(BIN_SERVER2)
+TRG_SERVER	:= $(DIR_BIN)/$(BIN_SERVER) $(DIR_BIN)/$(BIN_SERVER1) $(DIR_BIN)/$(BIN_SERVER2)
 TRG_CLIENT	:= $(DIR_BIN)/$(BIN_CLIENT1) $(DIR_BIN)/$(BIN_CLIENT2)
 
 TRG_BINS	:= $(TRG_SERVER) $(TRG_CLIENT)
@@ -89,6 +90,12 @@ $(DIR_BIN)/$(BIN_CLIENT1): $(OBJS) $(DIR_OBJ)/tcpclient_main.o
 
 $(DIR_BIN)/$(BIN_CLIENT2): $(OBJS) $(DIR_OBJ)/udpclient_main.o
 	$(CC_CPP) $(CC_LIBS) $^ -o $@
+
+$(DIR_BIN)/$(BIN_SERVER): $(OBJS) $(DIR_OBJ)/server_main.o
+	$(CC_CPP) $(CC_LIBS) $^ -o $@
+
+$(DIR_OBJ)/server_main.o: server_main.cpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@
 
 $(DIR_OBJ)/tcpclient_main.o: tcpclient_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL) -c $< -o $@

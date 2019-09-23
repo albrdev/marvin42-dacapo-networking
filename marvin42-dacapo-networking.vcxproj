@@ -75,6 +75,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="server_main.cpp" />
     <ClCompile Include="shared_libraries\crc.c" />
     <ClCompile Include="shared_libraries\custom_packets.c" />
     <ClCompile Include="shared_libraries\packet.c" />

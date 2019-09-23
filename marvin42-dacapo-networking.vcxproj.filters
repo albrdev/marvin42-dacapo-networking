@@ -59,6 +59,7 @@
     <ClCompile Include="src\TCPServer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="server_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="inc">
