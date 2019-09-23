@@ -103,12 +103,12 @@ bool Socket::GetAddressInfo(const char* const name, char* const result, const si
 
 bool Socket::GetAddressInfoList(const std::string& name, std::vector<std::string>& results, const int family)
 {
-    return Socket::GetAddressInfoList(name, results, nullptr, family);
+    return Socket::GetAddressInfoList(name.c_str(), results, nullptr, family);
 }
 
 bool Socket::GetAddressInfoList(const std::string& name, std::vector<std::string>& results, const std::string& service, const int family)
 {
-    return Socket::GetAddressInfoList(name, results, service.c_str(), family);
+    return Socket::GetAddressInfoList(name.c_str(), results, service.c_str(), family);
 }
 
 bool Socket::GetAddressInfoList(const char* const name, std::vector<std::string>& results, const char* const service, const int family)
