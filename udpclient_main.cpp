@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
     while(true)
     {
         std::vector<std::string> addresses;
-        Socket::GetAddressInfoList(options.GetAddress(), addresses, nullptr, AF_INET);
+        Socket::GetAddressInfoList(options.GetAddress(), addresses, AF_INET);
 
         if(addresses.empty())
         {
