@@ -1,9 +1,9 @@
 #include "SerialPort.hpp"
 #include "Exception.hpp"
 
-bool SerialPort::GetPortByName(const char* const name, struct sp_port** result)
+bool SerialPort::GetPortByName(const std::string& name, struct sp_port** result)
 {
-    enum sp_return ret = sp_get_port_by_name(name, result);
+    enum sp_return ret = sp_get_port_by_name(name.c_str(), result);
     return ret == SP_OK;
 }
 
@@ -116,7 +116,7 @@ int SerialPort::AvailableBytes(void)
     return ret;
 }
 
-bool SerialPort::Read(void* const data, const size_t size, unsigned int timeout)
+bool SerialPort::Read(void* const data, const size_t size, const unsigned int timeout)
 {
     enum sp_return ret = sp_nonblocking_read(m_Port, data, size); // just in case
     //enum sp_return ret = sp_blocking_read(m_Port, data, size, timeout);
@@ -127,12 +127,12 @@ bool SerialPort::Read(void* const data, const size_t size, unsigned int timeout)
     return false;
 }
 
-bool SerialPort::Write(const char* const data, unsigned int timeout)
+bool SerialPort::Write(const std::string& data, const unsigned int timeout)
 {
-    return Write(data, strlen(data) + 1U, timeout);
+    return Write(data.c_str(), data.length() + 1U, timeout);
 }
 
-bool SerialPort::Write(const void* const data, const size_t size, unsigned int timeout)
+bool SerialPort::Write(const void* const data, const size_t size, const unsigned int timeout)
 {
     enum sp_return ret = sp_nonblocking_write(m_Port, data, size);
     //enum sp_return ret = sp_blocking_write(m_Port, data, size, timeout); // crashes! segfault...
@@ -174,7 +174,7 @@ bool SerialPort::Close(void)
     return false;
 }
 
-SerialPort::SerialPort(const char* const port)
+SerialPort::SerialPort(const std::string& port)
 {
     if(!SerialPort::GetPortByName(port, &m_Port))
         throw EXCEPT("Could not find serial port");

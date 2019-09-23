@@ -1,5 +1,5 @@
-#ifndef _SERIALPORT_HPP_
-#define _SERIALPORT_HPP_
+#ifndef __SERIALPORT_HPP__
+#define __SERIALPORT_HPP__
 
 #include <string>
 #include <libserialport.h>
@@ -12,7 +12,7 @@ private:
     bool m_IsOpen = false;
 
 public:
-    static bool GetPortByName(const char* const name, struct sp_port** result);
+    static bool GetPortByName(const std::string& name, struct sp_port** result);
 
     bool SetBaudRate(const int value);
     bool SetDataBits(const int value);
@@ -27,17 +27,17 @@ public:
 
     int AvailableBytes(void);
 
-    bool Read(void* const data, const size_t size, unsigned int timeout = 0U);
+    bool Read(void* const data, const size_t size, const unsigned int timeout = 0U);
 
-    bool Write(const char* const data, unsigned int timeout = 0U);
-    bool Write(const void* const data, const size_t size, unsigned int timeout = 0U);
+    bool Write(const std::string& data, const unsigned int timeout = 0U);
+    bool Write(const void* const data, const size_t size, const unsigned int timeout = 0U);
 
     bool Begin(const enum sp_mode mode);
     bool Close(void);
 
-    SerialPort(const char* const port);
+    SerialPort(const std::string& port);
     SerialPort(void);
     virtual ~SerialPort(void);
 };
 
-#endif // _SERIALPORT_HPP_
+#endif // __SERIALPORT_HPP__
