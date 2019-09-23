@@ -1,6 +1,7 @@
 #ifndef __TCPSERVER_HPP__
 #define __TCPSERVER_HPP__
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <map>
@@ -21,7 +22,6 @@ typedef std::function<void(TCPServer* const, const IPAuthority&, const int, cons
 class TCPServer : public Server
 {
 private:
-    int m_Max = 10;
     struct timespec m_Timeout = { 0, 0L };
 
     std::vector<struct pollfd> m_PeerEvents;
@@ -45,7 +45,7 @@ public:
     bool DisconnectClient(const std::string &address, const unsigned short port = 0U);
     bool DisconnectClients(const std::string &address);
 
-    bool Listen(void);
+    bool Listen(const int max = 10);
     bool Poll(void* const buffer, const size_t size, const size_t offset = 0U) override;
     bool Send(const int fd, const char* const data);
     bool Send(const int fd, const void *const data, const size_t size);
@@ -55,7 +55,7 @@ public:
     virtual bool Start(const bool reuseAddress, const bool blocking) override;
     virtual bool Close(void) override;
 
-    TCPServer(const char *const address, const unsigned short port, const long timeout = 0L);
+    TCPServer(const std::string& address, const uint16_t port, const long timeout = 0L);
 };
 
 #endif // __TCPSERVER_HPP__

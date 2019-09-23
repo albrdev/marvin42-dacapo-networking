@@ -71,7 +71,7 @@ bool Server::Bind(void)
     return false;
 }
 
-Server::Server(const char* const address, const unsigned short port, const long timeout) : Socket(address, port)
+Server::Server(const std::string& address, const uint16_t port, const long timeout) : Socket(address, port)
 {
     SetTimeout(timeout);
 }

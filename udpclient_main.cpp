@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
     while(true)
     {
         std::vector<std::string> addresses;
-        Socket::GetAddressInfoList(options.GetAddress().c_str(), addresses, nullptr, AF_INET);
+        Socket::GetAddressInfoList(options.GetAddress(), addresses, nullptr, AF_INET);
 
         if(addresses.empty())
         {
@@ -139,10 +139,10 @@ int main(int argc, char* argv[])
         }
         std::cout << std::endl;
 
-        UDPClient client(addresses[0].c_str(), options.GetPort(), options.GetTimeout() < 0 ? 0 : options.GetTimeout());
+        UDPClient client(addresses[0], options.GetPort(), options.GetTimeout() < 0 ? 0 : options.GetTimeout());
         if(!options.GetInterface().empty())
         {
-            client.SetInterface(options.GetInterface().c_str());
+            client.SetInterface(options.GetInterface());
         }
 
         if(!client.Start())

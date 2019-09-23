@@ -109,13 +109,13 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    TCPServer server(options.GetAddress().c_str(), options.GetPort());
+    TCPServer server(options.GetAddress(), options.GetPort());
     server.SetOnClientConnectedEvent(OnClientConnected);
     server.SetOnClientDisconnectedEvent(OnClientDisconnected);
     server.SetOnDataReceivedEvent(OnDataReceived);
     if(!options.GetInterface().empty())
     {
-        server.SetInterface(options.GetInterface().c_str());
+        server.SetInterface(options.GetInterface());
     }
 
     if(!server.Start(true, false))

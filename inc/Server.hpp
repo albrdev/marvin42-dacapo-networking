@@ -1,6 +1,7 @@
-#ifndef _SERVER_HPP_
-#define _SERVER_HPP_
+#ifndef __SERVER_HPP__
+#define __SERVER_HPP__
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <map>
@@ -33,7 +34,7 @@ public:
 
     virtual bool Start(const bool reuseAddress, const bool blocking) = 0;
 
-    Server(const char *const address, const unsigned short port, const long timeout = 0L);
+    Server(const std::string& address, const uint16_t port, const long timeout = 0L);
 };
 
-#endif // _SERVER_HPP_
+#endif // __SERVER_HPP__

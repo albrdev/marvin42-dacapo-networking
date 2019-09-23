@@ -1,6 +1,7 @@
 #ifndef __UDPSERVER_HPP__
 #define __UDPSERVER_HPP__
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <map>
@@ -29,7 +30,7 @@ public:
 
     virtual bool Start(const bool reuseAddress, const bool blocking) override;
 
-    UDPServer(const char *const address, const unsigned short port, const long timeout = 0L);
+    UDPServer(const std::string& address, const uint16_t port, const long timeout = 0L);
 };
 
 #endif // __UDPSERVER_HPP__

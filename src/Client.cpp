@@ -22,9 +22,9 @@ bool Client::SetOptions(void)
     return false;
 }
 
-bool Client::Send(const char *const data)
+bool Client::Send(const std::string& data)
 {
-    return Send(data, strlen(data) + 1U);
+    return Send(data.c_str(), data.length() + 1U);
 }
 
 bool Client::Receive(void *const data, const size_t size, size_t &result)
@@ -45,7 +45,7 @@ bool Client::Receive(void *const data, const size_t size, size_t &result)
     return false;
 }
 
-Client::Client(const char *const address, const unsigned short port, const unsigned long timeout) : Socket(address, port)
+Client::Client(const std::string& address, const uint16_t port, const unsigned long timeout) : Socket(address, port)
 {
     SetTimeout(timeout);
 }

@@ -60,9 +60,9 @@ bool TCPServer::DisconnectClients(const std::string &address)
     return count;
 }
 
-bool TCPServer::Listen(void)
+bool TCPServer::Listen(const int max)
 {
-    int ret = listen(m_Socket, m_Max);
+    int ret = listen(m_Socket, max);
     if(ret != -1)
         return true;
 
@@ -244,4 +244,4 @@ bool TCPServer::Close(void)
     return Socket::Close() && status;
 }
 
-TCPServer::TCPServer(const char* const address, const unsigned short port, const long timeout) : Server(address, port, timeout) { }
+TCPServer::TCPServer(const std::string& address, const uint16_t port, const long timeout) : Server(address, port, timeout) { }

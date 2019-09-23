@@ -1,6 +1,7 @@
 #ifndef __TCPCLIENT_HPP__
 #define __TCPCLIENT_HPP__
 
+#include <cstdint>
 #include <string>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -15,7 +16,7 @@ public:
 
     virtual bool Start(void) override;
 
-    TCPClient(const char *const address, const unsigned short port, const unsigned long timeout = 0UL);
+    TCPClient(const std::string& address, const uint16_t port, const unsigned long timeout = 0UL);
 };
 
 #endif // __TCPCLIENT_HPP__

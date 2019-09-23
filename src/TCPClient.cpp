@@ -45,4 +45,4 @@ bool TCPClient::Start(void)
     return Create(SOCK_STREAM) && SetOptions() && Connect();
 }
 
-TCPClient::TCPClient(const char* const address, const unsigned short port, const unsigned long timeout) : Client(address, port, timeout) { }
+TCPClient::TCPClient(const std::string& address, const uint16_t port, const unsigned long timeout) : Client(address, port, timeout) { }

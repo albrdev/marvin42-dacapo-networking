@@ -74,13 +74,13 @@ int main(int argc, char *argv[])
     serialPort->SetParity(SP_PARITY_NONE);
     serialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
 
-    TCPServer tcpServer(options.GetAddress().c_str(), options.GetPort());
+    TCPServer tcpServer(options.GetAddress(), options.GetPort());
     tcpServer.SetOnClientConnectedEvent(OnClientConnected);
     tcpServer.SetOnClientDisconnectedEvent(OnClientDisconnected);
     tcpServer.SetOnDataReceivedEvent(OnTCPDataReceived);
     if(!options.GetInterface().empty())
     {
-        tcpServer.SetInterface(options.GetInterface().c_str());
+        tcpServer.SetInterface(options.GetInterface());
     }
 
     if(!tcpServer.Start(true, false))
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    UDPServer udpServer(options.GetAddress().c_str(), options.GetPort());
+    UDPServer udpServer(options.GetAddress(), options.GetPort());
     udpServer.SetOnDataReceivedEvent(OnUDPDataReceived);
     if(!udpServer.Start(true, false))
     {

@@ -30,7 +30,7 @@ void OnDataReceived(UDPServer* const self, const IPAuthority& address, const voi
         return;
     }
 
-    UDPClient client(address.GetAddress().c_str(), address.GetPort());
+    UDPClient client(address.GetAddress(), address.GetPort());
     if(!client.Start())
     {
         std::cerr << "*** Error: " << client.GetError() << std::endl;
@@ -107,11 +107,11 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    UDPServer server(options.GetAddress().c_str(), options.GetPort());
+    UDPServer server(options.GetAddress(), options.GetPort());
     server.SetOnDataReceivedEvent(OnDataReceived);
     if(!options.GetInterface().empty())
     {
-        server.SetInterface(options.GetInterface().c_str());
+        server.SetInterface(options.GetInterface());
     }
 
     if(!server.Start(true, true))
