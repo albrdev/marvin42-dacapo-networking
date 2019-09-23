@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    serialPort = new SerialPort(options.GetSerialPort().c_str());
+    serialPort = new SerialPort(options.GetSerialPort());
     if(!serialPort->Begin(SP_MODE_WRITE))
     {
         std::cerr << "*** Error: " << serialPort->GetError() << std::endl;
