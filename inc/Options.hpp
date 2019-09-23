@@ -24,12 +24,13 @@ private:
         {NULL,          0,                  NULL,   0}
     };
 
-    std::string m_OptionString = "-:a:p:t:Vh";
+    std::string m_OptionString = "-:a:p:t:I:Vh";
 
     std::string m_Address;
     uint16_t m_Port = 0U;
 
     long m_Timeout;
+    std::string m_Interface;
 
     bool m_Verbose = false;
     bool m_PrintUsage = false;
@@ -45,6 +46,9 @@ public:
     long GetTimeout(void) const;
     void SetTimeout(const long value);
     void SetTimeout(const std::string& value);
+
+    std::string GetInterface(void) const;
+    void SetInterface(const std::string& value);
 
     bool GetVerbose(void) const;
     void SetVerbose(const bool value);

@@ -9,6 +9,7 @@ static const struct option _argopts[] =
     {"cmd",         required_argument,  NULL,   'c'},
 
     {"timeout",     required_argument,  NULL,   't'},
+    {"interface",   required_argument,  NULL,   'I'},
 
     {"interactive", no_argument,        NULL,   'i'},
 
@@ -28,6 +29,9 @@ void Options::SetPort(const std::string& value) { m_Port = (uint16_t)std::stoi(v
 long Options::GetTimeout(void) const { return m_Timeout; }
 void Options::SetTimeout(const long value) { m_Timeout = value; }
 void Options::SetTimeout(const std::string& value) { m_Timeout = std::stol(value); }
+
+std::string Options::GetInterface(void) const { return m_Interface; }
+void Options::SetInterface(const std::string& value) { m_Interface = value; }
 
 bool Options::GetVerbose(void) const { return m_Verbose; }
 void Options::SetVerbose(const bool value) { m_Verbose = value; }
@@ -74,6 +78,10 @@ bool Options::ParseOption(const int option, const char* const argument, const ch
 
         case 't':
             SetTimeout(value);
+            break;
+
+        case 'I':
+            SetInterface(value);
             break;
 
         case 'V':
