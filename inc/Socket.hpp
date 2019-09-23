@@ -1,5 +1,5 @@
-#ifndef _SOCKET_HPP_
-#define _SOCKET_HPP_
+#ifndef __SOCKET_HPP__
+#define __SOCKET_HPP__
 
 #include <cstring>
 #include <cstdint>
@@ -43,4 +43,4 @@ public:
     virtual ~Socket(void);
 };
 
-#endif // _SOCKET_HPP_
+#endif // __SOCKET_HPP__
