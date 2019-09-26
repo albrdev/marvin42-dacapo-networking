@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -17,7 +18,7 @@ void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
     std::cout << "OnClientDisconnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
 }
 
-SerialPort* serialPort;
+SerialPort* serialPort = nullptr;
 void OnTCPDataReceived(TCPServer* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnTCPDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
@@ -34,8 +35,21 @@ void OnUDPDataReceived(UDPServer* const self, const IPAuthority& address, const 
     serialPort->Write(data, size);
 }
 
+void cleanup(void)
+{
+    std::cout << "Cleanup" << std::endl;
+
+    if(serialPort != nullptr)
+    {
+        delete serialPort;
+        serialPort = nullptr;
+    }
+}
+
 int main(int argc, char *argv[])
 {
+    atexit(cleanup);
+
     ServerOptions options("0.0.0.0", 1042, "", 0L, false, false);
     if(!options.ParseArguments(argv, argc))
     {
