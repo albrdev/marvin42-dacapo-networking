@@ -7,11 +7,11 @@
 class IError
 {
 private:
-    const ErrorInfo *m_ErrorInfo = nullptr;
+    const ErrorInfo* m_Info = nullptr;
     std::string m_DefaultMessage;
 
 protected:
-    void SetError(const ErrorInfo *const value);
+    void SetError(const ErrorInfo* const value);
     void ClearError(void);
 
 public:

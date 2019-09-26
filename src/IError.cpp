@@ -2,22 +2,22 @@
 
 std::string IError::GetError(void) const
 {
-    return m_ErrorInfo != nullptr ? m_ErrorInfo->GetMessage() : m_DefaultMessage;
+    return m_Info != nullptr ? m_Info->GetMessage() : m_DefaultMessage;
 }
 
-void IError::SetError(const ErrorInfo *const value)
+void IError::SetError(const ErrorInfo* const value)
 {
     ClearError();
-    m_ErrorInfo = value;
+    m_Info = value;
 }
 
 void IError::ClearError(void)
 {
-    if(m_ErrorInfo == nullptr)
+    if(m_Info == nullptr)
         return;
 
-    delete m_ErrorInfo;
-    m_ErrorInfo = nullptr;
+    delete m_Info;
+    m_Info = nullptr;
 }
 
 std::string IError::GetDefaultMessage(void) const
@@ -32,7 +32,7 @@ void IError::SetDefaultMessage(const std::string& value)
 
 IError::operator bool(void) const
 {
-    return m_ErrorInfo == nullptr;
+    return m_Info == nullptr;
 }
 
 IError::IError(const std::string& defaultMessage)
