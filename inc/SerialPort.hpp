@@ -27,16 +27,19 @@ public:
 
     int AvailableBytes(void);
 
-    bool Read(void* const data, const size_t size, const unsigned int timeout = 0U);
+    bool BlockingRead(void* const data, const size_t size, const unsigned int timeout = 0U);
+    bool Read(void* const data, const size_t size);
 
-    bool Write(const std::string& data, const unsigned int timeout = 0U);
-    bool Write(const void* const data, const size_t size, const unsigned int timeout = 0U);
+    bool BlockingWrite(const std::string& data, const unsigned int timeout = 0U);
+    bool BlockingWrite(const void* const data, const size_t size, const unsigned int timeout = 0U);
+
+    bool Write(const std::string& data);
+    bool Write(const void* const data, const size_t size);
 
     bool Begin(const enum sp_mode mode);
     bool Close(void);
 
     SerialPort(const std::string& port);
-    SerialPort(void);
     virtual ~SerialPort(void);
 };
 

@@ -116,10 +116,9 @@ int SerialPort::AvailableBytes(void)
     return ret;
 }
 
-bool SerialPort::Read(void* const data, const size_t size, const unsigned int timeout)
+bool SerialPort::BlockingRead(void* const data, const size_t size, const unsigned int timeout)
 {
-    enum sp_return ret = sp_nonblocking_read(m_Port, data, size); // just in case
-    //enum sp_return ret = sp_blocking_read(m_Port, data, size, timeout);
+    enum sp_return ret = sp_blocking_read(m_Port, data, size, timeout);
     if(ret == SP_OK)
         return true;
 
@@ -127,15 +126,39 @@ bool SerialPort::Read(void* const data, const size_t size, const unsigned int ti
     return false;
 }
 
-bool SerialPort::Write(const std::string& data, const unsigned int timeout)
+bool SerialPort::Read(void* const data, const size_t size)
 {
-    return Write(data.c_str(), data.length() + 1U, timeout);
+    enum sp_return ret = sp_nonblocking_read(m_Port, data, size);
+    if(ret == SP_OK)
+        return true;
+
+    SetError(new EI_SP(ret));
+    return false;
 }
 
-bool SerialPort::Write(const void* const data, const size_t size, const unsigned int timeout)
+bool SerialPort::BlockingWrite(const std::string& data, const unsigned int timeout)
+{
+    return BlockingWrite(data.c_str(), data.length() + 1U, timeout);
+}
+
+bool SerialPort::BlockingWrite(const void* const data, const size_t size, const unsigned int timeout)
+{
+    enum sp_return ret = sp_blocking_write(m_Port, data, size, timeout);
+    if(ret == SP_OK)
+        return true;
+
+    SetError(new EI_SP(ret));
+    return false;
+}
+
+bool SerialPort::Write(const std::string& data)
+{
+    return Write(data.c_str(), data.length() + 1U);
+}
+
+bool SerialPort::Write(const void* const data, const size_t size)
 {
     enum sp_return ret = sp_nonblocking_write(m_Port, data, size);
-    //enum sp_return ret = sp_blocking_write(m_Port, data, size, timeout); // crashes! segfault...
     if(ret == SP_OK)
         return true;
 
@@ -179,8 +202,6 @@ SerialPort::SerialPort(const std::string& port)
     if(!SerialPort::GetPortByName(port, &m_Port))
         throw EXCEPT("Could not find serial port");
 }
-
-SerialPort::SerialPort(void) { }
 
 SerialPort::~SerialPort(void)
 {
