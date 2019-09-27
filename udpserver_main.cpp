@@ -11,7 +11,7 @@
 
 void OnDataReceived(UDPServer* const self, const IPAuthority& address, const void* const data, const size_t size)
 {
-    std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
+    std::cout << "OnDataReceived: " << address << std::endl;
     fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
     const packet_header_t* hdr = (const packet_header_t*)data;

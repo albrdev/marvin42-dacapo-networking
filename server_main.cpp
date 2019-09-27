@@ -6,39 +6,39 @@
 #include "UDPServer.hpp"
 #include "SerialPort.hpp"
 #include "ServerOptions.hpp"
+
+//#define M42_DEBUG // Must define before including 'generic.hpp'
 #include "generic.hpp"
 
 void OnClientConnected(TCPServer* const self, const IPAuthority& address)
 {
-    std::cout << "OnClientConnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
+    std::cout << "OnClientConnected: " << address << std::endl;
 }
 
 void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
 {
-    std::cout << "OnClientDisconnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
+    std::cout << "OnClientDisconnected: " << address << std::endl;
 }
 
 SerialPort* serialPort = nullptr;
 void OnTCPDataReceived(TCPServer* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
 {
-    std::cout << "OnTCPDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
-    fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
+    std::cout << "OnTCPDataReceived: " << address << std::endl;
+    PrintfDebug2("Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
     serialPort->Write(data, size);
 }
 
 void OnUDPDataReceived(UDPServer* const self, const IPAuthority& address, const void* const data, const size_t size)
 {
-    std::cout << "OnUDPDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
-    fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
+    std::cout << "OnUDPDataReceived: " << address << std::endl;
+    PrintfDebug2("Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
     serialPort->Write(data, size);
 }
 
 void cleanup(void)
 {
-    std::cout << "Cleanup" << std::endl;
-
     if(serialPort != nullptr)
     {
         delete serialPort;

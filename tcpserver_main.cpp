@@ -10,12 +10,12 @@
 
 void OnClientConnected(TCPServer* const self, const IPAuthority& address)
 {
-    std::cout << "OnClientConnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
+    std::cout << "OnClientConnected: " << address << std::endl;
 }
 
 void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
 {
-    std::cout << "OnClientDisconnected: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
+    std::cout << "OnClientDisconnected: " << address << std::endl;
 }
 
 void OnDataReceived(TCPServer* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
