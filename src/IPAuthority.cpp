@@ -46,7 +46,19 @@ in_port_t IPAuthority::GetPort(void) const
     }
 }
 
+std::string IPAuthority::ToString(void) const
+{
+    std::ostringstream oss;
+    oss << GetAddress() << ':' << GetPort();
+    return oss.str();
+}
+
 IPAuthority::IPAuthority(const struct sockaddr_storage &address)
 {
     m_Raw = address;
+}
+
+std::ostream& operator <<(std::ostream& stream, const IPAuthority& object)
+{
+    return stream << object.ToString();
 }
