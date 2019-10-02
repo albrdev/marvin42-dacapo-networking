@@ -1,5 +1,5 @@
-#ifndef _EXCEPTION_HPP_
-#define _EXCEPTION_HPP_
+#ifndef __EXCEPTION_HPP__
+#define __EXCEPTION_HPP__
 
 #include <exception>
 #include <stdexcept>
@@ -20,4 +20,4 @@ public:
 
 #define EXCEPT(msg) (Exception((msg), __FILE__, __LINE__))
 
-#endif // _EXCEPTION_HPP_
+#endif // __EXCEPTION_HPP__

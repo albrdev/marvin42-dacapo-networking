@@ -1,5 +1,5 @@
-#ifndef _ErrorInfo_HPP_
-#define _ErrorInfo_HPP_
+#ifndef __ERRORINFO_HPP__
+#define __ERRORINFO_HPP__
 
 #include <cstring>
 #include <cerrno>
@@ -73,4 +73,4 @@ public:
 #define EI_SP(x) SerialPortErrorInfo(x)
 #define EI_CUSTOM(msg) CustomErrorInfo(msg)
 
-#endif // _ErrorInfo_HPP_
+#endif // __ERRORINFO_HPP__

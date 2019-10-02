@@ -1,5 +1,5 @@
-#ifndef _CLIENT_HPP_
-#define _CLIENT_HPP_
+#ifndef __CLIENT_HPP__
+#define __CLIENT_HPP__
 
 #include <cstdint>
 #include <string>
@@ -27,4 +27,4 @@ public:
     Client(const std::string& address, const uint16_t port, const unsigned long timeout = 0UL);
 };
 
-#endif // _CLIENT_HPP_
+#endif // __CLIENT_HPP__
