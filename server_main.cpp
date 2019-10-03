@@ -2,10 +2,13 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <unistd.h>
 #include "TCPServer.hpp"
 #include "UDPServer.hpp"
 #include "SerialPort.hpp"
 #include "ServerOptions.hpp"
+
+#define POLL_DELAY  10
 
 //#define M42_DEBUG // Must define before including 'generic.hpp'
 #include "generic.hpp"
@@ -125,6 +128,8 @@ int main(int argc, char *argv[])
             std::cerr << "*** Error: " << udpServer.GetError() << std::endl;
             return 1;
         }
+
+        usleep(POLL_DELAY * 1000);
     }
 
     return 0;
