@@ -70,6 +70,19 @@ bool TCPServer::Listen(const int max)
     return false;
 }
 
+bool TCPServer::SetMaxCount(const size_t value, const bool drop)
+{
+    m_MaxCount = value;
+
+    if(drop && m_MaxCount > 0U && Count() > m_MaxCount)
+    {
+        if(!Drop(Count() - m_MaxCount))
+            return false;
+    }
+
+    return true;
+}
+
 void TCPServer::AddConnection(const struct pollfd &pfd, const struct sockaddr_storage &address)
 {
     AddSocket(pfd);
@@ -85,6 +98,27 @@ void TCPServer::AddConnection(const struct pollfd &pfd, const struct sockaddr_st
 void TCPServer::AddSocket(const struct pollfd &pfd)
 {
     m_PeerEvents.push_back(pfd);
+}
+
+bool TCPServer::DropAll(void)
+{
+    return Drop(Count());
+}
+
+bool TCPServer::Drop(size_t count)
+{
+    if(count > m_Count)
+        throw;
+
+    while(count > 0U)
+    {
+        if(!RemoveConnection(m_PeerEvents.end() + 0))
+            return false;
+
+        count--;
+    }
+
+    return true;
 }
 
 bool TCPServer::RemoveConnection(const size_t index)
@@ -137,6 +171,9 @@ bool TCPServer::Poll(void *const buffer, const size_t size, const size_t offset)
             int fd;
             do
             {
+                if(m_MaxCount > 0U && Count() >= m_MaxCount)
+                    break;
+
                 struct sockaddr_storage client;
                 socklen_t s = sizeof(client);
                 fd = accept(m_Socket, (struct sockaddr *)&client, &s);//*
@@ -244,4 +281,4 @@ bool TCPServer::Close(void)
     return Socket::Close() && status;
 }
 
-TCPServer::TCPServer(const std::string& address, const uint16_t port, const long timeout) : Server(address, port, timeout) { }
+TCPServer::TCPServer(const std::string& address, const uint16_t port, const long timeout, const size_t maxCount) : Server(address, port, timeout), m_MaxCount(maxCount) { }

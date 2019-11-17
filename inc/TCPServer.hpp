@@ -26,13 +26,17 @@ private:
 
     std::vector<struct pollfd> m_PeerEvents;
     std::map<int, std::shared_ptr<IPAuthority>> m_PeerInfo;
+    size_t m_MaxCount;
 
     OnClientConnectionEventHandler m_OnClientConnectedEvent;
     OnClientConnectionEventHandler m_OnClientDisconnectedEvent;
     OnTCPDataReceivedEventHandler m_OnDataReceived;
 
+    bool SetMaxCount(const size_t value, const bool drop = true);
     void AddConnection(const struct pollfd &pfd, const struct sockaddr_storage &address);
     void AddSocket(const struct pollfd &pfd);
+    bool DropAll(void);
+    bool Drop(size_t count = 1U);
     bool RemoveConnectionByFD(const int fd);
     bool RemoveConnection(const size_t index);
     bool CloseConnection(const size_t index);
@@ -55,7 +59,7 @@ public:
     virtual bool Start(const bool reuseAddress, const bool blocking) override;
     virtual bool Close(void) override;
 
-    TCPServer(const std::string& address, const uint16_t port, const long timeout = 0L);
+    TCPServer(const std::string& address, const uint16_t port, const long timeout = 0L, const size_t maxCount = 0U);
 };
 
 #endif // __TCPSERVER_HPP__
