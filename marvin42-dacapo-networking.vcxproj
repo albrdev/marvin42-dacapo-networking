@@ -74,6 +74,9 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)\ext\marvin42-dacapo-shared_libraries\inc;$(ProjectDir)\inc;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="server_main.cpp" />
     <ClCompile Include="shared_libraries\crc.c" />
