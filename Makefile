@@ -109,7 +109,7 @@ $(DIR_OBJ)/tcpserver_main.o: tcpserver_main.cpp
 $(DIR_OBJ)/udpserver_main.o: udpserver_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL)/$(DIR_INC) -c $< -o $@
 
-# External/Shared
+# External
 $(DIR_OBJ)/custom_packets.o: $(DIR_SL)/$(DIR_SRC)/custom_packets.c $(DIR_SL)/$(DIR_INC)/custom_packets.h $(DIR_SL)/$(DIR_INC)/packet.h
 	$(CC_C) $(CC_FLAGS) -I$(DIR_SL)/$(DIR_INC) -c $< -o $@
 
@@ -122,7 +122,7 @@ $(DIR_OBJ)/crc.o: $(DIR_SL)/$(DIR_SRC)/crc.c $(DIR_SL)/$(DIR_INC)/crc.h
 $(DIR_OBJ)/generic.o: $(DIR_SL)/$(DIR_SRC)/generic.cpp $(DIR_SL)/$(DIR_INC)/generic.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL)/$(DIR_INC) -c $< -o $@
 
-# Units
+# Internal
 $(DIR_OBJ)/ClientOptions.o: $(DIR_SRC)/ClientOptions.cpp $(DIR_INC)/ClientOptions.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
