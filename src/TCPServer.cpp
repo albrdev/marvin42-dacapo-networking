@@ -1,4 +1,5 @@
 #include "TCPServer.hpp"
+#include <stdexcept>
 #include "Exception.hpp"
 #include "ErrorInfo.hpp"
 
@@ -107,12 +108,12 @@ bool TCPServer::DropAll(void)
 
 bool TCPServer::Drop(size_t count)
 {
-    if(count > m_Count)
-        throw;
+    if(count > m_MaxCount)
+        throw std::out_of_range("Argument out of range");
 
     while(count > 0U)
     {
-        if(!RemoveConnection(m_PeerEvents.end() + 0))
+        if(!RemoveConnection(m_PeerEvents.size() - 1U))
             return false;
 
         count--;
