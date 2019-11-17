@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
         }
         std::cout << std::endl;
 
-        UDPClient client(addresses[0], options.GetPort(), options.GetTimeout() < 0 ? 0 : options.GetTimeout());
+        UDPClient client(addresses[0], options.GetPort());
         if(!options.GetInterface().empty())
         {
             client.SetInterface(options.GetInterface());

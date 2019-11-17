@@ -139,13 +139,13 @@ int main(int argc, char *argv[])
         }
         std::cout << std::endl;
 
-        TCPClient client(addresses[0], options.GetPort(), options.GetTimeout() < 0 ? 0 : options.GetTimeout());
+        TCPClient client(addresses[0], options.GetPort());
         if(!options.GetInterface().empty())
         {
             client.SetInterface(options.GetInterface());
         }
 
-        if(!client.Start())
+        if(!client.Start(options.GetTimeout() < 0 ? 0 : options.GetTimeout()))
         {
             std::cerr << "*** Error: " << client.GetError() << std::endl;
             return 1;

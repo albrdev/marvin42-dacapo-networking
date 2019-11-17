@@ -2,23 +2,6 @@
 #include "Exception.hpp"
 #include "ErrorInfo.hpp"
 
-unsigned long Client::GetTimeout(void) const
-{
-    return (m_Timeout.tv_sec * 1000UL) + (m_Timeout.tv_usec / 1000000);
-}
-
-bool Client::SetTimeout(const unsigned long value)
-{
-    m_Timeout.tv_sec = value / 1000;
-    m_Timeout.tv_usec = (value % 1000UL) * 1000000UL;
-
-    if(setsockopt(m_Socket, SOL_SOCKET, SO_RCVTIMEO, &m_Timeout, sizeof(m_Timeout)) != -1)
-        return true;
-
-    SetError(new EI_ERRNO());
-    return false;
-}
-
 bool Client::Send(const std::string& data)
 {
     return Send(data.c_str(), data.length() + 1U);

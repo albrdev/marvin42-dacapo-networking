@@ -14,7 +14,7 @@ bool UDPClient::Send(const void *const data, const size_t size)
 
 bool UDPClient::Start(void)
 {
-    return Create(SOCK_DGRAM)/* && SetOptions()*/;
+    return Create(SOCK_DGRAM);
 }
 
-UDPClient::UDPClient(const std::string& address, const uint16_t port, const unsigned long timeout) : Client(address, port, timeout) { }
+UDPClient::UDPClient(const std::string& address, const uint16_t port) : Client(address, port) { }

@@ -3,19 +3,45 @@
 #include "Exception.hpp"
 #include "ErrorInfo.hpp"
 
-void TCPServer::SetOnClientConnectedEvent(const OnClientConnectionEventHandler& value)
+#ifndef __REGION__PRIVATE_METHODS
+void TCPServer::AddSocket(const struct pollfd& pfd)
 {
-    m_OnClientConnectedEvent = value;
+    m_PeerEvents.push_back(pfd);
 }
 
-void TCPServer::SetOnClientDisconnectedEvent(const OnClientConnectionEventHandler& value)
+void TCPServer::AddConnection(const struct pollfd& pfd, const struct sockaddr_storage& address)
 {
-    m_OnClientDisconnectedEvent = value;
+    AddSocket(pfd);
+    std::shared_ptr<IPAuthority> tmp = std::make_shared<IPAuthority>(IPAuthority(address));
+    m_PeerInfo[pfd.fd] = tmp;
+
+    if(m_OnClientConnectedEvent)
+    {
+        m_OnClientConnectedEvent(this, *tmp);
+    }
 }
 
-void TCPServer::SetOnDataReceivedEvent(const OnTCPDataReceivedEventHandler& value)
+bool TCPServer::CloseConnection(const size_t index)
 {
-    m_OnDataReceived = value;
+    if(m_OnClientDisconnectedEvent)
+    {
+        m_OnClientDisconnectedEvent(this, *m_PeerInfo[m_PeerEvents[index].fd]);
+    }
+
+    int ret = close(m_PeerEvents[index].fd);
+    if(ret != -1)
+        return true;
+
+    SetError(new EI_ERRNO());
+    return false;
+}
+
+bool TCPServer::RemoveConnection(const size_t index)
+{
+    bool ret = CloseConnection(index);
+    m_PeerInfo.erase(m_PeerEvents[index].fd);
+    m_PeerEvents.erase(m_PeerEvents.begin() + index);
+    return ret;
 }
 
 bool TCPServer::RemoveConnectionByFD(const int fd)
@@ -30,45 +56,33 @@ bool TCPServer::RemoveConnectionByFD(const int fd)
 
     return false;
 }
+#endif // __REGION__PRIVATE_METHODS
 
-bool TCPServer::DisconnectClient(const std::string &address, const unsigned short port)
+#ifndef __REGION__PUBLIC_METHODS
+long TCPServer::GetTimeout(void) const
 {
-    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
-    {
-        if(address == (*(i->second)).GetAddress() && (port == 0U || port == (*(i->second)).GetPort()))
-        {
-            return RemoveConnectionByFD(i->first);
-        }
-    }
-
-    return false;
+    return m_Timeout != nullptr ? ((m_Timeout->tv_sec * 1000L) + (m_Timeout->tv_nsec / 1000000000L)) : -1L;
 }
 
-bool TCPServer::DisconnectClients(const std::string &address)
+void TCPServer::SetTimeout(const long value)
 {
-    size_t count = 0U;
-    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
+    if(m_Timeout != nullptr)
     {
-        if(address == (*(i->second)).GetAddress())
-        {
-            if(RemoveConnectionByFD(i->first))
-            {
-                count++;
-            }
-        }
+        delete m_Timeout;
+        m_Timeout = nullptr;
     }
 
-    return count;
+    if(value >= 0L)
+    {
+        m_Timeout = new timespec;
+        m_Timeout->tv_sec = value / 1000;
+        m_Timeout->tv_nsec = (value % 1000L) * 1000000000L;
+    }
 }
 
-bool TCPServer::Listen(const int max)
+size_t TCPServer::GetMaxCount(void) const
 {
-    int ret = listen(m_Socket, max);
-    if(ret != -1)
-        return true;
-
-    SetError(new EI_ERRNO());
-    return false;
+    return m_MaxCount;
 }
 
 bool TCPServer::SetMaxCount(const size_t value, const bool drop)
@@ -84,26 +98,54 @@ bool TCPServer::SetMaxCount(const size_t value, const bool drop)
     return true;
 }
 
-void TCPServer::AddConnection(const struct pollfd &pfd, const struct sockaddr_storage &address)
+void TCPServer::SetOnClientConnectedEvent(const OnClientConnectionEventHandler& value)
 {
-    AddSocket(pfd);
-    std::shared_ptr<IPAuthority> tmp = std::make_shared<IPAuthority>(IPAuthority(address));
-    m_PeerInfo[pfd.fd] = tmp;
+    m_OnClientConnectedEvent = value;
+}
 
-    if(m_OnClientConnectedEvent)
+void TCPServer::SetOnClientDisconnectedEvent(const OnClientConnectionEventHandler& value)
+{
+    m_OnClientDisconnectedEvent = value;
+}
+
+void TCPServer::SetOnDataReceivedEvent(const OnTCPDataReceivedEventHandler& value)
+{
+    m_OnDataReceived = value;
+}
+
+size_t TCPServer::Count(void) const
+{
+    return m_PeerInfo.size();
+}
+
+bool TCPServer::DisconnectClient(const std::string& address, const unsigned short port)
+{
+    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
     {
-        m_OnClientConnectedEvent(this, *tmp);
+        if(address == (*(i->second)).GetAddress() && (port == 0U || port == (*(i->second)).GetPort()))
+        {
+            return RemoveConnectionByFD(i->first);
+        }
     }
+
+    return false;
 }
 
-void TCPServer::AddSocket(const struct pollfd &pfd)
+bool TCPServer::DisconnectClients(const std::string& address)
 {
-    m_PeerEvents.push_back(pfd);
-}
+    size_t count = 0U;
+    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
+    {
+        if(address == (*(i->second)).GetAddress())
+        {
+            if(RemoveConnectionByFD(i->first))
+            {
+                count++;
+            }
+        }
+    }
 
-bool TCPServer::DropAll(void)
-{
-    return Drop(Count());
+    return count;
 }
 
 bool TCPServer::Drop(size_t count)
@@ -122,22 +164,14 @@ bool TCPServer::Drop(size_t count)
     return true;
 }
 
-bool TCPServer::RemoveConnection(const size_t index)
+bool TCPServer::DropAll(void)
 {
-    bool ret = CloseConnection(index);
-    m_PeerInfo.erase(m_PeerEvents[index].fd);
-    m_PeerEvents.erase(m_PeerEvents.begin() + index);
-    return ret;
+    return Drop(Count());
 }
 
-bool TCPServer::CloseConnection(const size_t index)
+bool TCPServer::Listen(const int max)
 {
-    if(m_OnClientDisconnectedEvent)
-    {
-        m_OnClientDisconnectedEvent(this, *m_PeerInfo[m_PeerEvents[index].fd]);
-    }
-
-    int ret = close(m_PeerEvents[index].fd);
+    int ret = listen(m_Socket, max);
     if(ret != -1)
         return true;
 
@@ -145,9 +179,9 @@ bool TCPServer::CloseConnection(const size_t index)
     return false;
 }
 
-bool TCPServer::Poll(void *const buffer, const size_t size, const size_t offset)
+bool TCPServer::Poll(void* const buffer, const size_t size, const size_t offset)
 {
-    int ret = ppoll(&m_PeerEvents[0], m_PeerEvents.size(), &m_Timeout, nullptr);
+    int ret = ppoll(&m_PeerEvents[0], m_PeerEvents.size(), m_Timeout, nullptr);
     if(ret < 0)
     {
         SetError(new EI_ERRNO());
@@ -177,7 +211,7 @@ bool TCPServer::Poll(void *const buffer, const size_t size, const size_t offset)
 
                 struct sockaddr_storage client;
                 socklen_t s = sizeof(client);
-                fd = accept(m_Socket, (struct sockaddr *)&client, &s);//*
+                fd = accept(m_Socket, (struct sockaddr*) & client, &s);//*
                 if(fd < 0)
                 {
                     if(errno != EWOULDBLOCK)
@@ -239,7 +273,7 @@ bool TCPServer::Send(const int fd, const char* const data)
     return Send(fd, data, strlen(data) + 1U);
 }
 
-bool TCPServer::Send(const int fd, const void *const data, const size_t size)
+bool TCPServer::Send(const int fd, const void* const data, const size_t size)
 {
     int ret = send(fd, data, size, 0);
     if(ret != -1)
@@ -247,11 +281,6 @@ bool TCPServer::Send(const int fd, const void *const data, const size_t size)
 
     SetError(new EI_ERRNO());
     return false;
-}
-
-size_t TCPServer::Count(void) const
-{
-    return m_PeerInfo.size();
 }
 
 bool TCPServer::Start(const bool reuseAddress, const bool blocking)
@@ -282,4 +311,17 @@ bool TCPServer::Close(void)
     return Socket::Close() && status;
 }
 
-TCPServer::TCPServer(const std::string& address, const uint16_t port, const long timeout, const size_t maxCount) : Server(address, port, timeout), m_MaxCount(maxCount) { }
+TCPServer::TCPServer(const std::string& address, const uint16_t port, const long timeout, const size_t maxCount) : Server(address, port)
+{
+    SetTimeout(timeout);
+    SetMaxCount(maxCount);
+}
+
+TCPServer::~TCPServer(void)
+{
+    if(m_Timeout != nullptr)
+    {
+        delete m_Timeout;
+    }
+}
+#endif // __REGION__PUBLIC_METHODS

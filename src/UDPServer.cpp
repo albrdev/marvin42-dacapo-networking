@@ -55,4 +55,4 @@ bool UDPServer::Start(const bool reuseAddress, const bool blocking)
     return Create(SOCK_DGRAM) && SetReusableAddressMode(reuseAddress) && SetBlockingMode(blocking) && Bind();
 }
 
-UDPServer::UDPServer(const std::string& address, const uint16_t port, const long timeout) : Server(address, port, timeout) { }
+UDPServer::UDPServer(const std::string& address, const uint16_t port) : Server(address, port) { }

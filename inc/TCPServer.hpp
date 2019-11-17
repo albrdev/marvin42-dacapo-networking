@@ -22,7 +22,7 @@ typedef std::function<void(TCPServer* const, const IPAuthority&, const int, cons
 class TCPServer : public Server
 {
 private:
-    struct timespec m_Timeout = { 0, 0L };
+    struct timespec* m_Timeout = nullptr;
 
     std::vector<struct pollfd> m_PeerEvents;
     std::map<int, std::shared_ptr<IPAuthority>> m_PeerInfo;
@@ -32,34 +32,42 @@ private:
     OnClientConnectionEventHandler m_OnClientDisconnectedEvent;
     OnTCPDataReceivedEventHandler m_OnDataReceived;
 
-    bool SetMaxCount(const size_t value, const bool drop = true);
-    void AddConnection(const struct pollfd &pfd, const struct sockaddr_storage &address);
     void AddSocket(const struct pollfd &pfd);
-    bool DropAll(void);
-    bool Drop(size_t count = 1U);
-    bool RemoveConnectionByFD(const int fd);
-    bool RemoveConnection(const size_t index);
+    void AddConnection(const struct pollfd& pfd, const struct sockaddr_storage& address);
+
     bool CloseConnection(const size_t index);
+    bool RemoveConnection(const size_t index);
+    bool RemoveConnectionByFD(const int fd);
 
 public:
+    long GetTimeout(void) const;
+    void SetTimeout(const long value);
+
+    size_t GetMaxCount(void) const;
+    bool SetMaxCount(const size_t value, const bool drop = true);
+
     void SetOnClientConnectedEvent(const OnClientConnectionEventHandler& value);
     void SetOnClientDisconnectedEvent(const OnClientConnectionEventHandler& value);
     void SetOnDataReceivedEvent(const OnTCPDataReceivedEventHandler& value);
 
+    size_t Count(void) const;
+
     bool DisconnectClient(const std::string &address, const unsigned short port = 0U);
     bool DisconnectClients(const std::string &address);
+
+    bool Drop(size_t count = 1U);
+    bool DropAll(void);
 
     bool Listen(const int max = 10);
     bool Poll(void* const buffer, const size_t size, const size_t offset = 0U) override;
     bool Send(const int fd, const char* const data);
     bool Send(const int fd, const void *const data, const size_t size);
 
-    size_t Count(void) const;
-
     virtual bool Start(const bool reuseAddress, const bool blocking) override;
     virtual bool Close(void) override;
 
     TCPServer(const std::string& address, const uint16_t port, const long timeout = 0L, const size_t maxCount = 0U);
+    virtual ~TCPServer(void);
 };
 
 #endif // __TCPSERVER_HPP__

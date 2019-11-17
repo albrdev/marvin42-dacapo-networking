@@ -7,17 +7,6 @@ bool Server::AvailableBytes(const int fd, int &result)
     return ioctl(fd, FIONREAD, &result) != -1;
 }
 
-long Server::GetTimeout(void) const
-{
-    return (m_Timeout.tv_sec * 1000L) + (m_Timeout.tv_nsec / 1000000000);
-}
-
-void Server::SetTimeout(const long value)
-{
-    m_Timeout.tv_sec = value / 1000;
-    m_Timeout.tv_nsec = (value % 1000L) * 1000000000L;
-}
-
 bool Server::SetBlockingMode(const bool value)
 {
     int flags = fcntl(m_Socket, F_GETFL, 0);
@@ -71,7 +60,4 @@ bool Server::Bind(void)
     return false;
 }
 
-Server::Server(const std::string& address, const uint16_t port, const long timeout) : Socket(address, port)
-{
-    SetTimeout(timeout);
-}
+Server::Server(const std::string& address, const uint16_t port) : Socket(address, port) { }

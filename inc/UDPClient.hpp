@@ -9,14 +9,12 @@
 
 class UDPClient : public Client
 {
-private:
-
 public:
     bool Send(const void *const data, const size_t size);
 
-    virtual bool Start(void) override;
+    virtual bool Start(void);
 
-    UDPClient(const std::string& address, const uint16_t port, const unsigned long timeout = 0UL);
+    UDPClient(const std::string& address, const uint16_t port);
 };
 
 #endif // __UDPCLIENT_HPP__

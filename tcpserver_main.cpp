@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    TCPServer server(options.GetAddress(), options.GetPort());
+    TCPServer server(options.GetAddress(), options.GetPort(), options.GetTimeout());
     server.SetOnClientConnectedEvent(OnClientConnected);
     server.SetOnClientDisconnectedEvent(OnClientDisconnected);
     server.SetOnDataReceivedEvent(OnDataReceived);
