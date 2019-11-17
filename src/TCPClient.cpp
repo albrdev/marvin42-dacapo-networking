@@ -40,9 +40,9 @@ bool TCPClient::Receive(void *const data, const size_t size, size_t &result)
     return false;
 }
 
-bool TCPClient::Start(void)
+bool TCPClient::Start(const unsigned long timeout = 0UL)
 {
-    return Create(SOCK_STREAM) && SetOptions() && Connect();
+    return Create(SOCK_STREAM) && SetTimeout(timeout) && Connect();
 }
 
-TCPClient::TCPClient(const std::string& address, const uint16_t port, const unsigned long timeout) : Client(address, port, timeout) { }
+TCPClient::TCPClient(const std::string& address, const uint16_t port) : Client(address, port) { }

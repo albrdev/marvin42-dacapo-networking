@@ -7,14 +7,11 @@ unsigned long Client::GetTimeout(void) const
     return (m_Timeout.tv_sec * 1000UL) + (m_Timeout.tv_usec / 1000000);
 }
 
-void Client::SetTimeout(const unsigned long value)
+bool Client::SetTimeout(const unsigned long value)
 {
     m_Timeout.tv_sec = value / 1000;
     m_Timeout.tv_usec = (value % 1000UL) * 1000000UL;
-}
 
-bool Client::SetOptions(void)
-{
     if(setsockopt(m_Socket, SOL_SOCKET, SO_RCVTIMEO, &m_Timeout, sizeof(m_Timeout)) != -1)
         return true;
 
@@ -45,7 +42,4 @@ bool Client::Receive(void *const data, const size_t size, size_t &result)
     return false;
 }
 
-Client::Client(const std::string& address, const uint16_t port, const unsigned long timeout) : Socket(address, port)
-{
-    SetTimeout(timeout);
-}
+Client::Client(const std::string& address, const uint16_t port) : Socket(address, port) { }

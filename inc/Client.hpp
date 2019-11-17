@@ -14,17 +14,15 @@ private:
 
 public:
     unsigned long GetTimeout(void) const;
-    void SetTimeout(const unsigned long value);
-
-    bool SetOptions(void);
+    bool SetTimeout(const unsigned long value);
 
     virtual bool Send(const std::string& data);
     virtual bool Send(const void* const data, const size_t size) = 0;
     bool Receive(void *const data, const size_t size, size_t &result);
 
-    virtual bool Start(void) = 0;
+    virtual bool Start(const unsigned long timeout = 0UL) = 0;
 
-    Client(const std::string& address, const uint16_t port, const unsigned long timeout = 0UL);
+    Client(const std::string& address, const uint16_t port);
 };
 
 #endif // __CLIENT_HPP__
