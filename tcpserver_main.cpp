@@ -90,7 +90,7 @@ void OnDataReceived(TCPServer* const self, const IPAuthority& address, const int
 
 int main(int argc, char *argv[])
 {
-    ServerOptions options("0.0.0.0", 1042, "", 0L, false, false);
+    ServerOptions options("0.0.0.0", 1042, "", 0L, TCPServer::CONNECTIONS_MAX, false, false);
     if(!options.ParseArguments(argv, argc))
     {
         std::cerr << "*** Error: " << options.GetError() << std::endl;
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    TCPServer server(options.GetAddress(), options.GetPort(), options.GetTimeout());
+    TCPServer server(options.GetAddress(), options.GetPort(), options.GetTimeout(), options.GetMaxConnections());
     server.SetOnClientConnectedEvent(OnClientConnected);
     server.SetOnClientDisconnectedEvent(OnClientDisconnected);
     server.SetOnDataReceivedEvent(OnDataReceived);

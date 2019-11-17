@@ -89,7 +89,7 @@ bool TCPServer::SetMaxCount(const size_t value, const bool drop)
 {
     m_MaxCount = value;
 
-    if(drop && m_MaxCount > 0U && Count() > m_MaxCount)
+    if(drop && Count() > m_MaxCount)
     {
         if(!Drop(Count() - m_MaxCount))
             return false;
@@ -206,7 +206,7 @@ bool TCPServer::Poll(void* const buffer, const size_t size, const size_t offset)
             int fd;
             do
             {
-                if(m_MaxCount > 0U && Count() >= m_MaxCount)
+                if(Count() >= m_MaxCount)
                     break;
 
                 struct sockaddr_storage client;

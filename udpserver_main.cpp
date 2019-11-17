@@ -88,7 +88,7 @@ void OnDataReceived(UDPServer* const self, const IPAuthority& address, const voi
 
 int main(int argc, char* argv[])
 {
-    ServerOptions options("0.0.0.0", 1042, "", 0L, false, false);
+    ServerOptions options("0.0.0.0", 1042, "", 0L, 0U, false, false);
     if(!options.ParseArguments(argv, argc))
     {
         std::cerr << "*** Error: " << options.GetError() << std::endl;

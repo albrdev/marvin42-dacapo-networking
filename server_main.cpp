@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 {
     atexit(cleanup);
 
-    ServerOptions options("0.0.0.0", 1042, "", 0L, false, false);
+    ServerOptions options("0.0.0.0", 1042, "", 0L, TCPServer::CONNECTIONS_MAX, false, false);
     if(!options.ParseArguments(argv, argc))
     {
         std::cerr << "*** Error: " << options.GetError() << std::endl;
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     serialPort->SetParity(SP_PARITY_NONE);
     serialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
 
-    TCPServer tcpServer(options.GetAddress(), options.GetPort());
+    TCPServer tcpServer(options.GetAddress(), options.GetPort(), options.GetTimeout(), options.GetMaxConnections());
     tcpServer.SetOnClientConnectedEvent(OnClientConnected);
     tcpServer.SetOnClientDisconnectedEvent(OnClientDisconnected);
     tcpServer.SetOnDataReceivedEvent(OnTCPDataReceived);

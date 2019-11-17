@@ -8,6 +8,7 @@
 #include <iostream>
 #include <functional>
 #include <memory>
+#include <limits>
 #include <unistd.h>
 #include <poll.h>
 #include <fcntl.h>
@@ -40,11 +41,13 @@ private:
     bool RemoveConnectionByFD(const int fd);
 
 public:
+    static const size_t CONNECTIONS_MAX = std::numeric_limits<size_t>::max();
+
     long GetTimeout(void) const;
     void SetTimeout(const long value);
 
     size_t GetMaxCount(void) const;
-    bool SetMaxCount(const size_t value, const bool drop = true);
+    bool SetMaxCount(const size_t value = TCPServer::CONNECTIONS_MAX, const bool drop = true);
 
     void SetOnClientConnectedEvent(const OnClientConnectionEventHandler& value);
     void SetOnClientDisconnectedEvent(const OnClientConnectionEventHandler& value);
@@ -66,7 +69,7 @@ public:
     virtual bool Start(const bool reuseAddress, const bool blocking) override;
     virtual bool Close(void) override;
 
-    TCPServer(const std::string& address, const uint16_t port, const long timeout = 0L, const size_t maxCount = 0U);
+    TCPServer(const std::string& address, const uint16_t port, const long timeout = 0L, const size_t maxCount = TCPServer::CONNECTIONS_MAX);
     virtual ~TCPServer(void);
 };
 
