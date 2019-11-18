@@ -26,7 +26,6 @@ public:
 
     ErrnoErrorInfo(const int code);
     ErrnoErrorInfo(void);
-    virtual ~ErrnoErrorInfo(void) override;
 };
 
 class GAIErrorInfo : public ErrorInfo
@@ -38,8 +37,6 @@ public:
     std::string GetMessage(void) const override;
 
     GAIErrorInfo(const int code);
-    GAIErrorInfo(void);
-    virtual ~GAIErrorInfo(void) override;
 };
 
 class SerialPortErrorInfo : public ErrorInfo
@@ -51,8 +48,6 @@ public:
     std::string GetMessage(void) const override;
 
     SerialPortErrorInfo(const enum sp_return code);
-    SerialPortErrorInfo(void);
-    virtual ~SerialPortErrorInfo(void) override;
 };
 
 class CustomErrorInfo : public ErrorInfo
@@ -64,8 +59,6 @@ public:
     std::string GetMessage(void) const override;
 
     CustomErrorInfo(const std::string& message);
-    CustomErrorInfo(void);
-    virtual ~CustomErrorInfo(void) override;
 };
 
 #define EI_ERRNO() ErrnoErrorInfo(errno)
