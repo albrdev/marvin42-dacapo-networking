@@ -5,7 +5,7 @@ CC_CPP		:= g++
 CC_FLAGS	:= -pedantic -Wall -Wextra -Wconversion -std=c++11
 CC_LIBS		:= -lm -lserialport
 
-FLAGS_DBG	:= -g -Wno-unused-parameter
+FLAGS_DBG	:= -g -Wno-unused-parameter -DM42_DEBUG
 FLAGS_RLS	:= -DNDEBUG
 
 DIR_INC		:= inc
