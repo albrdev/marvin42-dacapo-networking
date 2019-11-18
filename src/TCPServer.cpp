@@ -32,7 +32,7 @@ bool TCPServer::CloseConnection(const size_t index)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -175,7 +175,7 @@ bool TCPServer::Listen(const int max)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -184,7 +184,7 @@ bool TCPServer::Poll(void* const buffer, const size_t size, const size_t offset)
     int ret = ppoll(&m_PeerEvents[0], m_PeerEvents.size(), m_Timeout, nullptr);
     if(ret < 0)
     {
-        SetError(new EI_ERRNO());
+        SetError(new ErrnoErrorInfo());
         return false;
     }
     if(ret == 0)
@@ -197,7 +197,7 @@ bool TCPServer::Poll(void* const buffer, const size_t size, const size_t offset)
 
         if(m_PeerEvents[i].revents != POLLIN)
         {
-            SetError(new EI_CUSTOM("Unexpected socket event"));
+            SetError(new CustomErrorInfo("Unexpected socket event"));
             return false;
         }
 
@@ -216,7 +216,7 @@ bool TCPServer::Poll(void* const buffer, const size_t size, const size_t offset)
                 {
                     if(errno != EWOULDBLOCK)
                     {
-                        SetError(new EI_ERRNO());
+                        SetError(new ErrnoErrorInfo());
                         return false;
                     }
 
@@ -231,7 +231,7 @@ bool TCPServer::Poll(void* const buffer, const size_t size, const size_t offset)
             int availSize;
             if(!AvailableBytes(m_PeerEvents[i].fd, availSize))
             {
-                SetError(new EI_ERRNO());
+                SetError(new ErrnoErrorInfo());
                 return false;
             }
 
@@ -246,7 +246,7 @@ bool TCPServer::Poll(void* const buffer, const size_t size, const size_t offset)
             {
                 if(errno != EWOULDBLOCK)
                 {
-                    SetError(new EI_ERRNO());
+                    SetError(new ErrnoErrorInfo());
                     return false;
                 }
 
@@ -279,7 +279,7 @@ bool TCPServer::Send(const int fd, const void* const data, const size_t size)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 

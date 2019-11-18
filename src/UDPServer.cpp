@@ -12,7 +12,7 @@ bool UDPServer::Poll(void* const buffer, const size_t size, const size_t offset)
     /*int availSize;
     if(!AvailableBytes(m_Socket, availSize))
     {
-        SetError(new EI_ERRNO());
+        SetError(new ErrnoErrorInfo());
         return false;
     }
 
@@ -28,7 +28,7 @@ bool UDPServer::Poll(void* const buffer, const size_t size, const size_t offset)
     {
         if(errno != EWOULDBLOCK)
         {
-            SetError(new EI_ERRNO());
+            SetError(new ErrnoErrorInfo());
             return false;
         }
 

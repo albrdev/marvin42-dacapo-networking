@@ -12,7 +12,7 @@ bool Server::SetBlockingMode(const bool value)
     int flags = fcntl(m_Socket, F_GETFL, 0);
     if(flags == -1)
     {
-        SetError(new EI_ERRNO());
+        SetError(new ErrnoErrorInfo());
         return false;
     }
 
@@ -35,7 +35,7 @@ bool Server::SetBlockingMode(const bool value)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -46,7 +46,7 @@ bool Server::SetReusableAddressMode(const bool value)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -56,7 +56,7 @@ bool Server::Bind(void)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 

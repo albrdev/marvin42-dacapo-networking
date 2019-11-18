@@ -61,9 +61,4 @@ public:
     CustomErrorInfo(const std::string& message);
 };
 
-#define EI_ERRNO() ErrnoErrorInfo(errno)
-#define EI_GAI(x) GAIErrorInfo(x)
-#define EI_SP(x) SerialPortErrorInfo(x)
-#define EI_CUSTOM(msg) CustomErrorInfo(msg)
-
 #endif // __ERRORINFO_HPP__

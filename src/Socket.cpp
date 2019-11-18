@@ -195,7 +195,7 @@ bool Socket::Create(const int protocol)
     if(m_Socket != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -211,7 +211,7 @@ bool Socket::Close(void)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -220,7 +220,7 @@ bool Socket::SetInterface(const std::string& value)
     if(setsockopt(m_Socket, SOL_SOCKET, SO_BINDTODEVICE, value.c_str(), (socklen_t)value.length()) != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -229,7 +229,7 @@ bool Socket::UnsetInterface(void)
     if(setsockopt(m_Socket, SOL_SOCKET, SO_BINDTODEVICE, "", 0) != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 

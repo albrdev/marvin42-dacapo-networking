@@ -21,7 +21,7 @@ bool Client::Receive(void* const data, const size_t size, size_t& result)
         return true;
     }
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 

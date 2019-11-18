@@ -24,7 +24,7 @@ bool ServerOptions::ParseOption(const int option, const char* const argument, co
             break;
 
         case '\?':
-            SetError(new EI_CUSTOM("Unknown option"));
+            SetError(new CustomErrorInfo("Unknown option"));
             return false;
 
         default:

@@ -13,7 +13,7 @@ bool SerialPort::SetBaudRate(const int value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -23,7 +23,7 @@ bool SerialPort::SetDataBits(const int value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -33,7 +33,7 @@ bool SerialPort::SetParity(const enum sp_parity value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -43,7 +43,7 @@ bool SerialPort::SetStopBits(const int value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -53,7 +53,7 @@ bool SerialPort::SetRTS(const enum sp_rts value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -63,7 +63,7 @@ bool SerialPort::SetCTS(const enum sp_cts value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -73,7 +73,7 @@ bool SerialPort::SetDTR(const enum sp_dtr value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -83,7 +83,7 @@ bool SerialPort::SetDSR(const enum sp_dsr value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -93,7 +93,7 @@ bool SerialPort::SetX01(const enum sp_xonxoff value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -103,7 +103,7 @@ bool SerialPort::SetFlowControl(const enum sp_flowcontrol value)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -111,7 +111,7 @@ int SerialPort::AvailableBytes(void)
 {
     enum sp_return ret = sp_input_waiting(m_Port);
     if(ret < SP_OK)
-        SetError(new EI_SP(ret));
+        SetError(new SerialPortErrorInfo(ret));
 
     return ret;
 }
@@ -122,7 +122,7 @@ bool SerialPort::BlockingRead(void* const data, const size_t size, const unsigne
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -132,7 +132,7 @@ bool SerialPort::Read(void* const data, const size_t size)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -147,7 +147,7 @@ bool SerialPort::BlockingWrite(const void* const data, const size_t size, const 
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -162,7 +162,7 @@ bool SerialPort::Write(const void* const data, const size_t size)
     if(ret == SP_OK)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -170,7 +170,7 @@ bool SerialPort::Begin(const enum sp_mode mode)
 {
     if(m_IsOpen)
     {
-        SetError(new EI_CUSTOM("Port already open"));
+        SetError(new CustomErrorInfo("Port already open"));
         return false;
     }
 
@@ -179,7 +179,7 @@ bool SerialPort::Begin(const enum sp_mode mode)
     if(m_IsOpen)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 
@@ -193,7 +193,7 @@ bool SerialPort::Close(void)
     if(m_IsOpen)
         return true;
 
-    SetError(new EI_SP(ret));
+    SetError(new SerialPortErrorInfo(ret));
     return false;
 }
 

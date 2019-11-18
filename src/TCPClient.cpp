@@ -15,7 +15,7 @@ bool TCPClient::SetTimeout(const unsigned long value)
     if(setsockopt(m_Socket, SOL_SOCKET, SO_RCVTIMEO, &m_Timeout, sizeof(m_Timeout)) != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -25,7 +25,7 @@ bool TCPClient::Connect(void)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -35,7 +35,7 @@ bool TCPClient::Send(const void* const data, const size_t size)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
@@ -53,7 +53,7 @@ bool TCPClient::Receive(void* const data, const size_t size, size_t& result)
         return true;
     }
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 

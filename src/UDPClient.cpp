@@ -8,7 +8,7 @@ bool UDPClient::Send(const void* const data, const size_t size)
     if(ret != -1)
         return true;
 
-    SetError(new EI_ERRNO());
+    SetError(new ErrnoErrorInfo());
     return false;
 }
 
