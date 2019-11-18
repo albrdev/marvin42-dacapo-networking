@@ -1,8 +1,26 @@
 #include "IError.hpp"
 
-std::string IError::GetError(void) const
+std::unique_ptr<const ErrorInfo> IError::s_Info;
+
+const ErrorInfo* IError::GetStaticError(void)
 {
-    return m_Info != nullptr ? m_Info->GetMessage() : m_DefaultMessage;
+    return IError::s_Info.get();
+}
+
+void IError::SetStaticError(const ErrorInfo* const value)
+{
+    ClearStaticError();
+    IError::s_Info = std::unique_ptr<const ErrorInfo>(value);
+}
+
+void IError::ClearStaticError(void)
+{
+    IError::s_Info.reset(nullptr);
+}
+
+const ErrorInfo* IError::GetError(void) const
+{
+    return m_Info;
 }
 
 void IError::SetError(const ErrorInfo* const value)
