@@ -13,10 +13,10 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include "Server.hpp"
-#include "IPAuthority.hpp"
+#include "SocketAddress.hpp"
 
 class UDPServer;
-typedef std::function<void(UDPServer* const, const IPAuthority&, const void* const, const size_t)> OnUDPDataReceivedEventHandler;
+typedef std::function<void(UDPServer* const, const SocketAddress&, const void* const, const size_t)> OnUDPDataReceivedEventHandler;
 
 class UDPServer : public Server
 {

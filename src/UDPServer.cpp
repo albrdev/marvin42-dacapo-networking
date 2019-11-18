@@ -42,8 +42,8 @@ bool UDPServer::Poll(void* const buffer, const size_t size, const size_t offset)
 
     if(m_OnDataReceived)
     {
-        //std::shared_ptr<IPAuthority> tmp = std::make_shared<IPAuthority>(IPAuthority(address));
-        IPAuthority authority(clientAddress);
+        //std::shared_ptr<SocketAddress> tmp = std::make_shared<SocketAddress>(SocketAddress(address));
+        SocketAddress authority(clientAddress);
         m_OnDataReceived(this, authority, buffer, offset + ret);
     }
 

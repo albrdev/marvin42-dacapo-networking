@@ -1,13 +1,13 @@
-#include "IPAuthority.hpp"
+#include "SocketAddress.hpp"
 #include "Socket.hpp"
 #include "Exception.hpp"
 
-struct sockaddr_storage IPAuthority::GetRaw(void) const
+struct sockaddr_storage SocketAddress::GetRaw(void) const
 {
     return m_Raw;
 }
 
-std::string IPAuthority::GetAddress(void) const
+std::string SocketAddress::GetAddress(void) const
 {
     const void* addr;
     switch(m_Raw.ss_family)
@@ -33,7 +33,7 @@ std::string IPAuthority::GetAddress(void) const
     }
 }
 
-in_port_t IPAuthority::GetPort(void) const
+in_port_t SocketAddress::GetPort(void) const
 {
     switch(m_Raw.ss_family)
     {
@@ -46,19 +46,19 @@ in_port_t IPAuthority::GetPort(void) const
     }
 }
 
-std::string IPAuthority::ToString(void) const
+std::string SocketAddress::ToString(void) const
 {
     std::ostringstream oss;
     oss << GetAddress() << ':' << GetPort();
     return oss.str();
 }
 
-IPAuthority::IPAuthority(const struct sockaddr_storage& address)
+SocketAddress::SocketAddress(const struct sockaddr_storage& address)
 {
     m_Raw = address;
 }
 
-std::ostream& operator <<(std::ostream& stream, const IPAuthority& object)
+std::ostream& operator <<(std::ostream& stream, const SocketAddress& object)
 {
     return stream << object.ToString();
 }

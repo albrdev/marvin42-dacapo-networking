@@ -156,7 +156,7 @@ $(DIR_OBJ)/Server.o: $(DIR_SRC)/Server.cpp $(DIR_INC)/Server.hpp
 $(DIR_OBJ)/Socket.o: $(DIR_SRC)/Socket.cpp $(DIR_INC)/Socket.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -D__USE_POSIX -c $< -o $@
 
-$(DIR_OBJ)/IPAuthority.o: $(DIR_SRC)/IPAuthority.cpp $(DIR_INC)/IPAuthority.hpp
+$(DIR_OBJ)/SocketAddress.o: $(DIR_SRC)/SocketAddress.cpp $(DIR_INC)/SocketAddress.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/IError.o: $(DIR_SRC)/IError.cpp $(DIR_INC)/IError.hpp

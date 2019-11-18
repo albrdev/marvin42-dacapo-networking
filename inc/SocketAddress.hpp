@@ -1,5 +1,5 @@
-#ifndef __IPAUTHORITY_HPP__
-#define __IPAUTHORITY_HPP__
+#ifndef __SOCKETADDRESS_HPP__
+#define __SOCKETADDRESS_HPP__
 
 #include <string>
 #include <sstream>
@@ -7,10 +7,10 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-class IPAuthority
+class SocketAddress
 {
 private:
-    friend std::ostream& operator <<(std::ostream& stream, const IPAuthority& object);
+    friend std::ostream& operator <<(std::ostream& stream, const SocketAddress& object);
 
     struct sockaddr_storage m_Raw;
 
@@ -20,7 +20,7 @@ public:
     in_port_t GetPort(void) const;
     virtual std::string ToString(void) const;
 
-    IPAuthority(const struct sockaddr_storage& address);
+    SocketAddress(const struct sockaddr_storage& address);
 };
 
-#endif // __IPAUTHORITY_HPP__
+#endif // __SOCKETADDRESS_HPP__

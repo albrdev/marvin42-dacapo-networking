@@ -8,17 +8,17 @@
 #include "custom_packets.h"
 #include "generic.hpp"
 
-void OnClientConnected(TCPServer* const self, const IPAuthority& address)
+void OnClientConnected(TCPServer* const self, const SocketAddress& address)
 {
     std::cout << "OnClientConnected: " << address << std::endl;
 }
 
-void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
+void OnClientDisconnected(TCPServer* const self, const SocketAddress& address)
 {
     std::cout << "OnClientDisconnected: " << address << std::endl;
 }
 
-void OnDataReceived(TCPServer* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
+void OnDataReceived(TCPServer* const self, const SocketAddress& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address.GetAddress() << ':' << address.GetPort() << std::endl;
     fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));

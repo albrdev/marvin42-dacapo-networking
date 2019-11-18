@@ -9,7 +9,7 @@
 #include "custom_packets.h"
 #include "generic.hpp"
 
-void OnDataReceived(UDPServer* const self, const IPAuthority& address, const void* const data, const size_t size)
+void OnDataReceived(UDPServer* const self, const SocketAddress& address, const void* const data, const size_t size)
 {
     std::cout << "OnDataReceived: " << address << std::endl;
     fprintf(stderr, "Raw: size=%zu, hex=%s\n", size, hexstr(data, size));

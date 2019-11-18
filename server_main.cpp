@@ -13,18 +13,18 @@
 //#define M42_DEBUG // Must define before including 'generic.hpp'
 #include "generic.hpp"
 
-void OnClientConnected(TCPServer* const self, const IPAuthority& address)
+void OnClientConnected(TCPServer* const self, const SocketAddress& address)
 {
     std::cout << "OnClientConnected: " << address << std::endl;
 }
 
-void OnClientDisconnected(TCPServer* const self, const IPAuthority& address)
+void OnClientDisconnected(TCPServer* const self, const SocketAddress& address)
 {
     std::cout << "OnClientDisconnected: " << address << std::endl;
 }
 
 SerialPort* serialPort = nullptr;
-void OnTCPDataReceived(TCPServer* const self, const IPAuthority& address, const int fd, const void* const data, const size_t size)
+void OnTCPDataReceived(TCPServer* const self, const SocketAddress& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnTCPDataReceived: " << address << std::endl;
     PrintfDebug2("Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
@@ -32,7 +32,7 @@ void OnTCPDataReceived(TCPServer* const self, const IPAuthority& address, const 
     serialPort->Write(data, size);
 }
 
-void OnUDPDataReceived(UDPServer* const self, const IPAuthority& address, const void* const data, const size_t size)
+void OnUDPDataReceived(UDPServer* const self, const SocketAddress& address, const void* const data, const size_t size)
 {
     std::cout << "OnUDPDataReceived: " << address << std::endl;
     PrintfDebug2("Raw: size=%zu, hex=%s\n", size, hexstr(data, size));

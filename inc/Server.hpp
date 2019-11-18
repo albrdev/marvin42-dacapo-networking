@@ -13,7 +13,7 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include "Socket.hpp"
-#include "IPAuthority.hpp"
+#include "SocketAddress.hpp"
 
 class Server : public Socket
 {

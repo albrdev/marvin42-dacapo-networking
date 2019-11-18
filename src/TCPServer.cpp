@@ -12,7 +12,7 @@ void TCPServer::AddSocket(const struct pollfd& pfd)
 void TCPServer::AddConnection(const struct pollfd& pfd, const struct sockaddr_storage& address)
 {
     AddSocket(pfd);
-    std::shared_ptr<IPAuthority> tmp = std::make_shared<IPAuthority>(IPAuthority(address));
+    std::shared_ptr<SocketAddress> tmp = std::make_shared<SocketAddress>(SocketAddress(address));
     m_PeerInfo[pfd.fd] = tmp;
 
     if(m_OnClientConnectedEvent)
@@ -120,7 +120,7 @@ size_t TCPServer::Count(void) const
 
 bool TCPServer::DisconnectClient(const std::string& address, const unsigned short port)
 {
-    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
+    for(std::map<int, std::shared_ptr<SocketAddress>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
     {
         if(address == (*(i->second)).GetAddress() && (port == 0U || port == (*(i->second)).GetPort()))
         {
@@ -134,7 +134,7 @@ bool TCPServer::DisconnectClient(const std::string& address, const unsigned shor
 bool TCPServer::DisconnectClients(const std::string& address)
 {
     size_t count = 0U;
-    for(std::map<int, std::shared_ptr<IPAuthority>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
+    for(std::map<int, std::shared_ptr<SocketAddress>>::iterator i = m_PeerInfo.begin(); i != m_PeerInfo.end(); i++)
     {
         if(address == (*(i->second)).GetAddress())
         {

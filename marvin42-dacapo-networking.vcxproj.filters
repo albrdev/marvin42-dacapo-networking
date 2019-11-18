@@ -10,9 +10,6 @@
     <ClCompile Include="src\Exception.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\IPAuthority.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Server.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -51,6 +48,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="server_main.cpp" />
+    <ClCompile Include="src\SocketAddress.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="inc">
@@ -68,9 +68,6 @@
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\Exception.hpp">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\IPAuthority.hpp">
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\Server.hpp">
@@ -104,6 +101,9 @@
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\TCPServer.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SocketAddress.hpp">
       <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,11 +14,11 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include "Server.hpp"
-#include "IPAuthority.hpp"
+#include "SocketAddress.hpp"
 
 class TCPServer;
-typedef std::function<void(TCPServer* const, const IPAuthority&)> OnClientConnectionEventHandler;
-typedef std::function<void(TCPServer* const, const IPAuthority&, const int, const void* const, const size_t)> OnTCPDataReceivedEventHandler;
+typedef std::function<void(TCPServer* const, const SocketAddress&)> OnClientConnectionEventHandler;
+typedef std::function<void(TCPServer* const, const SocketAddress&, const int, const void* const, const size_t)> OnTCPDataReceivedEventHandler;
 
 class TCPServer : public Server
 {
@@ -26,7 +26,7 @@ private:
     struct timespec* m_Timeout = nullptr;
 
     std::vector<struct pollfd> m_PeerEvents;
-    std::map<int, std::shared_ptr<IPAuthority>> m_PeerInfo;
+    std::map<int, std::shared_ptr<SocketAddress>> m_PeerInfo;
     size_t m_MaxCount;
 
     OnClientConnectionEventHandler m_OnClientConnectedEvent;
