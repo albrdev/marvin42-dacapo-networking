@@ -2,7 +2,7 @@
 #include "Exception.hpp"
 #include "ErrorInfo.hpp"
 
-bool UDPClient::Send(const void *const data, const size_t size)
+bool UDPClient::Send(const void* const data, const size_t size)
 {
     int ret = sendto(m_Socket, data, size, 0, (const struct sockaddr*)&m_Address, sizeof(m_Address));
     if(ret != -1)

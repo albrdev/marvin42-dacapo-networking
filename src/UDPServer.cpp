@@ -7,7 +7,7 @@ void UDPServer::SetOnDataReceivedEvent(const OnUDPDataReceivedEventHandler& valu
     m_OnDataReceived = value;
 }
 
-bool UDPServer::Poll(void *const buffer, const size_t size, const size_t offset)
+bool UDPServer::Poll(void* const buffer, const size_t size, const size_t offset)
 {
     /*int availSize;
     if(!AvailableBytes(m_Socket, availSize))

@@ -12,7 +12,7 @@ class Client : public Socket
 public:
     virtual bool Send(const std::string& data);
     virtual bool Send(const void* const data, const size_t size) = 0;
-    bool Receive(void *const data, const size_t size, size_t &result);
+    bool Receive(void* const data, const size_t size, size_t& result);
 
     Client(const std::string& address, const uint16_t port);
 };

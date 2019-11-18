@@ -91,7 +91,7 @@ bool SendCommand(TCPClient& client, const std::string& command, const std::vecto
     return true;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     ClientOptions options("127.0.0.1", 1042, "", std::vector<std::string>(), 1000, false, false, false);
     if(!options.ParseArguments(argv, argc))

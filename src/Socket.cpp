@@ -3,7 +3,7 @@
 #include "ErrorInfo.hpp"
 #include "Exception.hpp"
 
-int Socket::StringToNetworkAddress(const std::string& address, void *const result)
+int Socket::StringToNetworkAddress(const std::string& address, void* const result)
 {
     if(inet_pton(AF_INET, address.c_str(), result) > 0)
     {
@@ -21,19 +21,19 @@ int Socket::StringToNetworkAddress(const std::string& address, void *const resul
 
 bool Socket::NetworkToStringAddress(const struct sockaddr_storage& value, std::string& resultAddress, uint16_t& resultPort)
 {
-    const void *addr;
+    const void* addr;
     switch(value.ss_family)
     {
-    case AF_INET:
-        addr = &(((struct sockaddr_in *) & value)->sin_addr);
-        resultPort = ((struct sockaddr_in *) & value)->sin_port;
-        break;
-    case AF_INET6:
-        addr = &(((struct sockaddr_in6 *) & value)->sin6_addr);
-        resultPort = ((struct sockaddr_in6 *) & value)->sin6_port;
-        break;
-    default:
-        return false;
+        case AF_INET:
+            addr = &(((struct sockaddr_in*)&value)->sin_addr);
+            resultPort = ((struct sockaddr_in*)&value)->sin_port;
+            break;
+        case AF_INET6:
+            addr = &(((struct sockaddr_in6*)&value)->sin6_addr);
+            resultPort = ((struct sockaddr_in6*)&value)->sin6_port;
+            break;
+        default:
+            return false;
     }
 
     char buf[INET6_ADDRSTRLEN];
@@ -71,7 +71,7 @@ bool Socket::GetAddressInfo(const std::string& name, std::string& result, const 
 bool Socket::GetAddressInfo(const char* const name, char* const result, const size_t size, const char* const service, const int family)
 {
     struct addrinfo hints;
-    struct addrinfo *res;
+    struct addrinfo* res;
 
     memset(&hints, 0, sizeof hints);
     hints.ai_family = family;
@@ -83,17 +83,17 @@ bool Socket::GetAddressInfo(const char* const name, char* const result, const si
         return false;
     }
 
-    void *addr;
+    void* addr;
     switch(res->ai_family)
     {
-    case AF_INET:
-        addr = &(((struct sockaddr_in *)res->ai_addr)->sin_addr);
-        break;
-    case AF_INET6:
-        addr = &(((struct sockaddr_in6 *)res->ai_addr)->sin6_addr);
-        break;
-    default:
-        return false;
+        case AF_INET:
+            addr = &(((struct sockaddr_in*)res->ai_addr)->sin_addr);
+            break;
+        case AF_INET6:
+            addr = &(((struct sockaddr_in6*)res->ai_addr)->sin6_addr);
+            break;
+        default:
+            return false;
     }
 
     inet_ntop(res->ai_family, addr, result, size);
@@ -114,7 +114,7 @@ bool Socket::GetAddressInfoList(const std::string& name, std::vector<std::string
 bool Socket::GetAddressInfoList(const char* const name, std::vector<std::string>& results, const char* const service, const int family)
 {
     struct addrinfo hints;
-    struct addrinfo *res;
+    struct addrinfo* res;
 
     memset(&hints, 0, sizeof hints);
     hints.ai_family = family;
@@ -126,18 +126,19 @@ bool Socket::GetAddressInfoList(const char* const name, std::vector<std::string>
         return false;
     }
 
-    for(struct addrinfo *p = res; p != nullptr; p = p->ai_next) {
-        void *addr;
+    for(struct addrinfo* p = res; p != nullptr; p = p->ai_next)
+    {
+        void* addr;
         switch(p->ai_family)
         {
-        case AF_INET:
-            addr = &(((struct sockaddr_in *)p->ai_addr)->sin_addr);
-            break;
-        case AF_INET6:
-            addr = &(((struct sockaddr_in6 *)p->ai_addr)->sin6_addr);
-            break;
-        default:
-            return false;
+            case AF_INET:
+                addr = &(((struct sockaddr_in*)p->ai_addr)->sin_addr);
+                break;
+            case AF_INET6:
+                addr = &(((struct sockaddr_in6*)p->ai_addr)->sin6_addr);
+                break;
+            default:
+                return false;
         }
 
         char buf[INET6_ADDRSTRLEN];
@@ -149,7 +150,7 @@ bool Socket::GetAddressInfoList(const char* const name, std::vector<std::string>
     return true;
 }
 
-bool Socket::GetHostname(std::string &result)
+bool Socket::GetHostname(std::string& result)
 {
     char buf[HOST_NAME_MAX + 1];
     if(gethostname(buf, sizeof(buf)) != -1)
@@ -207,7 +208,7 @@ bool Socket::UnsetInterface(void)
     return false;
 }
 
-Socket::Socket(const std::string&  address, const uint16_t port)
+Socket::Socket(const std::string& address, const uint16_t port)
 {
     if(port == 0)
     {
@@ -220,18 +221,18 @@ Socket::Socket(const std::string&  address, const uint16_t port)
     int version = Socket::StringToNetworkAddress(address, &addr);
     switch(version)
     {
-    case AF_INET:
-        ((struct sockaddr_in *)& m_Address)->sin_addr = addr.ip4;
-        ((struct sockaddr_in *)& m_Address)->sin_family = AF_INET;
-        ((struct sockaddr_in *)& m_Address)->sin_port = htons(port);
-        break;
-    case AF_INET6:
-        ((struct sockaddr_in6 *)& m_Address)->sin6_addr = addr.ip6;
-        ((struct sockaddr_in6 *)& m_Address)->sin6_family = AF_INET6;
-        ((struct sockaddr_in6 *)& m_Address)->sin6_port = htons(port);
-        break;
-    default:
-        throw EXCEPT("Invalid address format");
+        case AF_INET:
+            ((struct sockaddr_in*)&m_Address)->sin_addr = addr.ip4;
+            ((struct sockaddr_in*)&m_Address)->sin_family = AF_INET;
+            ((struct sockaddr_in*)&m_Address)->sin_port = htons(port);
+            break;
+        case AF_INET6:
+            ((struct sockaddr_in6*)&m_Address)->sin6_addr = addr.ip6;
+            ((struct sockaddr_in6*)&m_Address)->sin6_family = AF_INET6;
+            ((struct sockaddr_in6*)&m_Address)->sin6_port = htons(port);
+            break;
+        default:
+            throw EXCEPT("Invalid address format");
     }
 }
 

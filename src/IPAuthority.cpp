@@ -9,17 +9,17 @@ struct sockaddr_storage IPAuthority::GetRaw(void) const
 
 std::string IPAuthority::GetAddress(void) const
 {
-    const void *addr;
+    const void* addr;
     switch(m_Raw.ss_family)
     {
-    case AF_INET:
-        addr = &(((struct sockaddr_in *)&m_Raw)->sin_addr);
-        break;
-    case AF_INET6:
-        addr = &(((struct sockaddr_in6 *)&m_Raw)->sin6_addr);
-        break;
-    default:
-        throw EXCEPT("Could not retrieve address");
+        case AF_INET:
+            addr = &(((struct sockaddr_in*)&m_Raw)->sin_addr);
+            break;
+        case AF_INET6:
+            addr = &(((struct sockaddr_in6*)&m_Raw)->sin6_addr);
+            break;
+        default:
+            throw EXCEPT("Could not retrieve address");
     }
 
     char buf[INET6_ADDRSTRLEN];
@@ -37,12 +37,12 @@ in_port_t IPAuthority::GetPort(void) const
 {
     switch(m_Raw.ss_family)
     {
-    case AF_INET:
-        return ((struct sockaddr_in *)&m_Raw)->sin_port;
-    case AF_INET6:
-        return ((struct sockaddr_in6 *)&m_Raw)->sin6_port;
-    default:
-        throw EXCEPT("Could not retrieve address");
+        case AF_INET:
+            return ((struct sockaddr_in*)&m_Raw)->sin_port;
+        case AF_INET6:
+            return ((struct sockaddr_in6*)&m_Raw)->sin6_port;
+        default:
+            throw EXCEPT("Could not retrieve address");
     }
 }
 
@@ -53,7 +53,7 @@ std::string IPAuthority::ToString(void) const
     return oss.str();
 }
 
-IPAuthority::IPAuthority(const struct sockaddr_storage &address)
+IPAuthority::IPAuthority(const struct sockaddr_storage& address)
 {
     m_Raw = address;
 }

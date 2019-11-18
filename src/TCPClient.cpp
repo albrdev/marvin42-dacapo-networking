@@ -21,7 +21,7 @@ bool TCPClient::SetTimeout(const unsigned long value)
 
 bool TCPClient::Connect(void)
 {
-    int ret = connect(m_Socket, (struct sockaddr *)&m_Address, sizeof(m_Address));
+    int ret = connect(m_Socket, (struct sockaddr*)&m_Address, sizeof(m_Address));
     if(ret != -1)
         return true;
 
@@ -29,7 +29,7 @@ bool TCPClient::Connect(void)
     return false;
 }
 
-bool TCPClient::Send(const void *const data, const size_t size)
+bool TCPClient::Send(const void* const data, const size_t size)
 {
     int ret = send(m_Socket, data, size, 0);
     if(ret != -1)
@@ -39,7 +39,7 @@ bool TCPClient::Send(const void *const data, const size_t size)
     return false;
 }
 
-bool TCPClient::Receive(void *const data, const size_t size, size_t &result)
+bool TCPClient::Receive(void* const data, const size_t size, size_t& result)
 {
     int ret = recv(m_Socket, data, size, 0);
     if(ret != -1)

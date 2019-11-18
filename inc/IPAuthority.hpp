@@ -20,7 +20,7 @@ public:
     in_port_t GetPort(void) const;
     virtual std::string ToString(void) const;
 
-    IPAuthority(const struct sockaddr_storage &address);
+    IPAuthority(const struct sockaddr_storage& address);
 };
 
 #endif // __IPAUTHORITY_HPP__

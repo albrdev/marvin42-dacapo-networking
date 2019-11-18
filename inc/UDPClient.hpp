@@ -10,7 +10,7 @@
 class UDPClient : public Client
 {
 public:
-    bool Send(const void *const data, const size_t size);
+    bool Send(const void* const data, const size_t size);
 
     virtual bool Start(void);
 

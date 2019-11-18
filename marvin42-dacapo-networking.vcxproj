@@ -79,9 +79,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="server_main.cpp" />
-    <ClCompile Include="shared_libraries\crc.c" />
-    <ClCompile Include="shared_libraries\custom_packets.c" />
-    <ClCompile Include="shared_libraries\packet.c" />
     <ClCompile Include="src\Client.cpp" />
     <ClCompile Include="src\ClientOptions.cpp" />
     <ClCompile Include="src\ErrorInfo.cpp" />
@@ -118,9 +115,6 @@
     <ClInclude Include="inc\TCPServer.hpp" />
     <ClInclude Include="inc\UDPClient.hpp" />
     <ClInclude Include="inc\UDPServer.hpp" />
-    <ClInclude Include="shared_libraries\crc.h" />
-    <ClInclude Include="shared_libraries\custom_packets.h" />
-    <ClInclude Include="shared_libraries\packet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

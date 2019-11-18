@@ -211,7 +211,7 @@ bool TCPServer::Poll(void* const buffer, const size_t size, const size_t offset)
 
                 struct sockaddr_storage client;
                 socklen_t s = sizeof(client);
-                fd = accept(m_Socket, (struct sockaddr*) & client, &s);//*
+                fd = accept(m_Socket, (struct sockaddr*)&client, &s);//*
                 if(fd < 0)
                 {
                     if(errno != EWOULDBLOCK)

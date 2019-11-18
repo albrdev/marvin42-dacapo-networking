@@ -11,11 +11,11 @@ private:
     std::string m_Filename;
     int m_LineNumber = -1;
 
-    static std::string GenerateMessage(const std::string &message, const std::string &filename, const int lineNumber);
+    static std::string GenerateMessage(const std::string& message, const std::string& filename, const int lineNumber);
 
 public:
-    Exception(const std::string &message, const std::string &filename, const int lineNumber);
-    Exception(const std::string &message);
+    Exception(const std::string& message, const std::string& filename, const int lineNumber);
+    Exception(const std::string& message);
 };
 
 #define EXCEPT(msg) (Exception((msg), __FILE__, __LINE__))

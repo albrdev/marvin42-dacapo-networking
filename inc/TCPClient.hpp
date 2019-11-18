@@ -17,8 +17,8 @@ public:
     bool SetTimeout(const unsigned long value);
 
     bool Connect(void);
-    bool Send(const void *const data, const size_t size);
-    bool Receive(void *const data, const size_t size, size_t &result);
+    bool Send(const void* const data, const size_t size);
+    bool Receive(void* const data, const size_t size, size_t& result);
 
     virtual bool Start(const unsigned long timeout = 0UL);
 

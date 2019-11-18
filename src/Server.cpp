@@ -2,7 +2,7 @@
 #include "Exception.hpp"
 #include "ErrorInfo.hpp"
 
-bool Server::AvailableBytes(const int fd, int &result)
+bool Server::AvailableBytes(const int fd, int& result)
 {
     return ioctl(fd, FIONREAD, &result) != -1;
 }
@@ -52,7 +52,7 @@ bool Server::SetReusableAddressMode(const bool value)
 
 bool Server::Bind(void)
 {
-    int ret = bind(m_Socket, (struct sockaddr *)&m_Address, sizeof(m_Address));//*
+    int ret = bind(m_Socket, (struct sockaddr*)&m_Address, sizeof(m_Address));//*
     if(ret != -1)
         return true;
 

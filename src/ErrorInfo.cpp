@@ -45,8 +45,8 @@ std::string SerialPortErrorInfo::GetMessage(void) const
 SerialPortErrorInfo::SerialPortErrorInfo(const enum sp_return code) { m_Code = code; }
 SerialPortErrorInfo::SerialPortErrorInfo(void) { }
 SerialPortErrorInfo::~SerialPortErrorInfo(void) { }
-    
+
 std::string CustomErrorInfo::GetMessage(void) const { return m_Message; }
-CustomErrorInfo::CustomErrorInfo(const std::string &message) { m_Message = message; }
+CustomErrorInfo::CustomErrorInfo(const std::string& message) { m_Message = message; }
 CustomErrorInfo::CustomErrorInfo(void) { }
 CustomErrorInfo::~CustomErrorInfo(void) { }

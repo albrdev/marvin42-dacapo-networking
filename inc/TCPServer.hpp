@@ -33,7 +33,7 @@ private:
     OnClientConnectionEventHandler m_OnClientDisconnectedEvent;
     OnTCPDataReceivedEventHandler m_OnDataReceived;
 
-    void AddSocket(const struct pollfd &pfd);
+    void AddSocket(const struct pollfd& pfd);
     void AddConnection(const struct pollfd& pfd, const struct sockaddr_storage& address);
 
     bool CloseConnection(const size_t index);
@@ -55,8 +55,8 @@ public:
 
     size_t Count(void) const;
 
-    bool DisconnectClient(const std::string &address, const unsigned short port = 0U);
-    bool DisconnectClients(const std::string &address);
+    bool DisconnectClient(const std::string& address, const unsigned short port = 0U);
+    bool DisconnectClients(const std::string& address);
 
     bool Drop(size_t count = 1U);
     bool DropAll(void);
@@ -64,7 +64,7 @@ public:
     bool Listen(const int max = 10);
     bool Poll(void* const buffer, const size_t size, const size_t offset = 0U) override;
     bool Send(const int fd, const char* const data);
-    bool Send(const int fd, const void *const data, const size_t size);
+    bool Send(const int fd, const void* const data, const size_t size);
 
     virtual bool Start(const bool reuseAddress, const bool blocking) override;
     virtual bool Close(void) override;

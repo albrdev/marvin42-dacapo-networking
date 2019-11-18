@@ -96,9 +96,9 @@ bool Options::ParseOption(const int option, const char* const argument, const ch
             SetError(new EI_CUSTOM("Missing option argument"));
             return false;
 
-        /*case '\?':
-            SetError(new EI_CUSTOM("Unknown option"));
-            return false;*/
+            /*case '\?':
+                SetError(new EI_CUSTOM("Unknown option"));
+                return false;*/
     }
 
     return true;

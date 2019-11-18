@@ -25,10 +25,10 @@ protected:
     struct sockaddr_storage m_Address;
 
 public:
-    static int StringToNetworkAddress(const std::string& address, void *const result);
-    static bool NetworkToStringAddress(const struct sockaddr_storage& value, std::string& resultAddress, uint16_t &resultPort);
+    static int StringToNetworkAddress(const std::string& address, void* const result);
+    static bool NetworkToStringAddress(const struct sockaddr_storage& value, std::string& resultAddress, uint16_t& resultPort);
 
-    static bool GetAddressInfo(const std::string& name, std::string &result, const int family = AF_UNSPEC);
+    static bool GetAddressInfo(const std::string& name, std::string& result, const int family = AF_UNSPEC);
     static bool GetAddressInfo(const std::string& name, std::string& result, const std::string& service, const int family = AF_UNSPEC);
     static bool GetAddressInfo(const char* const name, char* const result, const size_t size, const char* const service, const int family = AF_UNSPEC);
 
@@ -36,7 +36,7 @@ public:
     static bool GetAddressInfoList(const std::string& name, std::vector<std::string>& results, const std::string& service, const int family = AF_UNSPEC);
     static bool GetAddressInfoList(const char* const name, std::vector<std::string>& results, const char* const service, const int family = AF_UNSPEC);
 
-    static bool GetHostname(std::string &result);
+    static bool GetHostname(std::string& result);
 
     virtual bool Create(const int protocol);
     virtual bool Close(void);

@@ -22,15 +22,6 @@
     <ClCompile Include="src\SerialPort.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="shared_libraries\crc.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="shared_libraries\custom_packets.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="shared_libraries\packet.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\IError.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -89,15 +80,6 @@
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\SerialPort.hpp">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="shared_libraries\crc.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="shared_libraries\custom_packets.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="shared_libraries\packet.h">
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\IError.hpp">

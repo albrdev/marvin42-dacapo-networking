@@ -88,7 +88,7 @@ void OnDataReceived(TCPServer* const self, const IPAuthority& address, const int
     self->Send(fd, &rsp, sizeof(rsp));
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     ServerOptions options("0.0.0.0", 1042, "", 0L, TCPServer::CONNECTIONS_MAX, false, false);
     if(!options.ParseArguments(argv, argc))

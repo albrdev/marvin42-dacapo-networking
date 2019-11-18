@@ -63,7 +63,7 @@ private:
 public:
     std::string GetMessage(void) const override;
 
-    CustomErrorInfo(const std::string &message);
+    CustomErrorInfo(const std::string& message);
     CustomErrorInfo(void);
     virtual ~CustomErrorInfo(void) override;
 };
