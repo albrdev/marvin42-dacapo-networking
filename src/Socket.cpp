@@ -5,18 +5,26 @@
 
 int Socket::StringToNetworkAddress(const std::string& address, void* const result)
 {
-    if(inet_pton(AF_INET, address.c_str(), result) > 0)
+    int ret;
+    if((ret = inet_pton(AF_INET, address.c_str(), result)) == 1)
     {
         return AF_INET;
     }
-    else if(inet_pton(AF_INET6, address.c_str(), result) > 0)
+    else if(ret == 0)
     {
-        return AF_INET6;
+        if((ret = inet_pton(AF_INET6, address.c_str(), result)) == 1)
+        {
+            return AF_INET6;
+        }
+        else if(ret == 0)
+        {
+            SetStaticError(new CustomErrorInfo("Invalid address format"));
+            return 0;
+        }
     }
-    else
-    {
-        return -1;
-    }
+
+    SetStaticError(new ErrnoErrorInfo());
+    return -1;
 }
 
 bool Socket::NetworkToStringAddress(const struct sockaddr_storage& value, std::string& resultAddress, uint16_t& resultPort)
@@ -44,6 +52,7 @@ bool Socket::NetworkToStringAddress(const struct sockaddr_storage& value, std::s
     }
     else
     {
+        SetStaticError(new ErrnoErrorInfo());
         return false;
     }
 }
@@ -78,8 +87,10 @@ bool Socket::GetAddressInfo(const char* const name, char* const result, const si
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
 
-    if(getaddrinfo(name, service, &hints, &res) != 0 || res == nullptr)
+    int ret;
+    if((ret = getaddrinfo(name, service, &hints, &res)) != 0 || res == nullptr)
     {
+        SetStaticError(new GAIErrorInfo(ret));
         return false;
     }
 
@@ -96,9 +107,14 @@ bool Socket::GetAddressInfo(const char* const name, char* const result, const si
             return false;
     }
 
-    inet_ntop(res->ai_family, addr, result, size);
+    bool status;
+    if(!(status = inet_ntop(res->ai_family, addr, result, size) != nullptr))
+    {
+        SetStaticError(new ErrnoErrorInfo());
+    }
+
     freeaddrinfo(res);
-    return true;
+    return status;
 }
 
 bool Socket::GetAddressInfoList(const std::string& name, std::vector<std::string>& results, const int family)
@@ -121,11 +137,14 @@ bool Socket::GetAddressInfoList(const char* const name, std::vector<std::string>
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
 
-    if(getaddrinfo(name, service, &hints, &res) != 0)
+    int ret;
+    if((ret = getaddrinfo(name, service, &hints, &res)) != 0)
     {
+        SetStaticError(new GAIErrorInfo(ret));
         return false;
     }
 
+    bool status;
     for(struct addrinfo* p = res; p != nullptr; p = p->ai_next)
     {
         void* addr;
@@ -142,12 +161,17 @@ bool Socket::GetAddressInfoList(const char* const name, std::vector<std::string>
         }
 
         char buf[INET6_ADDRSTRLEN];
-        inet_ntop(p->ai_family, addr, buf, sizeof(buf));
+        if(!(status = inet_ntop(p->ai_family, addr, buf, sizeof(buf))))
+        {
+            SetStaticError(new ErrnoErrorInfo());
+            break;
+        }
+
         results.push_back(buf);
     }
 
     freeaddrinfo(res);
-    return true;
+    return status;
 }
 
 bool Socket::GetHostname(std::string& result)
@@ -160,6 +184,7 @@ bool Socket::GetHostname(std::string& result)
     }
     else
     {
+        SetStaticError(new ErrnoErrorInfo());
         return false;
     }
 }
