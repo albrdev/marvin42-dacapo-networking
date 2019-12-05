@@ -116,11 +116,14 @@ int SerialPort::AvailableBytes(void)
     return ret;
 }
 
-bool SerialPort::BlockingRead(void* const data, const size_t size, const unsigned int timeout)
+bool SerialPort::BlockingRead(void* const data, const size_t size, size_t& resSize, const unsigned int timeout)
 {
     enum sp_return ret = sp_blocking_read(m_Port, data, size, timeout);
     if(ret == SP_OK)
+    {
+        resSize = (size_t)ret;
         return true;
+    }
 
     SetError(new SerialPortErrorInfo(ret));
     return false;
