@@ -59,27 +59,59 @@ void OnDataReceived(TCPServer* const self, const SocketAddress& address, const i
 
     switch(hdr->type)
     {
-        case CPT_MOTORRUN:
+        case CPT_MOTORBALANCE:
         {
-            const packet_motorrun_t* hdr = (const packet_motorrun_t*)data;
+            const packet_motorbalance_t* pkt = (const packet_motorbalance_t*)data;
+
             float left, right;
-            memcpy(&left, &hdr->left, sizeof(hdr->left));
-            memcpy(&right, &hdr->right, sizeof(hdr->right));
-            fprintf(stderr, "CPT_MOTORRUN: left=%.2f, right=%.2f\n", left, right);
+            memcpy(&left, &pkt->left, sizeof(pkt->left));
+            memcpy(&right, &pkt->right, sizeof(pkt->right));
+
+            fprintf(stderr, "CPT_MOTORBALANCE: left=%.2f, right=%.2f\n", left, right);
             break;
         }
+        case CPT_DIRECTION:
+        {
+            const packet_direction_t* pkt = (const packet_direction_t*)hdr;
 
+            vector2data_t direction;
+            memcpy(&direction, &pkt->direction, sizeof(pkt->direction));
+
+            fprintf(stderr, "CPT_DIRECTION: direction(x=%.2f, y=%.2f)\n", direction.x, direction.y);
+            break;
+        }
+        case CPT_MOTORPOWER:
+        {
+            const packet_motorpower_t* pkt = (const packet_motorpower_t*)hdr;
+
+            float power;
+            memcpy(&power, &pkt->power, sizeof(pkt->power));
+
+            fprintf(stderr, "CPT_MOTORPOWER: power=%.2f\n", power);
+            break;
+        }
+        case CPT_MOTORRUN:
+        {
+            const packet_motorrun_t* pkt = (const packet_motorrun_t*)hdr;
+
+            vector2data_t direction;
+            float power;
+            memcpy(&direction, &pkt->direction, sizeof(pkt->direction));
+            memcpy(&power, &pkt->power, sizeof(pkt->power));
+
+            fprintf(stderr, "CPT_MOTORRUN: direction(x=%.2f, y=%.2f), power=%.2f\n", direction.x, direction.y, power);
+            break;
+        }
         case CPT_MOTORSTOP:
         {
             fprintf(stderr, "CPT_MOTORSTOP\n");
             break;
         }
-
         default:
         {
-            fprintf(stderr, "Unknown packet type\n");
-            packet_mkbasic(&rsp, PT_FALSE);
-            self->Send(fd, &rsp, sizeof(rsp));
+            fprintf(stderr, "Unknown packet type: %hhu\n", hdr->type);
+            //packet_mkbasic(&rsp, PT_FALSE);
+            //self->Send(fd, &rsp, sizeof(rsp));
             return;
         }
     }

@@ -32,16 +32,18 @@ bool SendCommand(UDPClient& client, const std::string& command, const std::vecto
     if(command == "run")
     {
         std::cout << "Sending \'" << command << "\'..." << std::endl;
-        if(arguments.size() < 2)
+        if(arguments.size() < 3)
         {
             std::cerr << "*** Error: Insufficient command arguments provided" << std::endl;
             return false;
         }
 
-        float left = std::stof(arguments[0]);
-        float right = std::stof(arguments[1]);
+        vector2data_t direction;
+        direction.x = std::stof(arguments[0]);
+        direction.y = std::stof(arguments[1]);
+        float power = std::stof(arguments[2]);
         packet_motorrun_t pkt;
-        packet_mkmotorrun(&pkt, left, right);
+        packet_mkmotorrun(&pkt, &direction, power);
         if(!client.Send(&pkt, sizeof(pkt)))
         {
             std::cerr << "*** Error: " << client.GetError() << std::endl;

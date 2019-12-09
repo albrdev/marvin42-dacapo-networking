@@ -8,10 +8,12 @@
 #include "SerialPort.hpp"
 #include "ServerOptions.hpp"
 
-#define POLL_DELAY  10
-
 //#define M42_DEBUG // Must define before including 'generic.hpp'
 #include "generic.hpp"
+
+#define POLL_DELAY  10
+
+SerialPort* serialPort = nullptr;
 
 void OnClientConnected(TCPServer* const self, const SocketAddress& address)
 {
@@ -23,7 +25,6 @@ void OnClientDisconnected(TCPServer* const self, const SocketAddress& address)
     std::cout << "OnClientDisconnected: " << address << std::endl;
 }
 
-SerialPort* serialPort = nullptr;
 void OnTCPDataReceived(TCPServer* const self, const SocketAddress& address, const int fd, const void* const data, const size_t size)
 {
     std::cout << "OnTCPDataReceived: " << address << std::endl;
