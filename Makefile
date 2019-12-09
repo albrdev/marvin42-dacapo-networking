@@ -129,10 +129,16 @@ $(DIR_OBJ)/generic.o: $(DIR_SL)/$(DIR_SRC)/generic.cpp $(DIR_SL)/$(DIR_INC)/gene
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_SL)/$(DIR_INC) -c $< -o $@
 
 # Internal
+$(DIR_OBJ)/SerialServerOptions.o: $(DIR_SRC)/SerialServerOptions.cpp $(DIR_INC)/SerialServerOptions.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+
 $(DIR_OBJ)/ClientOptions.o: $(DIR_SRC)/ClientOptions.cpp $(DIR_INC)/ClientOptions.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/ServerOptions.o: $(DIR_SRC)/ServerOptions.cpp $(DIR_INC)/ServerOptions.hpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
+
+$(DIR_OBJ)/NetworkOptions.o: $(DIR_SRC)/NetworkOptions.cpp $(DIR_INC)/NetworkOptions.hpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/Options.o: $(DIR_SRC)/Options.cpp $(DIR_INC)/Options.hpp
