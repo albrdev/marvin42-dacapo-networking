@@ -40,7 +40,7 @@ BIN_CLIENT2	:= $(APP_BIN)_udpcli
 TRG_SERVER	:= $(DIR_BIN)/$(BIN_SERVER) $(DIR_BIN)/$(BIN_SERVER1) $(DIR_BIN)/$(BIN_SERVER2)
 TRG_CLIENT	:= $(DIR_BIN)/$(BIN_CLIENT1) $(DIR_BIN)/$(BIN_CLIENT2)
 
-TRG_BINS	:= $(TRG_SERVER) $(TRG_CLIENT)
+TRG_BINS	:= $(TRG_SERVER) $(TRG_CLIENT) $(DIR_BIN)/$(APP_BIN)_sersrv
 
 .PHONY: all
 all: debug
@@ -94,6 +94,9 @@ $(DIR_BIN)/$(BIN_CLIENT2): $(OBJS) $(DIR_OBJ)/udpclient_main.o
 $(DIR_BIN)/$(BIN_SERVER): $(OBJS) $(DIR_OBJ)/server_main.o
 	$(CC_CPP) $(CC_LIBS) $^ -o $@
 
+$(DIR_BIN)/$(APP_BIN)_sersrv: $(OBJS) $(DIR_OBJ)/sersrv_main.o
+	$(CC_CPP) $(CC_LIBS) $^ -o $@
+
 $(DIR_OBJ)/server_main.o: server_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL)/$(DIR_INC) -c $< -o $@
 
@@ -107,6 +110,9 @@ $(DIR_OBJ)/tcpserver_main.o: tcpserver_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL)/$(DIR_INC) -c $< -o $@
 
 $(DIR_OBJ)/udpserver_main.o: udpserver_main.cpp
+	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL)/$(DIR_INC) -c $< -o $@
+
+$(DIR_OBJ)/sersrv_main.o: sersrv_main.cpp
 	$(CC_CPP) $(CC_FLAGS) -I$(DIR_INC) -I$(DIR_SL)/$(DIR_INC) -c $< -o $@
 
 # External
