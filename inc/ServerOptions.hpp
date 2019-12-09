@@ -4,9 +4,9 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-#include "Options.hpp"
+#include "NetworkOptions.hpp"
 
-class ServerOptions : public Options
+class ServerOptions : public NetworkOptions
 {
 private:
     size_t m_MaxConnections;

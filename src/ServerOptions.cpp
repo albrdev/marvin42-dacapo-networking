@@ -34,7 +34,7 @@ bool ServerOptions::ParseOption(const int option, const char* const argument, co
     return true;
 }
 
-ServerOptions::ServerOptions(const std::string& address, const uint16_t port, const std::string& serialPort, const long timeout, const size_t maxConnections, const bool verbose, const bool printUsage) : Options(address, port, timeout, verbose, printUsage)
+ServerOptions::ServerOptions(const std::string& address, const uint16_t port, const std::string& serialPort, const long timeout, const size_t maxConnections, const bool verbose, const bool printUsage) : NetworkOptions(address, port, timeout, verbose, printUsage)
 {
     AddOption({ "max_connections", required_argument, NULL, 'n' });
     AddOption({ "serialport", required_argument, NULL, 's' });

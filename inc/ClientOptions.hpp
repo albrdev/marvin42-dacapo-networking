@@ -4,9 +4,9 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-#include "Options.hpp"
+#include "NetworkOptions.hpp"
 
-class ClientOptions : public Options
+class ClientOptions : public NetworkOptions
 {
 private:
     std::string m_Command;

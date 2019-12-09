@@ -36,7 +36,7 @@ bool ClientOptions::ParseOption(const int option, const char* const argument, co
     return true;
 }
 
-ClientOptions::ClientOptions(const std::string& address, const uint16_t port, const std::string& command, const std::vector<std::string>& arguments, const long timeout, const bool interactive, const bool verbose, const bool printUsage) : Options(address, port, timeout, verbose, printUsage)
+ClientOptions::ClientOptions(const std::string& address, const uint16_t port, const std::string& command, const std::vector<std::string>& arguments, const long timeout, const bool interactive, const bool verbose, const bool printUsage) : NetworkOptions(address, port, timeout, verbose, printUsage)
 {
     AddOption({ "cmd", required_argument, NULL, 'c' });
     AddOption({ "interactive", no_argument, NULL, 'i' });
