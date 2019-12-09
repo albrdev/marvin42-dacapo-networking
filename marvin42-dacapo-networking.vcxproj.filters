@@ -55,6 +55,9 @@
     <ClCompile Include="src\SerialServerOptions.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\NetworkOptions.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="inc">
@@ -111,6 +114,9 @@
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\SerialServerOptions.hpp">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\NetworkOptions.hpp">
       <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>

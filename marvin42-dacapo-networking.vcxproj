@@ -85,6 +85,7 @@
     <ClCompile Include="src\ErrorInfo.cpp" />
     <ClCompile Include="src\Exception.cpp" />
     <ClCompile Include="src\IError.cpp" />
+    <ClCompile Include="src\NetworkOptions.cpp" />
     <ClCompile Include="src\SerialServerOptions.cpp" />
     <ClCompile Include="src\SocketAddress.cpp" />
     <ClCompile Include="src\Options.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="inc\ErrorInfo.hpp" />
     <ClInclude Include="inc\Exception.hpp" />
     <ClInclude Include="inc\IError.hpp" />
+    <ClInclude Include="inc\NetworkOptions.hpp" />
     <ClInclude Include="inc\SerialServerOptions.hpp" />
     <ClInclude Include="inc\SocketAddress.hpp" />
     <ClInclude Include="inc\Options.hpp" />
