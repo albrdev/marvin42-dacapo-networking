@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
     }
 
     rxSerialPort = new SerialPort(options.GetRXSerialPort());
-    if(!rxSerialPort->Begin(SP_MODE_WRITE))
+    if(!rxSerialPort->Begin(SP_MODE_READ))
     {
         std::cerr << "*** Error: " << rxSerialPort->GetError() << std::endl;
         return 1;
@@ -78,13 +78,13 @@ int main(int argc, char* argv[])
     txSerialPort->SetParity(SP_PARITY_NONE);
     txSerialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
 
-    uint8_t readBuffer[128];
+    uint8_t readBuffer[512];
     size_t readSize;
     while(true)
     {
         if(!rxSerialPort->BlockingRead(readBuffer, sizeof(readBuffer), readSize))
         {
-            std::cerr << "*** Errorl: " << rxSerialPort->GetError()->GetMessage() << std::endl;
+            std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << std::endl;
             return 1;
         }
 
