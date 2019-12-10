@@ -79,6 +79,7 @@ int main(int argc, char* argv[])
     txSerialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
 
     uint8_t readBuffer[512];
+    size_t readSize;
     while(true)
     {
         size_t availSize;
