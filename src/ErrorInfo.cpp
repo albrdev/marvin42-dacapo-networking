@@ -9,35 +9,22 @@ ErrnoErrorInfo::ErrnoErrorInfo(void) : m_Code(errno) { }
 std::string GAIErrorInfo::GetMessage(void) const { return gai_strerror(m_Code); }
 GAIErrorInfo::GAIErrorInfo(const int code) : m_Code(code) { }
 
+const std::map<sp_return, std::string> SerialPortErrorInfo::k_ErrorMap =
+{
+    { SP_OK, "Operation completed successfully" },
+    { SP_ERR_ARG, "Invalid arguments were passed to the function" },
+    { SP_ERR_FAIL, "A system error occurred while executing the operation" },
+    { SP_ERR_MEM, "A memory allocation failed while executing the operation" },
+    { SP_ERR_SUPP, "The requested operation is not supported by this system or device" }
+};
+
+const std::string SerialPortErrorInfo::k_DefaultErrorMessage = "Unknown error";
+
 std::string SerialPortErrorInfo::GetMessage(void) const
 {
-    switch(m_Code)
-    {
-        case SP_OK:
-        {
-            return "Operation completed successfully";
-        }
-        case SP_ERR_ARG:
-        {
-            return "Invalid arguments were passed to the function";
-        }
-        case SP_ERR_FAIL:
-        {
-            return "A system error occurred while executing the operation";
-        }
-        case SP_ERR_MEM:
-        {
-            return "A memory allocation failed while executing the operation";
-        }
-        case SP_ERR_SUPP:
-        {
-            return "The requested operation is not supported by this system or device";
-        }
-        default:
-        {
-            throw;
-        }
-    }
+    std::map<sp_return, std::string>::const_iterator iter = SerialPortErrorInfo::k_ErrorMap.find(m_Code);
+
+    return iter != SerialPortErrorInfo::k_ErrorMap.cend() ? iter->second : SerialPortErrorInfo::k_DefaultErrorMessage;
 }
 SerialPortErrorInfo::SerialPortErrorInfo(const enum sp_return code) : m_Code(code) { }
 

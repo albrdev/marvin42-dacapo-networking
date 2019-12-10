@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cerrno>
 #include <string>
+#include <map>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -42,6 +43,9 @@ public:
 class SerialPortErrorInfo : public ErrorInfo
 {
 private:
+    static const std::map<sp_return, std::string> k_ErrorMap;
+    static const std::string k_DefaultErrorMessage;
+
     enum sp_return m_Code = SP_OK;
 
 public:
