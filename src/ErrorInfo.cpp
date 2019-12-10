@@ -2,6 +2,11 @@
 
 ErrorInfo::~ErrorInfo(void) { }
 
+std::ostream& operator <<(std::ostream& stream, const ErrorInfo& object)
+{
+    return stream << object.GetMessage();
+}
+
 std::string ErrnoErrorInfo::GetMessage(void) const { return strerror(m_Code); }
 ErrnoErrorInfo::ErrnoErrorInfo(const int code) : m_Code(code) { }
 ErrnoErrorInfo::ErrnoErrorInfo(void) : m_Code(errno) { }

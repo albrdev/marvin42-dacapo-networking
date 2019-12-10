@@ -5,6 +5,7 @@
 #include <cerrno>
 #include <string>
 #include <map>
+#include <ostream>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -12,6 +13,9 @@
 
 class ErrorInfo
 {
+private:
+    friend std::ostream& operator <<(std::ostream& stream, const ErrorInfo& object);
+
 public:
     virtual std::string GetMessage(void) const = 0;
     virtual ~ErrorInfo(void) = 0;
