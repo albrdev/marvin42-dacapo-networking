@@ -79,21 +79,21 @@ int main(int argc, char* argv[])
     txSerialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
 
     uint8_t readBuffer[512];
-    size_t readSize;
     while(true)
     {
-        if(!rxSerialPort.AvailableBytes(reqSize))
+        size_t availSize;
+        if(!rxSerialPort->AvailableBytes(availSize))
         {
             std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << std::endl;
             return 1;
         }
 
-        if(reqSize == 0)
+        if(availSize == 0)
         {
             continue;
         }
 
-        if(!rxSerialPort->BlockingRead(readBuffer, reqSize, readSize))
+        if(!rxSerialPort->BlockingRead(readBuffer, availSize, readSize))
         {
             std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << std::endl;
             return 1;
