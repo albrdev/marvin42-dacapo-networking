@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
     {
         if(!rxSerialPort->BlockingRead(readBuffer, sizeof(readBuffer), readSize))
         {
-            std::cerr << "*** Error: " << rxSerialPort->GetError() << std::endl;
+            std::cerr << "*** Errorl: " << rxSerialPort->GetError()->GetMessage() << std::endl;
             return 1;
         }
 
