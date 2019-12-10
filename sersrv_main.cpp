@@ -103,7 +103,11 @@ int main(int argc, char* argv[])
         std::cout << "SerialDataReceived" << std::endl;
         PrintfDebug2("Raw: size=%zu, hex=%s\n", readSize, hexstr(readBuffer, readSize));
 
-        txSerialPort->Write(readBuffer, readSize);
+        if(!txSerialPort->Write(readBuffer, readSize))
+        {
+            std::cerr << "*** Error: " << txSerialPort->GetError()->GetMessage() << std::endl;
+            return 1;
+        }
     }
 
     return 0;
