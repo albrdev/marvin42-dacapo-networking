@@ -25,7 +25,7 @@ public:
     bool SetX01(const enum sp_xonxoff value);
     bool SetFlowControl(const enum sp_flowcontrol value);
 
-    int AvailableBytes(void);
+    bool AvailableBytes(size_t& result);
 
     bool BlockingRead(void* const data, const size_t size, size_t& resSize, const unsigned int timeout = 0U);
     bool Read(void* const data, const size_t size);

@@ -107,13 +107,17 @@ bool SerialPort::SetFlowControl(const enum sp_flowcontrol value)
     return false;
 }
 
-int SerialPort::AvailableBytes(void)
+bool SerialPort::AvailableBytes(size_t& result)
 {
     enum sp_return ret = sp_input_waiting(m_Port);
-    if(ret < SP_OK)
+    if(ret < 0)
+    {
         SetError(new SerialPortErrorInfo(ret));
+        return false;
+    }
 
-    return ret;
+    result = (size_t)ret;
+    return true;
 }
 
 bool SerialPort::BlockingRead(void* const data, const size_t size, size_t& resSize, const unsigned int timeout)

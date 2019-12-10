@@ -82,7 +82,18 @@ int main(int argc, char* argv[])
     size_t readSize;
     while(true)
     {
-        if(!rxSerialPort->BlockingRead(readBuffer, sizeof(readBuffer), readSize))
+        if(!rxSerialPort.AvailableBytes(reqSize))
+        {
+            std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << std::endl;
+            return 1;
+        }
+
+        if(reqSize == 0)
+        {
+            continue;
+        }
+
+        if(!rxSerialPort->BlockingRead(readBuffer, reqSize, readSize))
         {
             std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << std::endl;
             return 1;
@@ -92,8 +103,6 @@ int main(int argc, char* argv[])
         PrintfDebug2("Raw: size=%zu, hex=%s\n", readSize, hexstr(readBuffer, readSize));
 
         txSerialPort->Write(readBuffer, readSize);
-
-        //usleep(POLL_DELAY * 1000);
     }
 
     return 0;
