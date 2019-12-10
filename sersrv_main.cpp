@@ -66,13 +66,13 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    rxSerialPort->SetBaudRate(9600);
+    rxSerialPort->SetBaudRate(115200);
     rxSerialPort->SetDataBits(8);
     rxSerialPort->SetStopBits(1);
     rxSerialPort->SetParity(SP_PARITY_NONE);
     rxSerialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
 
-    txSerialPort->SetBaudRate(9600);
+    txSerialPort->SetBaudRate(115200);
     txSerialPort->SetDataBits(8);
     txSerialPort->SetStopBits(1);
     txSerialPort->SetParity(SP_PARITY_NONE);
