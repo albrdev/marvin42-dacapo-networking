@@ -70,13 +70,13 @@ int main(int argc, char* argv[])
     rxSerialPort->SetDataBits(8);
     rxSerialPort->SetStopBits(1);
     rxSerialPort->SetParity(SP_PARITY_NONE);
-    rxSerialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
+    rxSerialPort->SetFlowControl(SP_FLOWCONTROL_NONE);
 
     txSerialPort->SetBaudRate(115200);
     txSerialPort->SetDataBits(8);
     txSerialPort->SetStopBits(1);
     txSerialPort->SetParity(SP_PARITY_NONE);
-    txSerialPort->SetFlowControl(SP_FLOWCONTROL_DTRDSR);
+    txSerialPort->SetFlowControl(SP_FLOWCONTROL_NONE);
 
     uint8_t readBuffer[512];
     size_t readSize;
