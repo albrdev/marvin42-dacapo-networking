@@ -23,7 +23,7 @@ bool UDPServer::Poll(void* const buffer, const size_t size, const size_t offset)
 
     struct sockaddr_storage clientAddress;
     socklen_t clientAddressSize = sizeof(clientAddress);
-    int ret = recvfrom(m_Socket, (uint8_t* const)buffer + offset, size - offset, 0, (struct sockaddr*)&clientAddress, &clientAddressSize);
+    int ret = recvfrom(m_Socket, (uint8_t*)buffer + offset, size - offset, 0, (struct sockaddr*)&clientAddress, &clientAddressSize);
     if(ret < 0)
     {
         if(errno != EWOULDBLOCK)

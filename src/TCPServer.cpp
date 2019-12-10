@@ -241,7 +241,7 @@ bool TCPServer::Poll(void* const buffer, const size_t size, const size_t offset)
                 return true;
             }
 
-            int ret = recv(m_PeerEvents[i].fd, (uint8_t* const)buffer + offset, size - offset, 0);
+            int ret = recv(m_PeerEvents[i].fd, (uint8_t*)buffer + offset, size - offset, 0);
             if(ret < 0)
             {
                 if(errno != EWOULDBLOCK)
