@@ -96,7 +96,8 @@ int main(int argc, char* argv[])
         std::cout << "SerialDataReceived" << std::endl;
         PrintfDebug2("Raw: size=%zu, hex=%s\n", readSize, hexstr(readBuffer, readSize));
 
-        if(!txSerialPort->BlockingWrite(readBuffer, readSize))
+        size_t resSize;
+        if(!txSerialPort->BlockingWrite(readBuffer, readSize, resSize))
         {
             std::cerr << "*** Error: " << txSerialPort->GetError()->GetMessage() << std::endl;
             return 1;
