@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
     {
         if(!rxSerialPort->Read(readBuffer, sizeof(readBuffer), readSize))
         {
-            std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << " (" << rxSerialPort->GetError()->GetCode() << ")" << std::endl;
+            std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << " (" << ((const SerialPortErrorInfo*)rxSerialPort->GetError())->GetCode() << ")" << std::endl;
             return 1;
         }
 
