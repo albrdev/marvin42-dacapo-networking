@@ -82,22 +82,15 @@ int main(int argc, char* argv[])
     size_t readSize;
     while(true)
     {
-        size_t availSize;
-        if(!rxSerialPort->AvailableBytes(availSize))
+        if(!rxSerialPort->Read(readBuffer, sizeof(readBuffer), readSize))
         {
             std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << std::endl;
             return 1;
         }
 
-        if(availSize == 0)
+        if(readSize == 0U)
         {
             continue;
-        }
-
-        if(!rxSerialPort->BlockingRead(readBuffer, availSize, readSize))
-        {
-            std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << std::endl;
-            return 1;
         }
 
         std::cout << "SerialDataReceived" << std::endl;
