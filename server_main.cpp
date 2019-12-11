@@ -39,6 +39,7 @@ void OnUDPDataReceived(UDPServer* const self, const SocketAddress& address, cons
     std::cout << "OnUDPDataReceived: " << address << std::endl;
     PrintfDebug2("Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
+    size_t resSize;
     serialPort->Write(data, size, resSize);
 }
 
