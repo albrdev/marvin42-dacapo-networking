@@ -10,10 +10,20 @@ private:
     std::string m_BaseMessage;
     std::string m_Filename;
     int m_LineNumber = -1;
-
+    
+    /*! GenerateMessage().
+    \fn GenerateMessage().
+    \param .
+    \return .
+    */
     static std::string GenerateMessage(const std::string& message, const std::string& filename, const int lineNumber);
 
 public:
+    /*! Exception().
+    \fn Exception().
+    \param .
+    \return .
+    */
     Exception(const std::string& message, const std::string& filename, const int lineNumber);
     Exception(const std::string& message);
 };

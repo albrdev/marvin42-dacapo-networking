@@ -17,7 +17,18 @@ private:
     friend std::ostream& operator <<(std::ostream& stream, const ErrorInfo& object);
 
 public:
+    /*! GetMessage().
+    \fn GetMessage().
+    \param .
+    \return .
+    */
     virtual std::string GetMessage(void) const = 0;
+
+    /*! ~ErrorInfo().
+    \fn ~ErroeInfo().
+    \param .
+    \return .
+    */
     virtual ~ErrorInfo(void) = 0;
 };
 
@@ -28,7 +39,11 @@ private:
 
 public:
     std::string GetMessage(void) const override;
-
+    /*! ErrnoErrorInfo().
+    \fn ErrnoErrorInfo().
+    \param .
+    \return .
+    */
     ErrnoErrorInfo(const int code);
     ErrnoErrorInfo(void);
 };
@@ -39,8 +54,18 @@ private:
     int m_Code = 0;
 
 public:
+    /*! GetMessage().
+    \fn GetMessage().
+    \param .
+    \return .
+    */
     std::string GetMessage(void) const override;
-
+    
+    /*! GAIErrorInfo().
+    \fn GAIErrorInfo().
+    \param .
+    \return .
+    */
     GAIErrorInfo(const int code);
 };
 
@@ -53,9 +78,23 @@ private:
     enum sp_return m_Code = SP_OK;
 
 public:
+    /*! GetCode().
+    \fn GetCode().
+    \param .
+    \return .
+    */
     sp_return GetCode(void) const override;
+    /*! GetMessage().
+    \fn GetMessage().
+    \param .
+    \return .
+    */
     std::string GetMessage(void) const override;
-
+    /*! SerialPortErrorInfo().
+    \fn SerialPortErrorInfo().
+    \param .
+    \return .
+    */
     SerialPortErrorInfo(const enum sp_return code);
 };
 
@@ -65,8 +104,18 @@ private:
     std::string m_Message;
 
 public:
+    /*! GetMessage().
+    \fn GetMessage().
+    \param .
+    \return .
+    */
     std::string GetMessage(void) const override;
-
+    
+    /*! CustomErrorInfo().
+    \fn CustomErrorInfo().
+    \param .
+    \return .
+    */
     CustomErrorInfo(const std::string& message);
 };
 
