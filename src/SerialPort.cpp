@@ -207,7 +207,7 @@ bool SerialPort::OutputWaiting(size_t& resSize)
     resSize = (size_t)ret;
     return true;
 }
-bool SerialPort::Flush(const enum sp_buffer type) const
+bool SerialPort::Flush(const enum sp_buffer type)
 {
     enum sp_return ret = sp_flush(m_Port, type);
     if(ret == SP_OK)

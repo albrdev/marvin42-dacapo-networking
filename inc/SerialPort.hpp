@@ -38,7 +38,7 @@ public:
 
     bool InputWaiting(size_t& resSize);
     bool OutputWaiting(size_t& resSize);
-    bool Flush(const enum sp_buffer type) const;
+    bool Flush(const enum sp_buffer type);
 
     bool Begin(const enum sp_mode mode);
     bool Close(void);
