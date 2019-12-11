@@ -25,12 +25,18 @@ const std::map<sp_return, std::string> SerialPortErrorInfo::k_ErrorMap =
 
 const std::string SerialPortErrorInfo::k_DefaultErrorMessage = "Unknown error";
 
+sp_return SerialPortErrorInfo::GetCode(void) const
+{
+    return m_Code;
+}
+
 std::string SerialPortErrorInfo::GetMessage(void) const
 {
     std::map<sp_return, std::string>::const_iterator iter = SerialPortErrorInfo::k_ErrorMap.find(m_Code);
 
     return iter != SerialPortErrorInfo::k_ErrorMap.cend() ? iter->second : SerialPortErrorInfo::k_DefaultErrorMessage;
 }
+
 SerialPortErrorInfo::SerialPortErrorInfo(const enum sp_return code) : m_Code(code) { }
 
 std::string CustomErrorInfo::GetMessage(void) const { return m_Message; }
