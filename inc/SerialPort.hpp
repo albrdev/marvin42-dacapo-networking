@@ -115,17 +115,38 @@ public:
     \param .
     \return .
     */
-    bool BlockingWrite(const std::string& data, const unsigned int timeout = 0U);
-    bool BlockingWrite(const void* const data, const size_t size, const unsigned int timeout = 0U);
+    bool BlockingWrite(const std::string& data, size_t& resSize, const unsigned int timeout = 0U);
+    bool BlockingWrite(const void* const data, const size_t size, size_t& resSize, const unsigned int timeout = 0U);
 
     /*! Write().
     \fn Write().
     \param .
     \return .
     */
-    bool Write(const std::string& data);
-    bool Write(const void* const data, const size_t size);
-    
+    bool Write(const std::string& data, size_t& resSize);
+    bool Write(const void* const data, const size_t size, size_t& resSize);
+
+    /*! InputWaiting().
+    \fn InputWaiting().
+    \param .
+    \return .
+    */
+    bool InputWaiting(size_t& resSize);
+
+    /*! OutputWaiting().
+    \fn OutputWaiting().
+    \param .
+    \return .
+    */    
+    bool OutputWaiting(size_t& resSize);
+
+    /*! Flush().
+    \fn Flush().
+    \param .
+    \return .
+    */    
+    bool Flush(const enum sp_buffer type);
+
     /*! Begin().
     \fn Begin().
     \param .

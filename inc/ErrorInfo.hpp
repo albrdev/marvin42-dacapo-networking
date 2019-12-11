@@ -79,17 +79,19 @@ private:
 
 public:
     /*! GetCode().
-    \fn GetCode().
+    \fn Receive().
     \param .
     \return .
     */
-    sp_return GetCode(void) const override;
+    sp_return GetCode(void) const;
+
     /*! GetMessage().
     \fn GetMessage().
     \param .
     \return .
     */
     std::string GetMessage(void) const override;
+    
     /*! SerialPortErrorInfo().
     \fn SerialPortErrorInfo().
     \param .
