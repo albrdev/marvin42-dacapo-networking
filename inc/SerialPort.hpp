@@ -28,7 +28,7 @@ public:
     bool AvailableBytes(size_t& result);
 
     bool BlockingRead(void* const data, const size_t size, size_t& resSize, const unsigned int timeout = 0U);
-    bool Read(void* const data, const size_t size);
+    bool Read(void* const data, const size_t size, size_t& resSize);
 
     bool BlockingWrite(const std::string& data, const unsigned int timeout = 0U);
     bool BlockingWrite(const void* const data, const size_t size, const unsigned int timeout = 0U);

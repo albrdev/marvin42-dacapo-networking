@@ -133,14 +133,17 @@ bool SerialPort::BlockingRead(void* const data, const size_t size, size_t& resSi
     return true;
 }
 
-bool SerialPort::Read(void* const data, const size_t size)
+bool SerialPort::Read(void* const data, const size_t size, size_t& resSize)
 {
     enum sp_return ret = sp_nonblocking_read(m_Port, data, size);
-    if(ret == SP_OK)
-        return true;
+    if(ret < 0)
+    {
+        SetError(new SerialPortErrorInfo(ret));
+        return false;
+    }
 
-    SetError(new SerialPortErrorInfo(ret));
-    return false;
+    resSize = (size_t)ret;
+    return true;
 }
 
 bool SerialPort::BlockingWrite(const std::string& data, const unsigned int timeout)
