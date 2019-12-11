@@ -53,7 +53,7 @@ private:
     enum sp_return m_Code = SP_OK;
 
 public:
-    sp_return GetCode(void) const override;
+    sp_return GetCode(void) const;
     std::string GetMessage(void) const override;
 
     SerialPortErrorInfo(const enum sp_return code);
