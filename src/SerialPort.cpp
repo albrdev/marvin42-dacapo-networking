@@ -146,29 +146,70 @@ bool SerialPort::Read(void* const data, const size_t size, size_t& resSize)
     return true;
 }
 
-bool SerialPort::BlockingWrite(const std::string& data, const unsigned int timeout)
+bool SerialPort::BlockingWrite(const std::string& data, size_t& resSize, const unsigned int timeout)
 {
-    return BlockingWrite(data.c_str(), data.length() + 1U, timeout);
+    return BlockingWrite(data.c_str(), data.length() + 1U, resSize, timeout);
 }
 
-bool SerialPort::BlockingWrite(const void* const data, const size_t size, const unsigned int timeout)
+bool SerialPort::BlockingWrite(const void* const data, const size_t size, size_t& resSize, const unsigned int timeout)
 {
     enum sp_return ret = sp_blocking_write(m_Port, data, size, timeout);
-    if(ret == SP_OK)
-        return true;
+    if(ret < 0)
+    {
+        SetError(new SerialPortErrorInfo(ret));
+        return false;
+    }
 
-    SetError(new SerialPortErrorInfo(ret));
-    return false;
+    resSize = (size_t)ret;
+    return true;
 }
 
-bool SerialPort::Write(const std::string& data)
+bool SerialPort::Write(const std::string& data, size_t& resSize)
 {
-    return Write(data.c_str(), data.length() + 1U);
+    return Write(data.c_str(), data.length() + 1U, resSize);
 }
 
-bool SerialPort::Write(const void* const data, const size_t size)
+bool SerialPort::Write(const void* const data, const size_t size, size_t& resSize)
 {
     enum sp_return ret = sp_nonblocking_write(m_Port, data, size);
+    if(ret < 0)
+    {
+        SetError(new SerialPortErrorInfo(ret));
+        return false;
+    }
+
+    resSize = (size_t)ret;
+    return true;
+}
+
+bool SerialPort::InputWaiting(size_t& resSize)
+{
+    enum sp_return ret = sp_input_waiting(m_Port);
+    if(ret < 0)
+    {
+        SetError(new SerialPortErrorInfo(ret));
+        return false;
+    }
+
+    resSize = (size_t)ret;
+    return true;
+}
+
+bool SerialPort::OutputWaiting(size_t& resSize)
+{
+    enum sp_return ret = sp_output_waiting(m_Port);
+    if(ret < 0)
+    {
+        SetError(new SerialPortErrorInfo(ret));
+        return false;
+    }
+
+    resSize = (size_t)ret;
+    return true;
+}
+bool SerialPort::Flush(const enum sp_buffer type) const
+{
+    enum sp_return ret = sp_flush(m_Port, type);
     if(ret == SP_OK)
         return true;
 

@@ -30,11 +30,15 @@ public:
     bool BlockingRead(void* const data, const size_t size, size_t& resSize, const unsigned int timeout = 0U);
     bool Read(void* const data, const size_t size, size_t& resSize);
 
-    bool BlockingWrite(const std::string& data, const unsigned int timeout = 0U);
-    bool BlockingWrite(const void* const data, const size_t size, const unsigned int timeout = 0U);
+    bool BlockingWrite(const std::string& data, size_t& resSize, const unsigned int timeout = 0U);
+    bool BlockingWrite(const void* const data, const size_t size, size_t& resSize, const unsigned int timeout = 0U);
 
-    bool Write(const std::string& data);
-    bool Write(const void* const data, const size_t size);
+    bool Write(const std::string& data, size_t& resSize);
+    bool Write(const void* const data, const size_t size, size_t& resSize);
+
+    bool InputWaiting(size_t& resSize);
+    bool OutputWaiting(size_t& resSize);
+    bool Flush(const enum sp_buffer type) const;
 
     bool Begin(const enum sp_mode mode);
     bool Close(void);
