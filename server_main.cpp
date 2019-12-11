@@ -30,7 +30,8 @@ void OnTCPDataReceived(TCPServer* const self, const SocketAddress& address, cons
     std::cout << "OnTCPDataReceived: " << address << std::endl;
     PrintfDebug2("Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
-    serialPort->Write(data, size);
+    size_t resSize;
+    serialPort->Write(data, size, resSize);
 }
 
 void OnUDPDataReceived(UDPServer* const self, const SocketAddress& address, const void* const data, const size_t size)
@@ -38,7 +39,7 @@ void OnUDPDataReceived(UDPServer* const self, const SocketAddress& address, cons
     std::cout << "OnUDPDataReceived: " << address << std::endl;
     PrintfDebug2("Raw: size=%zu, hex=%s\n", size, hexstr(data, size));
 
-    serialPort->Write(data, size);
+    serialPort->Write(data, size, resSize);
 }
 
 void cleanup(void)
