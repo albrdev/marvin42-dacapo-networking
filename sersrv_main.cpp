@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
             continue;
         }
 
-        std::cout << "SerialDataReceived" << std::endl;
+        PrintfDebug2("SerialDataReceived\n");
         PrintfDebug2("Raw: size=%zu, hex=%s\n", readSize, hexstr(readBuffer, readSize));
 
         size_t resSize;
