@@ -90,6 +90,7 @@ int main(int argc, char* argv[])
 
         if(readSize == 0U)
         {
+            usleep(POLL_DELAY * 1000);
             continue;
         }
 
