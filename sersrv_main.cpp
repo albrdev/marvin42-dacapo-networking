@@ -55,18 +55,18 @@ int main(int argc, char* argv[])
     rxSerialPort = new SerialPort(options.GetRXSerialPort());
     if(!rxSerialPort->Begin(SP_MODE_READ))
     {
-        std::cerr << "*** Error: " << rxSerialPort->GetError() << std::endl;
+        std::cerr << "*** Error: " << rxSerialPort->GetError()->GetMessage() << std::endl;
         return 1;
     }
 
     txSerialPort = new SerialPort(options.GetTXSerialPort());
     if(!txSerialPort->Begin(SP_MODE_WRITE))
     {
-        std::cerr << "*** Error: " << txSerialPort->GetError() << std::endl;
+        std::cerr << "*** Error: " << txSerialPort->GetError()->GetMessage() << std::endl;
         return 1;
     }
 
-    rxSerialPort->SetBaudRate(115200);
+    rxSerialPort->SetBaudRate(9600);
     rxSerialPort->SetDataBits(8);
     rxSerialPort->SetStopBits(1);
     rxSerialPort->SetParity(SP_PARITY_NONE);
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
             return 1;
         }
 
-        //txSerialPort->Flush(SP_BUF_OUTPUT);
+        PrintfDebug2("done\n");
     }
 
     return 0;
