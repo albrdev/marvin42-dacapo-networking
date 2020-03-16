@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 {
     atexit(cleanup);
 
-    SerialServerOptions options("", "", false, false);
+    SerialServerOptions options("", 9600, 8, 1, SP_PARITY_NONE, SP_FLOWCONTROL_NONE, "", 9600, 8, 1, SP_PARITY_NONE, SP_FLOWCONTROL_NONE, false, false);
     if(!options.ParseArguments(argv, argc))
     {
         std::cerr << "*** Error: " << options.GetError() << std::endl;
@@ -66,17 +66,17 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    rxSerialPort->SetBaudRate(9600);
-    rxSerialPort->SetDataBits(8);
-    rxSerialPort->SetStopBits(1);
-    rxSerialPort->SetParity(SP_PARITY_NONE);
-    rxSerialPort->SetFlowControl(SP_FLOWCONTROL_NONE);
+    rxSerialPort->SetBaudRate(options.GetRXBaudRate());
+    rxSerialPort->SetDataBits(options.GetRXDataBits());
+    rxSerialPort->SetStopBits(options.GetRXStopBits());
+    rxSerialPort->SetParity(options.GetRXParity());
+    rxSerialPort->SetFlowControl(options.GetRXFlowControl());
 
-    txSerialPort->SetBaudRate(115200);
-    txSerialPort->SetDataBits(8);
-    txSerialPort->SetStopBits(1);
-    txSerialPort->SetParity(SP_PARITY_NONE);
-    txSerialPort->SetFlowControl(SP_FLOWCONTROL_NONE);
+    txSerialPort->SetBaudRate(options.GetTXBaudRate());
+    txSerialPort->SetDataBits(options.GetTXDataBits());
+    txSerialPort->SetStopBits(options.GetTXStopBits());
+    txSerialPort->SetParity(options.GetTXParity());
+    txSerialPort->SetFlowControl(options.GetTXFlowControl());
 
     uint8_t readBuffer[512];
     size_t readSize;
@@ -103,8 +103,6 @@ int main(int argc, char* argv[])
             std::cerr << "*** Error: " << txSerialPort->GetError()->GetMessage() << std::endl;
             return 1;
         }
-
-        PrintfDebug2("done\n");
     }
 
     return 0;
